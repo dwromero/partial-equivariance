@@ -371,6 +371,10 @@ class GroupConv(ConvBase):
 
         # Normalize elements to coordinates between -1 and 1
         acted_g_elements = self.group.normalize_g_distance(acted_g_elements).float()
+        if self.group.__class__.__name__ == 'SE2':
+            acted_g_elements = acted_g_elements.unsqueeze(-1)
+
+
 
         # Act on Rd with the resulting elements
         acted_rel_pos_Rd = self.group.left_action_on_Rd(
@@ -519,6 +523,8 @@ class PointwiseGroupConv(ConvBase):
 
         # Normalize elements to coordinates between -1 and 1
         acted_g_elements = self.group.normalize_g_distance(acted_g_elements).float()
+        if self.group.__class__.__name__ == 'SE2':
+            acted_g_elements = acted_g_elements.unsqueeze(-1)
 
         input_g_no_elems = acted_g_elements.shape[2]
         output_g_no_elems = acted_g_elements.shape[1]
