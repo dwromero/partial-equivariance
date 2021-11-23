@@ -394,6 +394,7 @@ class AugerinoCKResNet(torch.nn.Module):
         )
         if len(g_elements.shape) == 2:
             g_elements = g_elements.unsqueeze(-1)
+
         # Use them to augment input
         x_modif = torch.stack(
             [
@@ -413,13 +414,36 @@ class AugerinoCKResNet(torch.nn.Module):
 
     @staticmethod
     def transformation(x, element):
-        x_modif = TF.rotate(x,
-                           element[0].item() * 360/(2. * math.pi),
-                          InterpolationMode.BILINEAR,
-                          )
+        # x_modif = TF.rotate(x,
+        #                    element[0].item() * 360/(2. * math.pi),
+        #                   InterpolationMode.BILINEAR,
+        #                   )
+        x_modif = rot_img(x, element[0], dtype=x.dtype)
         if element.shape[0] == 2 and element[-1].item() == -1:
             x_modif = TF.hflip(x_modif)
         return x_modif
+
+def get_rot_mat(theta):
+    cos = torch.cos(theta)
+    sin = torch.sin(theta)
+
+    R = torch.zeros(2, 3, device=theta.device, dtype=theta.dtype)
+    R[0, 0] = cos
+    R[0, 1] = -sin
+    R[1, 0] = sin
+    R[1, 1] = cos
+
+    return R
+
+
+    return torch.tensor([[torch.cos(theta), -torch.sin(theta), 0],
+                         [torch.sin(theta), torch.cos(theta), 0]], device=device)
+
+def rot_img(x, theta, dtype):
+    rot_mat = get_rot_mat(theta)[None, ...].type(dtype).repeat(x.shape[0], 1, 1)
+    grid = F.affine_grid(rot_mat, x.size(), align_corners=True).type(dtype)
+    x = F.grid_sample(x, grid)
+    return x
 
 
 
