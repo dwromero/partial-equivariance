@@ -77,6 +77,11 @@ def classification_train(
         weight_loss=cfg.train.weight_decay, norm_type=2
     )
 
+    # Construct decay_regularizer
+    mono_decay_loss = gral.nn.loss.MonotonicPartialEquivarianceLoss(
+        weight_loss=cfg.train.monotonic_decay_loss,
+    )
+
     # Training parameters
     epochs = cfg.train.epochs
     device = cfg.device
@@ -134,8 +139,8 @@ def classification_train(
 
                     # Regularization:
                     if cfg.train.weight_decay > 0.0:
-                        reg = weight_regularizer(model)
-                        loss = loss + reg
+                        loss = loss + weight_regularizer(model)
+                        loss = loss + mono_decay_loss(model)
 
                     if phase == "train":
 

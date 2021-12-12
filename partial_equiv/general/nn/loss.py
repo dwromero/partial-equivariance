@@ -1,6 +1,7 @@
 import torch
 from partial_equiv.partial_gconv.conv import LiftingConv, GroupConv, PointwiseGroupConv
 from torch.nn import Conv1d, Conv2d, Conv3d
+from models import CKResNet
 
 # typing
 from typing import Union
@@ -39,4 +40,46 @@ class LnLoss(torch.nn.Module):
             #     loss += m.bias.norm(self.norm_type)
 
         loss = self.weight_loss * loss
+        return loss
+
+
+class MonotonicPartialEquivarianceLoss(torch.nn.Module):
+    def __init__(
+            self,
+            weight_loss: float,
+    ):
+        """
+        Computes the Ln loss on the learned subset values for a partial equivariant network.
+        It implicitly penalizes networks whose learned subsets increase during traning.
+        """
+        super().__init__()
+        self.weight_loss = weight_loss
+
+    def forward(
+            self,
+            model: torch.nn.Module,
+    ):
+        if not isinstance(model.module, CKResNet):
+            raise NotImplementedError(f'Model of type {model.__class__.__name__} not a CKResNet.')
+
+        # Only calculated with partial_equivariant models
+        if not model.module.partial_equiv:
+            return 0.0
+
+        learned_equivariances = []
+        for m in model.modules():
+            if isinstance(m, (GroupConv)):
+                if m.probs is not None and (m.probs.nelement() != 0):
+                    learned_equivariances.append(m.probs)
+
+        # Take the difference between the next element, and the previous.
+        # Then check if it's larger than 0. If that;'s the case, then
+        # the network is increasing, and thus, must be penalized.
+        differences = torch.relu(
+            torch.stack(
+                [y-x for (x,y) in zip(learned_equivariances[:-1], learned_equivariances[1:])],
+                dim=0,
+            )
+        )
+        loss = self.weight_loss * differences.sum()
         return loss

@@ -9,6 +9,9 @@ net:
   # finzi_lift: False
   block_width_factors: [0.0, ]
   pool_blocks: [-1, ]
+  last_conv_T2: False
+  learnable_final_pooling: False
+  final_spatial_dim: [1,1]
 conv:
   padding: ""
   partial_equiv: False
@@ -54,6 +57,7 @@ train:
     patience: -1
     warmup_epochs: -1
   warm_decay: 0.0
+  monotonic_decay_loss: 0.0
 dataset: ""
 augment: None
 wandb:
