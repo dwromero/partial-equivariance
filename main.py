@@ -48,7 +48,7 @@ def main(cfg: OmegaConf):
     wandb.init(
         project=cfg.wandb.project,
         config=gral.utils.flatten_configdict(cfg),
-        entity="dwromero",
+        entity="tychovdo",
     )
 
     # Construct the model

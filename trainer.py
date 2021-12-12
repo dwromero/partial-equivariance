@@ -115,7 +115,9 @@ def classification_train(
             total = 0
 
             # iterate over data
-            for data in dataloaders[phase]:
+            dl = dataloaders[phase]
+            for i, data in enumerate(dl):
+                print(f"Iter {i+1} / {len(dl)}")
 
                 inputs, labels = data
                 inputs = inputs.to(device)
@@ -132,7 +134,8 @@ def classification_train(
 
                     # Regularization:
                     if cfg.train.weight_decay > 0.0:
-                        loss = loss + weight_regularizer(model)
+                        reg = weight_regularizer(model)
+                        loss = loss + reg
 
                     if phase == "train":
 

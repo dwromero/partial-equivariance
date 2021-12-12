@@ -12,6 +12,7 @@ net:
 conv:
   padding: ""
   partial_equiv: False
+  cond_trans: False
   bias: True
 kernel:
   type: ""
@@ -20,6 +21,8 @@ kernel:
   size: -1
   omega0: 0.0
   learn_omega0: False
+  omega1: 0.0
+  learn_omega1: False
   weight_norm: False
   norm: ""
   activation: ""

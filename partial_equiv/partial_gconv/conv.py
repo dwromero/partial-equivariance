@@ -1,7 +1,10 @@
 # torch
 import copy
 
+import math
 import torch
+from torch import einsum
+# from opt_einsum import contract as einsum
 import torch.nn.functional as torch_F
 
 # project
@@ -34,6 +37,8 @@ class ConvBase(torch.nn.Module):
         kernel_weight_norm = kernel_config.weight_norm
         kernel_omega0 = kernel_config.omega0
         kernel_learn_omega0 = kernel_config.learn_omega0
+        kernel_omega1 = kernel_config.omega1
+        kernel_learn_omega1 = kernel_config.learn_omega1
         kernel_size = kernel_config.size
         kernel_activation=kernel_config.activation
         kernel_norm=kernel_config.norm
@@ -41,7 +46,8 @@ class ConvBase(torch.nn.Module):
         # Unpack values from conv_config
         bias = conv_config.bias
         padding = conv_config.padding
-        learn_partial = conv_config.partial_equiv
+        part_rot = conv_config.partial_equiv
+        cond_trans = conv_config.cond_trans
 
         # Unpack values from group_config and save them in self.
         self.group = group
@@ -55,16 +61,18 @@ class ConvBase(torch.nn.Module):
         self.out_channels = out_channels
         self.kernel_size = kernel_size
         self.padding = padding
-        self.partial_equiv = learn_partial
+        self.part_rot = part_rot
+        self.cond_trans = cond_trans
 
         # Get the dim_linear as well as the dim_input_space from the type of convolution.
+        cond_dims = 2 if self.cond_trans else 0
         if conv_type == "lifting":
-            self.dim_linear = self.group.dimension_Rd
-            self.dim_input_space = self.group.dimension_Rd
+            self.dim_linear = self.group.dimension_Rd + cond_dims
+            self.dim_input_space = self.group.dimension_Rd + cond_dims
         elif conv_type == "group":
-            self.dim_linear = self.group.dimension
+            self.dim_linear = self.group.dimension + cond_dims
             self.dim_input_space = (
-                self.group.dimension_Rd + self.group.dimension_stabilizer
+                self.group.dimension_Rd + self.group.dimension_stabilizer + cond_dims
             )
         elif conv_type == "pointwise":
             self.dim_linear = self.group.dimension - self.group.dimension_Rd
@@ -82,6 +90,21 @@ class ConvBase(torch.nn.Module):
                 bias=True,
                 omega_0=kernel_omega0,
                 learn_omega_0=kernel_learn_omega0,
+                omega_1=kernel_omega1,
+                learn_omega_1=kernel_learn_omega1,
+            )
+        elif kernel_type == "RFN":
+            self.kernelnet = ck.RFN(
+                dim_input_space=self.dim_input_space,
+                out_channels=out_channels * in_channels,
+                hidden_channels=kernel_no_hidden,
+                no_layers=kernel_no_layers,
+                weight_norm=kernel_weight_norm,
+                bias=True,
+                omega_0=kernel_omega0,
+                learn_omega_0=kernel_learn_omega0,
+                omega_1=kernel_omega1,
+                learn_omega_1=kernel_learn_omega1,
             )
         elif kernel_type == "Gabor":
             self.kernelnet = ck.GaborNet(
@@ -129,6 +152,7 @@ class ConvBase(torch.nn.Module):
         self.rel_positions = None
 
         # Define bias:
+        bias = False # TODO: check, is this really the right way to do bias? also the comment says "other dimensions", but is missing in code??
         if bias:
             bias = torch.zeros((1, out_channels))  # [Batch, Ch, other_dimensions]
             self.bias = torch.nn.Parameter(bias)
@@ -205,7 +229,17 @@ class LiftingConv(ConvBase):
         """
 
         # Get input grid of conv kernel
-        rel_pos = self.handle_rel_positions_on_Rd(x)
+        input_rel_pos = self.handle_rel_positions_on_Rd(x)
+
+        # Get output grid relative positions, if needed
+        if not hasattr(self, 'output_rel_pos'):
+            # TODO: now assuming x to have same size always
+            self.output_rel_pos = g_utils.rel_positions_grid(
+                grid_sizes=x.shape[-2:]
+            )
+            self.output_rel_pos = self.output_rel_pos.to(x.device)
+
+        output_rel_pos = self.output_rel_pos
 
         # Define the number of independent samples to take from the group. If self.sample_per_batch_element == True, and
         # self.group_sampling_method == RANDOM, then batch_size independent self.group_no_samples samples from the group
@@ -230,54 +264,144 @@ class LiftingConv(ConvBase):
         )  # [no_samples, self.group_no_samples]
 
         # For R2, we don't need to go to the LieAlgebra. We can parameterize the kernel directly on the input space
-        acted_rel_pos = self.group.left_action_on_Rd(
-            self.group.inv(g_elems.view(-1, self.group.dimension_stabilizer)), rel_pos
+        acted_rel_pos_Rd = self.group.left_action_on_Rd(
+            self.group.inv(g_elems.view(-1, self.group.dimension_stabilizer)), input_rel_pos
         )
+
+        kernel_size = acted_rel_pos_Rd.shape[-2:]
+        image_size = x.shape[-2:]
+
+        if self.cond_trans:
+            output_g_no_elems = self.group_no_samples
+
+            acted_rel_pos = torch.cat(
+                (
+                    # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
+                    # [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x]
+                    # +->  [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
+                    acted_rel_pos_Rd.contiguous().view(
+                        no_samples * output_g_no_elems,
+                        2,
+                        *kernel_size,
+                        1,
+                        1)
+                    .expand(
+                        *(-1,) * 4, *image_size
+                    ),
+                    # Expand the output rel pos Rd output_g_no_elems times along the "group axis", and "output group axes"
+                    # [2, output_size_x, output_size_y]
+                    # +->  [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x, output_size_x, output_size_y]
+                    output_rel_pos.contiguous().view(
+                        1,
+                        2,
+                        1,
+                        1,
+                        *image_size)
+                    .expand(
+                        no_samples * output_g_no_elems,
+                        -1,
+                        *kernel_size,
+                        -1,
+                        -1
+                    )
+                ),
+                dim=1,
+            )
+        else:
+            acted_rel_pos = acted_rel_pos_Rd.contiguous()
 
         self.acted_rel_pos = acted_rel_pos
 
         # Get the kernel
-        conv_kernel = self.kernelnet(acted_rel_pos).view(
-            no_samples * self.group_no_samples,
-            self.out_channels,
-            self.in_channels,
-            *acted_rel_pos.shape[-2:],
-        )
+        conv_kernel = self.kernelnet(acted_rel_pos)
+
+        if self.cond_trans:
+            conv_kernel = conv_kernel.view(
+                no_samples * self.group_no_samples,
+                self.out_channels,
+                self.in_channels,
+                *kernel_size,
+                *image_size
+            )
+        else:
+            conv_kernel = conv_kernel.view(
+                no_samples * self.group_no_samples,
+                self.out_channels,
+                self.in_channels,
+                *kernel_size,
+            )
+
 
         # Filter values outside the sphere
-        mask = (torch.norm(acted_rel_pos[:, :2], dim=1) > 1.0).unsqueeze(1).unsqueeze(2)
-        mask = mask.expand_as(conv_kernel)
-        conv_kernel[mask] = 0
+
+        # TODO: temporary removed masking, should be applied at most efficient location
+        # mask = torch.norm(acted_rel_pos_Rd, dim=1) > 1.0
+        # if self.cond_trans:
+        #     mask = mask.view(mask.size(0), 1, 1, *kernel_size, 1, 1)
+        # else:
+        #     mask = mask.view(mask.size(0), 1, 1, *kernel_size)
+
+        # mask = mask.expand_as(conv_kernel)
 
         self.conv_kernel = conv_kernel
 
         # Reshape conv_kernel for convolution
-        conv_kernel = conv_kernel.view(
-            no_samples * self.group_no_samples * self.out_channels,
-            self.in_channels,
-            *acted_rel_pos.shape[-2:],
-        )
+        if self.cond_trans:
+            conv_kernel = conv_kernel.contiguous().view(
+                no_samples * self.group_no_samples * self.out_channels,
+                self.in_channels,
+                *kernel_size,
+                *image_size
+            )
+        else:
+            conv_kernel = conv_kernel.contiguous().view(
+                no_samples * self.group_no_samples * self.out_channels,
+                self.in_channels,
+                *kernel_size
+            )
 
         # Convolution:
         if no_samples == 1:
-            out = torch_F.conv2d(
-                input=x,
-                weight=conv_kernel,
-                padding=self.padding,
-                groups=1,
-            )
+            inp = x
         else:
-            # If each batch element has independent rotations, we need to perform them as grouped convolutions.
-            out = torch_F.conv2d(
-                input=x.view(1, -1, *x.shape[2:]),  # Shift batch_size to input
-                weight=conv_kernel,
-                padding=self.padding,
-                groups=no_samples,
-            )
+            inp = x.view(1, -1, *x.shape[2:]),  # Shift batch_size to input
+
+        # assert self.padding == 'same', f"Only implemented same padding."
+        # Compute convolution as a 2D convolution
+        padding = tuple([x // 2 for x in kernel_size])
+        padding = padding + padding
+        if self.padding == 'same':
+            inp_pad = torch_F.pad(inp, padding, 'replicate')
+        elif self.padding == 'valid':
+            inp_pad = pad
+        else:
+            raise NotImplementedError(f"Unknown padding [{self.padding}].")
+
+        # unfold (transfer input to patch space: bix' -> bpx)
+        inp_unf = torch.nn.functional.unfold(inp_pad, kernel_size)
+
+        if self.cond_trans:
+            # apply conditional kernel filter
+            k_unf = conv_kernel.view(conv_kernel.size(0), conv_kernel.size(1)*kernel_size[0]*kernel_size[1], image_size[0]*image_size[1])
+
+            out_unf = einsum('bpx,opx->box', inp_unf, k_unf)
+
+            # out = torch.nn.functional.fold(out_unf, (32, 32), (1, 1))# , or equivalent that avoids mem copy:
+            out = out_unf.view(out_unf.size(0), -1, *image_size)
+
+        else:
+            # Perform convolution as regular broadcasted matrix multiplication
+            k_unf = conv_kernel.view(conv_kernel.size(0), conv_kernel.size(1)*kernel_size[0]*kernel_size[1])
+
+            # or einsum
+            out_unf = einsum('bpx,op->box', inp_unf, k_unf)
+
+            out = out_unf.view(out_unf.size(0), -1, *image_size)
 
         out = out.view(
             -1, self.group_no_samples, self.out_channels, *out.shape[-2:]
-        ).transpose(1, 2)
+        )
+        out = out.transpose(1, 2)
 
         # Add bias:
         if self.bias is not None:
@@ -312,7 +436,7 @@ class GroupConv(ConvBase):
             self.group_sampling_method,
             base_group_config.no_samples,
         )
-        if self.partial_equiv:
+        if self.part_rot:
             self.probs = torch.nn.Parameter(probs)
         else:
             self.register_buffer("probs", probs)
@@ -331,7 +455,24 @@ class GroupConv(ConvBase):
         x, input_g_elems = input_tuple
 
         # Get input grid of conv kernel
-        rel_pos = self.handle_rel_positions_on_Rd(x)
+        input_rel_pos = self.handle_rel_positions_on_Rd(x)
+
+        if self.padding == 'same':
+            new_image_size = x.shape[-2:]
+        else:
+            # HACK
+            new_image_size = (2, 2)
+
+        # Get output grid relative positions, if needed
+        if not hasattr(self, 'output_rel_pos'):
+            # TODO: now assuming x to have same size always
+            self.output_rel_pos = g_utils.rel_positions_grid(
+                grid_sizes=new_image_size
+            )
+            self.output_rel_pos = self.output_rel_pos.to(x.device)
+
+        output_rel_pos = self.output_rel_pos
+
 
         # Define the number of independent samples to take from the group. If self.sample_per_batch_element == True, and
         # self.group_sampling_method == RANDOM, then batch_size independent self.group_no_samples samples from the group
@@ -349,14 +490,14 @@ class GroupConv(ConvBase):
         if (
             self.group_sample_per_layer
             and self.group_sampling_method == SamplingMethods.RANDOM
-        ) or self.partial_equiv:
+        ) or self.part_rot:
             # Sample from the group
             g_elems = self.group.sample_from_stabilizer(
                 no_samples=no_samples,
                 no_elements=self.group_no_samples,
                 method=self.group_sampling_method,
                 device=x.device,
-                partial_equivariance=self.partial_equiv,
+                partial_equivariance=self.part_rot,
                 probs=self.probs,
             )
         else:
@@ -374,7 +515,7 @@ class GroupConv(ConvBase):
 
         # Act on Rd with the resulting elements
         acted_rel_pos_Rd = self.group.left_action_on_Rd(
-            self.group.inv(g_elems.view(-1, self.group.dimension_stabilizer)), rel_pos
+            self.group.inv(g_elems.view(-1, self.group.dimension_stabilizer)), input_rel_pos
         )
 
         # Combine both grids
@@ -383,82 +524,190 @@ class GroupConv(ConvBase):
         output_g_no_elems = acted_g_elements.shape[1]
         no_samples = acted_g_elements.shape[0]
 
-        acted_group_rel_pos = torch.cat(
-            (
-                # Expand the acted rel pos Rd input_g_no_elems times along the "group axis".
-                # [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x]
-                # +->  [no_samples * output_g_no_elems, 2, input_no_g_elems, kernel_size_y, kernel_size_x]
-                acted_rel_pos_Rd.unsqueeze(2).expand(
-                    *(-1,) * 2, input_g_no_elems, *(-1,) * 2
-                ),
-                # Expand the acted g elements along the "spatial axes".
-                # [no_samples, output_g_no_elems, input_g_no_elems, self.group.dimension_stabilizer]
-                # +->  [no_samples * output_g_no_elems, self.group.dimension_stabilizer, input_no_g_elems, kernel_size_y, kernel_size_x]
-                acted_g_elements.transpose(-1, -2)
-                .contiguous()
-                .view(
-                    no_samples * output_g_no_elems,
-                    self.group.dimension_stabilizer,
-                    input_g_no_elems,
-                    1,
-                    1,
-                )
-                .expand(
-                    -1,
-                    -1,
-                    -1,
-                    *acted_rel_pos_Rd.shape[2:],
-                ),
-            ),
-            dim=1,
-        )
+        kernel_size = acted_rel_pos_Rd.shape[-2:]
+        image_size = x.shape[-2:]
 
+        if self.cond_trans:
+            acted_group_rel_pos = torch.cat(
+                (
+                    # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
+                    # [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x]
+                    # +->  [no_samples * output_g_no_elems, 2, input_no_g_elems, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
+                    acted_rel_pos_Rd.contiguous().view(
+                        no_samples * output_g_no_elems,
+                        2,
+                        1,
+                        *kernel_size,
+                        1,
+                        1)
+                    .expand(
+                        *(-1,) * 2, input_g_no_elems, *(-1,) * 2, *new_image_size
+                    ),
+                    # Expand the acted g elements along the "spatial axes", and "output group axes"
+                    # [no_samples, output_g_no_elems, input_g_no_elems, self.group.dimension_stabilizer]
+                    # +->  [no_samples * output_g_no_elems, self.group.dimension_stabilizer, input_no_g_elems, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
+                    acted_g_elements.transpose(-1, -2)
+                    .contiguous()
+                    .view(
+                        no_samples * output_g_no_elems,
+                        self.group.dimension_stabilizer,
+                        input_g_no_elems,
+                        1,
+                        1,
+                        1,
+                        1,
+                    )
+                    .expand(
+                        -1,
+                        -1,
+                        -1,
+                        *kernel_size,
+                        *new_image_size
+                    ),
+                    # Expand the output rel pos Rd output_g_no_elems times along the "group axis", and "output group axes"
+                    # [2, output_size_x, output_size_y]
+                    # +->  [no_samples * output_g_no_elems, 2, input_no_g_elems, kernel_size_y, kernel_size_x, output_size_x, output_size_y]
+                    output_rel_pos.contiguous().view(
+                        1,
+                        2,
+                        1,
+                        1,
+                        1,
+                        *new_image_size)
+                        .expand(
+                        no_samples * output_g_no_elems,
+                        -1,
+                        input_g_no_elems,
+                        *kernel_size,
+                        -1,
+                        -1)
+                ),
+                dim=1,
+            )
+            
+        else:
+            acted_group_rel_pos = torch.cat(
+                (
+                    # Expand the acted rel pos Rd input_g_no_elems times along the "group axis".
+                    # [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x]
+                    # +->  [no_samples * output_g_no_elems, 2, input_no_g_elems, kernel_size_y, kernel_size_x]
+                    acted_rel_pos_Rd.unsqueeze(2).expand(
+                        *(-1,) * 2, input_g_no_elems, *(-1,) * 2
+                    ),
+                    # Expand the acted g elements along the "spatial axes".
+                    # [no_samples, output_g_no_elems, input_g_no_elems, self.group.dimension_stabilizer]
+                    # +->  [no_samples * output_g_no_elems, self.group.dimension_stabilizer, input_no_g_elems, kernel_size_y, kernel_size_x]
+                    acted_g_elements.transpose(-1, -2)
+                    .contiguous()
+                    .view(
+                        no_samples * output_g_no_elems,
+                        self.group.dimension_stabilizer,
+                        input_g_no_elems,
+                        1,
+                        1,
+                    )
+                    .expand(
+                        -1,
+                        -1,
+                        -1,
+                        *kernel_size
+                    ),
+                ),
+                dim=1,
+            )
         self.acted_rel_pos = acted_group_rel_pos
 
         # Get the kernel
-        conv_kernel = self.kernelnet(acted_group_rel_pos).view(
+        conv_kernel = self.kernelnet(acted_group_rel_pos)
+
+        conv_kernnel = conv_kernel.view(
             no_samples * output_g_no_elems,
             self.out_channels,
             self.in_channels,
-            *acted_group_rel_pos.shape[2:],
+            *acted_group_rel_pos.shape[2:]
         )
 
-        # Filter values outside the sphere
-        mask = (
-            (torch.norm(acted_group_rel_pos[:, :2], dim=1) > 1.0)
-            .unsqueeze(1)
-            .unsqueeze(2)
-        )
-        mask = mask.expand_as(conv_kernel)
-        conv_kernel[mask] = 0
+        # TODO: write masking code at efficient location with generalized group convolution
+        # # Filter values outside the sphere
+        # mask = torch.norm(acted_rel_pos_Rd, dim=1) > 1.0
+        # if self.cond_trans:
+        #     mask = mask.view(mask.size(0), 1, 1, 1, *kernel_size, 1, 1)
+        # else:
+        #     mask = mask.view(mask.size(0), 1, 1, 1, *kernel_size)
+        # mask = mask.expand_as(conv_kernel)
+
+        # conv_kernel[mask] = 0
 
         self.conv_kernel = conv_kernel
 
         # Reshape conv_kernel for convolution
-        conv_kernel = conv_kernel.contiguous().view(
-            no_samples * output_g_no_elems * self.out_channels,
-            self.in_channels * input_g_no_elems,
-            *conv_kernel.shape[-2:],
-        )
+        if self.cond_trans:
+            conv_kernel = conv_kernel.contiguous().view(
+                no_samples * self.group_no_samples * self.out_channels,
+                self.in_channels * input_g_no_elems,
+                *kernel_size,
+                *new_image_size
+            )
+        else:
+            conv_kernel = conv_kernel.contiguous().view(
+                no_samples * self.group_no_samples * self.out_channels,
+                self.in_channels * input_g_no_elems,
+                *kernel_size
+            )
 
         # Convolution:
         if no_samples == 1:
-            out = torch_F.conv2d(
-                input=x.contiguous().view(
-                    -1, self.in_channels * input_g_no_elems, *x.shape[-2:]
-                ),
-                weight=conv_kernel,
-                padding=self.padding,
-                groups=1,
-            )
+            inp = x.contiguous().view(-1, self.in_channels * input_g_no_elems, *x.shape[-2:])
         else:
-            # Compute convolution as a 2D convolution
-            out = torch_F.conv2d(
-                input=x.contiguous().view(1, -1, *x.shape[3:]),
-                weight=conv_kernel,
-                padding=self.padding,
-                groups=no_samples,
-            )
+            inp = x.contiguous().view(1, -1, *x.shape[3:]),
+
+        # Compute convolution as a 2D convolution
+        padding = tuple([x // 2 for x in kernel_size])
+        padding = padding + padding
+        if self.padding == 'same':
+            inp_pad = torch_F.pad(inp, padding, 'replicate')
+        elif self.padding == 'valid':
+            inp_pad = inp
+        else:
+            raise NotImplementedError(f"Unknown padding [{self.padding}].")
+
+        # unfold (transfer input to patch space: bix' -> bpx)
+        inp_unf = torch.nn.functional.unfold(inp_pad, kernel_size)
+
+        if self.cond_trans:
+            # apply conditional kernel filter
+            k_unf = conv_kernel.view(conv_kernel.size(0), conv_kernel.size(1)*kernel_size[0]*kernel_size[1], new_image_size[0]*new_image_size[1])
+
+            if self.kernelnet.omega_1 == 0.0:
+                assert (k_unf.std(2) == 0.0).all(), f"No equivariance check"
+
+            out_unf = einsum('bpx,opx->box', inp_unf, k_unf)
+
+            out_unf = out_unf.transpose(1, 2)
+
+            # out = torch.nn.functional.fold(out_unf, (32, 32), (1, 1)), equivalent that avoids mem copy:
+            out = out_unf.contiguous().view(out_unf.size(0), -1, *new_image_size)
+        else:
+            # Perform convolution as regular broadcasted matrix multiplication
+            k_unf = conv_kernel.view(conv_kernel.size(0), conv_kernel.size(1)*kernel_size[0]*kernel_size[1])
+
+            # using transpose
+            # out_unf = inp_unf.transpose(1, 2).matmul(k_unf.t()).transpose(1, 2)
+
+            # or einsum
+            out_unf = einsum('bpx,op->box', inp_unf, k_unf)
+
+            # out = torch.nn.functional.fold(out_unf, (32, 32), (1, 1)) #, equivalent that avoids mem copy:
+            out = out_unf.contiguous().view(out_unf.size(0), -1, *new_image_size)
+
+            # # Original conv:
+            # out_old = torch_F.conv2d(
+            #     input=inp_pad,
+            #     weight=conv_kernel,
+            #     groups=no_samples,
+            # )
+            # print(torch.mean(torch.abs(out - out_old)))
+
         out = out.view(
             -1, output_g_no_elems, self.out_channels, *out.shape[2:]
         ).transpose(1, 2)
@@ -547,30 +796,27 @@ class PointwiseGroupConv(ConvBase):
         self.conv_kernel = conv_kernel
 
         # Reshape conv_kernel for convolution
-        conv_kernel = conv_kernel.view(
+        conv_kernel = conv_kernel.contiguous().view(
             no_samples * output_g_no_elems * self.out_channels,
             self.in_channels * input_g_no_elems,
             *conv_kernel.shape[-2:],
         )
 
         # Convolution:
+
         if no_samples == 1:
-            out = torch_F.conv2d(
-                input=x.contiguous().view(
-                    -1, self.in_channels * input_g_no_elems, *x.shape[-2:]
-                ),
-                weight=conv_kernel,
-                padding=self.padding,
-                groups=1,
-            )
+            inp = x.contiguous().view(-1, self.in_channels * input_g_no_elems, *x.shape[-2:])
         else:
-            # Compute convolution as a 2D convolution
-            out = torch_F.conv2d(
-                input=x.contiguous().view(1, -1, *x.shape[3:]),
-                weight=conv_kernel,
-                padding=self.padding,
-                groups=no_samples,
-            )
+            inp = x.contiguous().view(1, -1, *x.shape[3:])
+
+        out = torch_F.conv2d(
+            input=inp,
+            weight=conv_kernel,
+            padding=self.padding,
+            groups=no_samples,
+        )
+        outt = torch.einsum('bcij,dckl->bdij', inp, conv_kernel)
+
         out = out.view(
             -1, output_g_no_elems, self.out_channels, *out.shape[2:]
         ).transpose(1, 2)

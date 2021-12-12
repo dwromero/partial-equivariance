@@ -15,3 +15,9 @@ def Sine():
     out = sin(x)
     """
     return Expression(lambda x: torch.sin(x))
+
+def Cos():
+    """
+    out = cos(x)
+    """
+    return Expression(lambda x: torch.cos(x))

@@ -20,8 +20,8 @@ def construct_optimizer(model, cfg):
     lr = cfg.train.lr
     lr_probs = cfg.train.lr_probs
     lr_omega0 = cfg.train.lr_omega0
-    momentum = cfg.train.optimizer_params.momentum
-    nesterov = cfg.train.optimizer_params.nesterov
+    # momentum = cfg.train.optimizer_params.momentum
+    # nesterov = cfg.train.optimizer_params.nesterov
 
     # Check value of prob_lr and replace if undefined.
     if lr_probs == 0.0:
@@ -79,8 +79,8 @@ def construct_optimizer(model, cfg):
                 {"params": omega_0s, "lr": lr_omega0},
             ],
             lr=lr,
-            momentum=momentum,
-            nesterov=nesterov,
+            # momentum=momentum,
+            # nesterov=nesterov,
         )
     elif optim_type == "Adam":
         optimizer = torch.optim.Adam(
