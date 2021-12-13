@@ -27,6 +27,7 @@ class RFN(torch.nn.Module):
     ):
 
         super().__init__()
+        print(f"RFN: {dim_input_space}, {hidden_channels}, {out_channels} ")
 
         # Save params in self
         self.dim_input_space = dim_input_space
@@ -46,7 +47,7 @@ class RFN(torch.nn.Module):
         self.act1 = gral.nn.Cos()
         self.act2 = nn.ReLU(inplace=True)
 
-        self.mid_layers = nn.ModuleList([nn.Linear(hidden_channels, hidden_channels, bias=bias) for _ in range(self.no_layers)])
+        self.mid_layers = nn.ModuleList([nn.Linear(hidden_channels, hidden_channels, bias=bias) for _ in range(self.no_layers - 2)])
         self.last_layer = nn.Linear(hidden_channels, out_channels, bias=bias)
 
         # omega_0
