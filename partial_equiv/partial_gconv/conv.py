@@ -516,7 +516,6 @@ class GroupConv(ConvBase):
             acted_g_elements = acted_g_elements.unsqueeze(-1)
 
 
-
         # Act on Rd with the resulting elements
         acted_rel_pos_Rd = self.group.left_action_on_Rd(
             self.group.inv(g_elems.view(-1, self.group.dimension_stabilizer)), input_rel_pos
@@ -624,14 +623,13 @@ class GroupConv(ConvBase):
         # Get the kernel
         conv_kernel = self.kernelnet(acted_group_rel_pos)
 
-        conv_kernnel = conv_kernel.view(
-            no_samples * output_g_no_elems,
-            self.out_channels,
-            self.in_channels,
-            *acted_group_rel_pos.shape[2:]
-        )
-
         # TODO: write masking code at efficient location with generalized group convolution
+        # conv_kernel = conv_kernel.view(
+        #     no_samples * output_g_no_elems,
+        #     self.out_channels,
+        #     self.in_channels,
+        #     *acted_group_rel_pos.shape[2:]
+        # )
         # # Filter values outside the sphere
         # mask = torch.norm(acted_rel_pos_Rd, dim=1) > 1.0
         # if self.cond_trans:
@@ -647,14 +645,14 @@ class GroupConv(ConvBase):
         # Reshape conv_kernel for convolution
         if self.cond_trans:
             conv_kernel = conv_kernel.contiguous().view(
-                no_samples * self.group_no_samples * self.out_channels,
+                no_samples * output_g_no_elems * self.out_channels,
                 self.in_channels * input_g_no_elems,
                 *kernel_size,
                 *new_image_size
             )
         else:
             conv_kernel = conv_kernel.contiguous().view(
-                no_samples * self.group_no_samples * self.out_channels,
+                no_samples * output_g_no_elems * self.out_channels,
                 self.in_channels * input_g_no_elems,
                 *kernel_size
             )
