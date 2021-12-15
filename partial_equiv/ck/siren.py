@@ -43,7 +43,7 @@ class SIRENBase(torch.nn.Module):
         # 1st layer:
         kernel_net = [
             Linear_hidden(
-                dim_input_space, hidden_channels, omega_0, learn_omega_0, omega_1, learn_omega_1, bias
+                dim_input_space, hidden_channels, bias
             ),
             ActivationFunction(),
         ]
@@ -55,10 +55,6 @@ class SIRENBase(torch.nn.Module):
                     Linear_hidden(
                         hidden_channels,
                         hidden_channels,
-                        omega_0,
-                        learn_omega_0,
-                        omega_1,
-                        learn_omega_1,
                         bias,
                     ),
                     ActivationFunction(),
