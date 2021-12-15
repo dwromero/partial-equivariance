@@ -34,6 +34,7 @@ class ConvBase(torch.nn.Module):
         kernel_type = kernel_config.type
         kernel_no_hidden = kernel_config.no_hidden
         kernel_no_layers = kernel_config.no_layers
+        kernel_init_scale = kernel_config.init_scale
         kernel_weight_norm = kernel_config.weight_norm
         kernel_omega0 = kernel_config.omega0
         kernel_learn_omega0 = kernel_config.learn_omega0
@@ -86,6 +87,7 @@ class ConvBase(torch.nn.Module):
                 out_channels=out_channels * in_channels,
                 hidden_channels=kernel_no_hidden,
                 no_layers=kernel_no_layers,
+                init_scale=kernel_init_scale,
                 weight_norm=kernel_weight_norm,
                 bias=True,
                 omega_0=kernel_omega0,
@@ -99,6 +101,7 @@ class ConvBase(torch.nn.Module):
                 out_channels=out_channels * in_channels,
                 hidden_channels=kernel_no_hidden,
                 no_layers=kernel_no_layers,
+                init_scale=kernel_init_scale,
                 weight_norm=kernel_weight_norm,
                 bias=True,
                 omega_0=kernel_omega0,
@@ -371,7 +374,8 @@ class LiftingConv(ConvBase):
         padding = tuple([x // 2 for x in kernel_size])
         padding = padding + padding
         if self.padding == 'same':
-            inp_pad = torch_F.pad(inp, padding, 'replicate')
+            #inp_pad = torch_F.pad(inp, padding, 'replicate')
+            inp_pad = torch_F.pad(inp, padding, 'constant')
         elif self.padding == 'valid':
             inp_pad = pad
         else:
@@ -646,6 +650,11 @@ class GroupConv(ConvBase):
 
         # Reshape conv_kernel for convolution
         if self.cond_trans:
+            print(f'no_samples: {no_samples}')
+            print(f'gr_samples: {self.group_no_samples}')
+            print(f'o_channels: {self.out_channels}')
+            print(f'i_channels: {self.in_channels}, {input_g_no_elems}')
+            print(f'{kernel_size}, {new_image_size}')
             conv_kernel = conv_kernel.contiguous().view(
                 no_samples * self.group_no_samples * self.out_channels,
                 self.in_channels * input_g_no_elems,

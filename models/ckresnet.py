@@ -324,8 +324,13 @@ class CKResNet(torch.nn.Module):
             out = torch.amax(out, dim=(-3, -2, -1), keepdim=True)
 
         # Final layer
+        print(f"OUT1 {out.shape}")
         out = self.out_layer(out.squeeze(-3))
-        return out.view(-1, self.out_channels)
+        print(f"OUT2 {out.shape}")
+        out = out.view(-1, self.out_channels)
+        print(f"OUT3 {out.shape}")
+
+        return out
 
 
 class AugerinoCKResNet(torch.nn.Module):
