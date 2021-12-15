@@ -26,6 +26,7 @@ kernel:
   learn_omega0: False
   omega1: 0.0
   learn_omega1: False
+  init_scale: 1.0
   weight_norm: False
   norm: ""
   activation: ""

@@ -24,6 +24,7 @@ class RFN(torch.nn.Module):
         learn_omega_0: bool,
         omega_1: float,
         learn_omega_1: bool,
+        init_scale: float
     ):
 
         super().__init__()
@@ -127,7 +128,7 @@ class RFN(torch.nn.Module):
                     self.first_layer.weight.data = self.first_layer.weight.data[:, :self.dim_input_space]
                 else:
                     print(f'Init {m}')
-                    w_std = sqrt(6.0 / m.weight.shape[1])
+                    w_std = sqrt(6.0 / m.weight.shape[1]) * self.init_scale
                     m.weight.data.uniform_(
                         -w_std,
                         w_std,
