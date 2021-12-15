@@ -17,7 +17,9 @@ class CIFAR10(datasets.CIFAR10):
             root = kwargs["root"]
         else:
             root = utils.get_original_cwd()
-            root = os.path.join(root, "data")
+
+        import numpy as np
+        root = os.path.join(root, f"data_{np.random.randint(999999999999)}")
 
         transform = []
         if augment == "resnet":

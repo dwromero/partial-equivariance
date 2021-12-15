@@ -25,14 +25,14 @@ def main(cfg: OmegaConf):
     print("Input arguments:")
     print(OmegaConf.to_yaml(cfg))
 
-    # Set visible devices for run
-    if cfg.cuda_visible_devices[0] == -1:
-        # If it's -1, all devices are used.
-        pass
-    else:
-        os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(
-            str(x) for x in cfg.cuda_visible_devices
-        )
+    # # Set visible devices for run
+    # if cfg.cuda_visible_devices[0] == -1:
+    #     # If it's -1, all devices are used.
+    #     pass
+    # else:
+    #     os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(
+    #         str(x) for x in cfg.cuda_visible_devices
+    #     )
 
     # Verify if the current arguments are compatible
     verify_arguments(cfg)
@@ -60,6 +60,16 @@ def main(cfg: OmegaConf):
         print("Let's use", torch.cuda.device_count(), "GPUs!")
     if (cfg.device == "cuda") and torch.cuda.is_available():
         cfg.device = "cuda:0"
+    elif cfg.device.startswith("cuda:"):
+        cfg.device = cfg.device
+        # print(f'cfgdevice: [{cfg.device}]')
+        # device_num = int(cfg.device[-1])
+        # print(f'devicenum: {device_num}')
+        # print(os.environ["CUDA_VISIBLE_DEVICES"])
+        # actual_num = int(os.environ["CUDA_VISIBLE_DEVICES"].split(',')[device_num])
+        # print(f'actual_num: {actual_num}')
+        # cfg.device = f'cuda:{actual_num}'
+        # print(f'DEVICE={cfg.device}')
     else:
         cfg.device = "cpu"
     model.to(cfg.device)
