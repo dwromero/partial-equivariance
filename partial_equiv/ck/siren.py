@@ -74,7 +74,7 @@ class SIRENBase(torch.nn.Module):
         self.kernel_net = torch.nn.Sequential(*kernel_net)
 
         # initialize the kernel function
-        self.initialize(omega_0=omega_0)
+        self.initialize()
 
         # Weight_norm
         if weight_norm:
@@ -83,20 +83,38 @@ class SIRENBase(torch.nn.Module):
                     # All Conv layers are subclasses of torch.nn.Conv
                     self.kernel_net[i] = w_norm(module)
 
+        # omega_0
+        if learn_omega_0:
+            self.omega_0 = torch.nn.Parameter(torch.Tensor(1))
+            with torch.no_grad():
+                self.omega_0.fill_(omega_0)
+        else:
+            tensor_omega_0 = torch.zeros(1)
+            tensor_omega_0.fill_(omega_0)
+            self.register_buffer("omega_0", tensor_omega_0)
+
+        # omega_1
+        if learn_omega_1:
+            self.omega_1 = torch.nn.Parameter(torch.Tensor(1))
+            with torch.no_grad():
+                self.omega_1.fill_(omega_1)
+        else:
+            tensor_omega_1 = torch.zeros(1)
+            tensor_omega_1.fill_(omega_1)
+            self.register_buffer("omega_1", tensor_omega_1)
+
     def forward(self, x):
-        print('x', x.shape)
-        exit(1)
         x = x.clone()
-        # if self.dim_input_space in [1, 2, 3]:
-        #     x = x * self.omega_0
-        # elif self.dim_input_space == 4:
-        #     x[:, :, :2] *= self.omega_0
-        #     x[:, :, 2:] *= self.omega_1
-        # elif self.dim_input_space == 5:
-        #     x[:, :, :3] *= self.omega_0
-        #     x[:, :, 3:] *= self.omega_1
-        # else:
-        #     raise NotImplementedError(f"Unknown input space: {self.dim_input_space}")
+        if self.dim_input_space in [1, 2, 3]:
+            x = x * self.omega_0
+        elif self.dim_input_space == 4:
+            x[:, :2] *= self.omega_0
+            x[:, 2:] *= self.omega_1
+        elif self.dim_input_space == 5:
+            x[:, :3] *= self.omega_0
+            x[:, 3:] *= self.omega_1
+        else:
+            raise NotImplementedError(f"Unknown input space: {self.dim_input_space}")
 
         # If dim_linear >3 , we cannot use a convolution operation. In this case, we must use a Linear layer instead.
         # However, since transposes are expensive, we try to avoid using t his as much as possible.
@@ -112,7 +130,7 @@ class SIRENBase(torch.nn.Module):
             out = self.kernel_net(x)
         return out
 
-    def initialize(self, omega_0, omega_1):
+    def initialize(self):
 
         net_layer = 1
         for (i, m) in enumerate(self.modules()):
@@ -211,10 +229,6 @@ class SIRENLayer1d(torch.nn.Conv1d):
         self,
         in_channels: int,
         out_channels: int,
-        omega_0: float,
-        learn_omega_0: bool,
-        omega_1: float,
-        learn_omega_1: bool,
         bias: bool,
     ):
         """
@@ -231,27 +245,8 @@ class SIRENLayer1d(torch.nn.Conv1d):
             bias=bias,
         )
 
-        # omega_0
-        if learn_omega_0:
-            self.omega_0 = torch.nn.Parameter(torch.Tensor(1))
-            with torch.no_grad():
-                self.omega_0.fill_(omega_0)
-        else:
-            tensor_omega_0 = torch.zeros(1)
-            tensor_omega_0.fill_(omega_0)
-            self.register_buffer("omega_0", tensor_omega_0)
-        # omega_1
-        if learn_omega_1:
-            self.omega_1 = torch.nn.Parameter(torch.Tensor(1))
-            with torch.no_grad():
-                self.omega_1.fill_(omega_1)
-        else:
-            tensor_omega_1 = torch.zeros(1)
-            tensor_omega_1.fill_(omega_1)
-            self.register_buffer("omega_1", tensor_omega_1)
-
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.omega_0 * torch.nn.functional.conv1d(
+        return torch.nn.functional.conv1d(
             x, self.weight, self.bias, stride=1, padding=0
         )
 
@@ -261,10 +256,6 @@ class SIRENLayer2d(torch.nn.Conv2d):
         self,
         in_channels: int,
         out_channels: int,
-        omega_0: float,
-        learn_omega_0: bool,
-        omega_1: float,
-        learn_omega_1: bool,
         bias: bool,
     ):
         """
@@ -279,26 +270,6 @@ class SIRENLayer2d(torch.nn.Conv2d):
             dilation=1,
             bias=bias,
         )
-
-        # omega_0
-        if learn_omega_0:
-            self.omega_0 = torch.nn.Parameter(torch.Tensor(1))
-            with torch.no_grad():
-                self.omega_0.fill_(omega_0)
-        else:
-            tensor_omega_0 = torch.zeros(1)
-            tensor_omega_0.fill_(omega_0)
-            self.register_buffer("omega_0", tensor_omega_0)
-
-        # omega_1
-        if learn_omega_1:
-            self.omega_1 = torch.nn.Parameter(torch.Tensor(1))
-            with torch.no_grad():
-                self.omega_1.fill_(omega_1)
-        else:
-            tensor_omega_1 = torch.zeros(1)
-            tensor_omega_1.fill_(omega_1)
-            self.register_buffer("omega_1", tensor_omega_1)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return torch.nn.functional.conv2d(
@@ -311,10 +282,6 @@ class SIRENLayer3d(torch.nn.Conv3d):
         self,
         in_channels: int,
         out_channels: int,
-        omega_0: float,
-        learn_omega_0: bool,
-        omega_1: float,
-        learn_omega_1: bool,
         bias: bool,
     ):
         """
@@ -329,26 +296,6 @@ class SIRENLayer3d(torch.nn.Conv3d):
             dilation=1,
             bias=bias,
         )
-
-        # omega_0
-        if learn_omega_0:
-            self.omega_0 = torch.nn.Parameter(torch.Tensor(1))
-            with torch.no_grad():
-                self.omega_0.fill_(omega_0)
-        else:
-            tensor_omega_0 = torch.zeros(1)
-            tensor_omega_0.fill_(omega_0)
-            self.register_buffer("omega_0", tensor_omega_0)
-
-        # omega_1
-        if learn_omega_1:
-            self.omega_1 = torch.nn.Parameter(torch.Tensor(1))
-            with torch.no_grad():
-                self.omega_1.fill_(omega_1)
-        else:
-            tensor_omega_1 = torch.zeros(1)
-            tensor_omega_1.fill_(omega_1)
-            self.register_buffer("omega_1", tensor_omega_1)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return torch.nn.functional.conv3d(
@@ -365,10 +312,6 @@ class SIRENLayerNd(torch.nn.Linear):
         self,
         in_channels: int,
         out_channels: int,
-        omega_0: float,
-        learn_omega_0: bool,
-        omega_1: float,
-        learn_omega_1: bool,
         bias: bool,
     ):
         """
@@ -379,26 +322,6 @@ class SIRENLayerNd(torch.nn.Linear):
             out_features=out_channels,
             bias=bias,
         )
-
-        # omega_0
-        if learn_omega_0:
-            self.omega_0 = torch.nn.Parameter(torch.Tensor(1))
-            with torch.no_grad():
-                self.omega_0.fill_(omega_0)
-        else:
-            tensor_omega_0 = torch.zeros(1)
-            tensor_omega_0.fill_(omega_0)
-            self.register_buffer("omega_0", tensor_omega_0)
-
-        # omega_1
-        if learn_omega_1:
-            self.omega_1 = torch.nn.Parameter(torch.Tensor(1))
-            with torch.no_grad():
-                self.omega_1.fill_(omega_1)
-        else:
-            tensor_omega_1 = torch.zeros(1)
-            tensor_omega_1.fill_(omega_1)
-            self.register_buffer("omega_1", tensor_omega_1)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return torch.nn.functional.linear(x, self.weight, self.bias)
