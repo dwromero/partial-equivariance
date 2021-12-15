@@ -22,6 +22,8 @@ from typing import Dict
 from torch.utils.data import DataLoader
 from omegaconf import OmegaConf
 
+# os.environ["CUBLAS_WORKSPACE_CONFIG"]=":4096:8"
+# torch.use_deterministic_algorithms(True)
 
 def train(
     model: torch.nn.Module,

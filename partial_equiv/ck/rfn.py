@@ -18,6 +18,7 @@ class RFN(torch.nn.Module):
         out_channels: int,
         hidden_channels: int,
         no_layers: int,
+        init_scale: float,
         weight_norm: bool,
         bias: bool,
         omega_0: float,
@@ -35,6 +36,8 @@ class RFN(torch.nn.Module):
         self.out_channels = out_channels
         self.hidden_channels = hidden_channels
         self.no_layers = no_layers
+
+        self.init_scale = init_scale
 
         # Construct the network
         # ---------------------
@@ -78,27 +81,41 @@ class RFN(torch.nn.Module):
     def forward(self, x):
         assert x.size(1) == self.dim_input_space, f"Dim linear should equal dimension of input x.size(1)"
 
-        out = x.clone()
+        #out = x.clone()
 
-        x_shape = out.shape
+        x_shape = x.shape
 
         # Put in_channels dimension at last and compress all other dimensions to one [batch_size, -1, in_channels]
-        out = out.view(x_shape[0], x_shape[1], -1).transpose(1, 2) 
+        out = x.view(x_shape[0], x_shape[1], -1).transpose(1, 2) 
 
-        # Apply omega's
+        # # Apply omega's on inputs
+        # if self.dim_input_space in [1, 2, 3]:
+        #     out = out * self.omega_0
+        # elif self.dim_input_space == 4:
+        #     out[:, :, :2] *= self.omega_0
+        #     out[:, :, 2:] *= self.omega_1
+        # elif self.dim_input_space == 5:
+        #     out[:, :, :3] *= self.omega_0
+        #     out[:, :, 3:] *= self.omega_1
+        # else:
+        #     raise NotImplementedError(f"Unknown input space: {self.dim_input_space}")
+        # out = self.first_layer(out)
+
+        # Apply omega on weights
+        W = self.first_layer.weight.clone()
         if self.dim_input_space in [1, 2, 3]:
-            out = out * self.omega_0
+            W *= self.omega_0
         elif self.dim_input_space == 4:
-            out[:, :, :2] *= self.omega_0
-            out[:, :, 2:] *= self.omega_1
+            W[:, :2] *= self.omega_0
+            W[:, 2:] *= self.omega_1
         elif self.dim_input_space == 5:
-            out[:, :, :3] *= self.omega_0
-            out[:, :, 3:] *= self.omega_1
+            W[:, :3] *= self.omega_0
+            W[:, 3:] *= self.omega_1
         else:
             raise NotImplementedError(f"Unknown input space: {self.dim_input_space}")
+        out = torch.einsum('abc,dc->abd', out, W) + self.first_layer.bias.view(1, 1, -1)
 
         # Forward-pass through kernel net
-        out = self.first_layer(out)
         out = self.act1(out)
         out = out * np.sqrt(2 / self.hidden_channels)
 
@@ -126,6 +143,9 @@ class RFN(torch.nn.Module):
                     self.first_layer.weight.data.normal_(0.0, 1.0)
                     self.first_layer.bias.data.uniform_(0.0, 2 * np.pi)
                     self.first_layer.weight.data = self.first_layer.weight.data[:, :self.dim_input_space]
+
+                    self.first_layer.weight.requires_grad = False
+                    self.first_layer.bias.requires_grad = False
                 else:
                     print(f'Init {m}')
                     w_std = sqrt(6.0 / m.weight.shape[1]) * self.init_scale
