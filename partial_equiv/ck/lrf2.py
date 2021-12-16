@@ -95,8 +95,6 @@ class LRF2(torch.nn.Module):
         # out_sin = torch.sin(out_h)
         # out = torch.cat((out_cos, out_sin), -1)
         out = torch.cos(out)
-        norm = np.sqrt(2 / self.hidden_channels)
-        out *= norm
 
         for m in self.mid_layers:
             out = m(out)
@@ -117,13 +115,13 @@ class LRF2(torch.nn.Module):
 
         # mid layer
         for m in self.mid_layers:
-            w_std = init_scale
+            w_std = sqrt(6.0 / m.weight.shape[1]) * self.init_scale
             m.weight.data.uniform_(-w_std, w_std)
             if m.bias is not None:
                 m.bias.data.zero_()
 
         # last layer
-        w_std = init_scale
+        w_std = sqrt(6.0 / self.last_layer.weight.shape[1]) * self.init_scale
         self.last_layer.weight.data.uniform_(-w_std, w_std)
         if self.last_layer.bias is not None:
             self.last_layer.bias.data.zero_()
