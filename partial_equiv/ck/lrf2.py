@@ -36,6 +36,8 @@ class LRF2(torch.nn.Module):
         # 1st layer:
         self.first_layer = nn.Linear(dim_input_space, hidden_channels, bias)
 
+        self.act2 = nn.ReLU(inplace=True)
+
         # Last layer:
         self.mid_layers = []
         for _ in range(no_layers - 2):
@@ -98,6 +100,7 @@ class LRF2(torch.nn.Module):
 
         for m in self.mid_layers:
             out = m(out)
+            out = self.act2(out)
 
         out = self.last_layer(out)
 
