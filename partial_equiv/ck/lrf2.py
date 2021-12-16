@@ -13,6 +13,7 @@ class LRF2(torch.nn.Module):
         dim_input_space: int,
         out_channels: int,
         hidden_channels: int,
+        no_layers: int,
         init_scale: float,
         bias: bool,
         omega_0: float,
