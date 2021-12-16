@@ -84,7 +84,7 @@ class LRF(torch.nn.Module):
         out_cos = torch.cos(out_h)
         out_sin = torch.sin(out_h)
         out = torch.cat((out_cos, out_sin), -1)
-        norm = torch.sqrt(2 / self.hidden_channels)
+        norm = np.sqrt(2 / self.hidden_channels)
         out *= norm
 
         out = self.last_layer(out)
