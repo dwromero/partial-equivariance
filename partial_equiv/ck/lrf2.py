@@ -36,8 +36,10 @@ class LRF2(torch.nn.Module):
         self.first_layer = nn.Linear(dim_input_space, hidden_channels // 2, bias)
 
         # Last layer:
-        for _ in range(no_layers - 2)
-        self.last_layer = nn.Linear(hidden_channels, out_channels, bias=bias)
+        self.mid_layers = []
+        for _ in range(no_layers - 2):
+            self.mid_layers.append(nn.Linear(hidden_channels, out_channels, bias=bias))
+        self.mid_layers = nn.ModuleList(self.mid_layers)
 
         # Last layer:
         self.last_layer = nn.Linear(hidden_channels, out_channels, bias=bias)
@@ -93,7 +95,7 @@ class LRF2(torch.nn.Module):
         norm = np.sqrt(2 / self.hidden_channels)
         out *= norm
 
-        for m in self.middle_layers:
+        for m in self.mid_layers:
             out = m(out)
 
         out = self.last_layer(out)
