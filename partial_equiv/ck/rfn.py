@@ -25,7 +25,6 @@ class RFN(torch.nn.Module):
         learn_omega_0: bool,
         omega_1: float,
         learn_omega_1: bool,
-        init_scale: float
     ):
 
         super().__init__()

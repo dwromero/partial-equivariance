@@ -43,6 +43,7 @@ class SIRENBase(torch.nn.Module):
         # 1st layer:
         kernel_net = [
             Linear_hidden(
+                dim_input_space, hidden_channels, bias
             ),
             ActivationFunction(),
         ]
@@ -306,8 +307,6 @@ class SIRENLayerNd(torch.nn.Linear):
             out_features=out_channels,
             bias=bias,
         )
-
-        return torch.nn.functional.linear(x, self.weight, self.bias)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return torch.nn.functional.linear(x, self.weight, self.bias)
