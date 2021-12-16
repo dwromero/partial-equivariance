@@ -39,7 +39,7 @@ class LRF2(torch.nn.Module):
         # Last layer:
         self.mid_layers = []
         for _ in range(no_layers - 2):
-            self.mid_layers.append(nn.Linear(hidden_channels, out_channels, bias=bias))
+            self.mid_layers.append(nn.Linear(hidden_channels, hidden_channels, bias=bias))
         self.mid_layers = nn.ModuleList(self.mid_layers)
 
         # Last layer:
