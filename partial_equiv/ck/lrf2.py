@@ -111,9 +111,9 @@ class LRF2(torch.nn.Module):
 
     def initialize(self, init_scale):
         # first layer
-        self.first_layer.weight.data.uniform_(0, 2 * np.pi)
+        self.first_layer.weight.data.uniform_(0, 1.0)
         if self.first_layer.bias is not None:
-            self.first_layer.bias.data.zero_()
+            self.first_layer.bias.data.uniform_(0, 2.0 * np.pi)
 
         # mid layer
         for m in self.mid_layers:
