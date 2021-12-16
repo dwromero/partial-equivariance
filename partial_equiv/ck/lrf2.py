@@ -34,7 +34,7 @@ class LRF2(torch.nn.Module):
         # Construct the network
         # ---------------------
         # 1st layer:
-        self.first_layer = nn.Linear(dim_input_space, hidden_channels // 2, bias)
+        self.first_layer = nn.Linear(dim_input_space, hidden_channels, bias)
 
         # Last layer:
         self.mid_layers = []
