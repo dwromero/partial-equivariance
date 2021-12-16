@@ -28,6 +28,8 @@ class LRF(torch.nn.Module):
         self.out_channels = out_channels
         self.hidden_channels = hidden_channels
 
+        print(f'KERNEL: {self.dim_input_space} -> {self.hidden_channels} -> {self.out_channels}')
+
         # Construct the network
         # ---------------------
         # 1st layer:
@@ -40,7 +42,7 @@ class LRF(torch.nn.Module):
         if learn_omega_0:
             self.omega_0 = torch.nn.Parameter(torch.Tensor(1))
             with torch.no_grad():
-                self.omega_0fill_(omega_0)
+                self.omega_0.fill_(omega_0)
         else:
             tensor_omega_0 = torch.zeros(1)
             tensor_omega_0.fill_(omega_0)
@@ -66,21 +68,20 @@ class LRF(torch.nn.Module):
         if self.dim_input_space in [1, 2, 3]:
             out = out * self.omega_0
         elif self.dim_input_space == 4:
-            out[:, :, :2] *= self.omega_0
-            out[:, :, 2:] *= self.omega_1
+            out[:, :2] *= self.omega_0
+            out[:, 2:] *= self.omega_1
         elif self.dim_input_space == 5:
-            out[:, :, :3] *= self.omega_0
-            out[:, :, 3:] *= self.omega_1
+            out[:, :3] *= self.omega_0
+            out[:, 3:] *= self.omega_1
         else:
             raise NotImplementedError(f"Unknown input space: {self.dim_input_space}")
-        out = self.first_layer(out)
 
         x_shape = x.shape
         # Put in_channels dimension at last and compress all other dimensions to one [batch_size, -1, in_channels]
-        out = x.contiguous().view(x_shape[0], x_shape[1], -1).transpose(1, 2)
+        out = out.contiguous().view(x_shape[0], x_shape[1], -1).transpose(1, 2)
 
         # Pass through the network
-        out_h = self.first_layer(out * self.omega_0)
+        out_h = self.first_layer(out)
         out_cos = torch.cos(out_h)
         out_sin = torch.sin(out_h)
         out = torch.cat((out_cos, out_sin), -1)
