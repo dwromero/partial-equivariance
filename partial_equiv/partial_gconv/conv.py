@@ -100,7 +100,7 @@ class ConvBase(torch.nn.Module):
                 dim_input_space=self.dim_input_space,
                 out_channels=out_channels * in_channels,
                 hidden_channels=kernel_no_hidden,
-                init_scale=0.1,
+                init_scale=kernel_init_scale,
                 bias=True,
                 omega_0=kernel_omega0,
                 learn_omega_0=kernel_learn_omega0,
