@@ -115,13 +115,13 @@ class LRF2(torch.nn.Module):
 
         # mid layer
         for m in self.mid_layers:
-            w_std = sqrt(6.0 / m.weight.shape[1]) * self.init_scale
+            w_std = sqrt(6.0 / m.weight.shape[1]) * init_scale
             m.weight.data.uniform_(-w_std, w_std)
             if m.bias is not None:
                 m.bias.data.zero_()
 
         # last layer
-        w_std = sqrt(6.0 / self.last_layer.weight.shape[1]) * self.init_scale
+        w_std = sqrt(6.0 / self.last_layer.weight.shape[1]) * init_scale
         self.last_layer.weight.data.uniform_(-w_std, w_std)
         if self.last_layer.bias is not None:
             self.last_layer.bias.data.zero_()
