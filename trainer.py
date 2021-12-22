@@ -142,7 +142,7 @@ def classification_train(
                     # Regularization:
                     if cfg.train.weight_decay > 0.0:
                         loss = loss + weight_regularizer(model)
-                        loss = loss + mono_decay_loss(model)
+                        # loss = loss + mono_decay_loss(model)
 
                     if phase == "train":
 

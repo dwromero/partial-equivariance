@@ -341,7 +341,8 @@ class LiftingConv(ConvBase):
         self.acted_rel_pos = acted_rel_pos
 
         # Get the kernel
-        conv_kernel = self.kernelnet(acted_rel_pos)
+        self.kernelnet.double()
+        conv_kernel = self.kernelnet(acted_rel_pos.double()).float()
 
         if self.cond_trans:
             conv_kernel = conv_kernel.view(
@@ -650,7 +651,8 @@ class GroupConv(ConvBase):
         self.acted_rel_pos = acted_group_rel_pos
 
         # Get the kernel
-        conv_kernel = self.kernelnet(acted_group_rel_pos)
+        self.kernelnet.double()
+        conv_kernel = self.kernelnet(acted_group_rel_pos.double()).float()
 
         # TODO: write masking code at efficient location with generalized group convolution
         # conv_kernel = conv_kernel.view(
@@ -823,7 +825,8 @@ class PointwiseGroupConv(ConvBase):
         # Resulting grid: [no_samples * g_elems, group.dimension_stabilizer, self.input_g_elems]
 
         # Get the kernel
-        conv_kernel = self.kernelnet(acted_g_elements).view(
+        self.kernelnet.double()
+        conv_kernel = self.kernelnet(acted_g_elements.double()).float().view(
             no_samples * output_g_no_elems,
             self.out_channels,
             self.in_channels,
