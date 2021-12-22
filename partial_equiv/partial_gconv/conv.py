@@ -389,7 +389,7 @@ class LiftingConv(ConvBase):
 
             out = einsum('bpx,opx->box', inp_unf, k_unf)
 
-            # out = torch.nn.functional.fold(out_unf, (32, 32), (1, 1))# , or equivalent that avoids mem copy:
+            # out = torch.nn.functional.fold(out, (32, 32), (1, 1))# , or equivalent that avoids mem copy:
             # out = out.view(out.size(0), -1, *image_size)
         else:
             # Perform convolution as regular broadcasted matrix multiplication
@@ -693,22 +693,22 @@ class GroupConv(ConvBase):
             if self.kernelnet.omega_1 == 0.0:
                 assert (k_unf.std(2) == 0.0).all(), f"No equivariance check"
 
-            out_unf = einsum('bpx,opx->box', inp_unf, k_unf)
+            out = einsum('bpx,opx->box', inp_unf, k_unf)
 
-            # out = torch.nn.functional.fold(out_unf, (32, 32), (1, 1)), equivalent that avoids mem copy:
-            out = out_unf.contiguous().view(out_unf.size(0), -1, *new_image_size)
+            # out = torch.nn.functional.fold(out, (32, 32), (1, 1)), equivalent that avoids mem copy:
+            out = out.contiguous().view(out.size(0), -1, *new_image_size)
         else:
             # Perform convolution as regular broadcasted matrix multiplication
             k_unf = conv_kernel.view(conv_kernel.size(0), conv_kernel.size(1)*kernel_size[0]*kernel_size[1])
 
             # using transpose
-            # out_unf = inp_unf.transpose(1, 2).matmul(k_unf.t()).transpose(1, 2)
+            # out = inp_unf.transpose(1, 2).matmul(k_unf.t()).transpose(1, 2)
 
             # or einsum
-            out_unf = einsum('bpx,op->box', inp_unf, k_unf)
+            out = einsum('bpx,op->box', inp_unf, k_unf)
 
-            # out = torch.nn.functional.fold(out_unf, (32, 32), (1, 1)) #, equivalent that avoids mem copy:
-            out = out_unf.contiguous().view(out_unf.size(0), -1, *new_image_size)
+            # out = torch.nn.functional.fold(out, (32, 32), (1, 1)) #, equivalent that avoids mem copy:
+            out = out.contiguous().view(out.size(0), -1, *new_image_size)
 
             # # Original conv:
             # out_old = torch_F.conv2d(
