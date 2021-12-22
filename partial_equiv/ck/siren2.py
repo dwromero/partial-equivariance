@@ -7,7 +7,7 @@ from math import sqrt
 import partial_equiv.general as gral
 
 
-class LRF2(torch.nn.Module):
+class SIREN2(torch.nn.Module):
     def __init__(
         self,
         dim_input_space: int,
@@ -28,24 +28,29 @@ class LRF2(torch.nn.Module):
         self.dim_input_space = dim_input_space
         self.out_channels = out_channels
         self.hidden_channels = hidden_channels
+        self.no_layers = no_layers
+        self.init_scale = init_scale
 
-        print(f'KERNEL: {self.dim_input_space} -> {self.hidden_channels} -> {self.out_channels}')
+        self.first_layer = nn.Linear(
+                dim_input_space, hidden_channels, bias
+            )
 
-        # Construct the network
-        # ---------------------
-        # 1st layer:
-        self.first_layer = nn.Linear(dim_input_space, hidden_channels, bias)
-
-        self.act2 = nn.ReLU(inplace=True)
-
-        # Last layer:
         self.mid_layers = []
         for _ in range(no_layers - 2):
-            self.mid_layers.append(nn.Linear(hidden_channels, hidden_channels, bias=bias))
+            self.mid_layers.append(
+                    nn.Linear(
+                        hidden_channels,
+                        hidden_channels,
+                        bias,
+                    )
+                )
         self.mid_layers = nn.ModuleList(self.mid_layers)
 
         # Last layer:
         self.last_layer = nn.Linear(hidden_channels, out_channels, bias=bias)
+
+        # initialize the kernel function
+        self.initialize(init_scale)
 
         # omega_0
         if learn_omega_0:
@@ -67,9 +72,6 @@ class LRF2(torch.nn.Module):
             tensor_omega_1.fill_(omega_1)
             self.register_buffer("omega_1", tensor_omega_1)
 
-        # initialize the kernel function
-        self.initialize(init_scale)
-
     def forward(self, x):
         out = x.clone()
 
@@ -85,45 +87,49 @@ class LRF2(torch.nn.Module):
         else:
             raise NotImplementedError(f"Unknown input space: {self.dim_input_space}")
 
-        x_shape = x.shape
         # Put in_channels dimension at last and compress all other dimensions to one [batch_size, -1, in_channels]
-        out = out.contiguous().view(x_shape[0], x_shape[1], -1).transpose(1, 2)
+        x_shape = x.shape
+        out = out.view(x_shape[0], x_shape[1], -1).transpose(1, 2)
 
         # Pass through the network
-        out = self.first_layer(out)
-        # out_cos = torch.cos(out_h)
-        # out_sin = torch.sin(out_h)
-        # out = torch.cat((out_cos, out_sin), -1)
-        out = torch.cos(out)
+        print(111, out.shape)
+        print(222, self.first_layer.weight.shape)
+        print(333, self.first_layer.bias.shape)
+        out = torch.einsum('ijk,lk->ijl', out, self.first_layer.weight) + self.first_layer.bias.view(1, 1, -1)
+        out = torch.sin(out)
 
         for m in self.mid_layers:
             out = m(out)
-            out = self.act2(out)
+            out = torch.sin(out)
 
         out = self.last_layer(out)
 
         # Restore shape
         out = out.transpose(1, 2).view(x_shape[0], -1, *x_shape[2:])
 
-        return out.contiguous()
+        return out
 
     def initialize(self, init_scale):
-        # first layer
-        self.first_layer.weight.data.uniform_(0, 1.0)
+        # first
+        self.first_layer.weight.data.normal_(0.0, 1.0)
         if self.first_layer.bias is not None:
-            self.first_layer.bias.data.uniform_(0, 2.0 * np.pi)
+            self.first_layer.bias.data.zero_()
 
-        # mid layer
+        # mid
         for m in self.mid_layers:
-            w_std = sqrt(6.0 / m.weight.shape[1]) * init_scale
+            w_std = sqrt(6.0 / self.hidden_channels)
             m.weight.data.uniform_(-w_std, w_std)
             if m.bias is not None:
                 m.bias.data.zero_()
 
-        # last layer
-        w_std = sqrt(6.0 / self.last_layer.weight.shape[1]) * init_scale
-        self.last_layer.weight.data.uniform_(-w_std, w_std)
+        # last
+        w_std = sqrt(6.0 / self.hidden_channels) * init_scale
+        self.last_layer.weight.data.uniform_(
+            -w_std,
+            w_std,
+        )
         if self.last_layer.bias is not None:
             self.last_layer.bias.data.zero_()
+
 
 
