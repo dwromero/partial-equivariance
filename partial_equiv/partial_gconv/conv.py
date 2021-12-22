@@ -95,52 +95,13 @@ class ConvBase(torch.nn.Module):
                 omega_1=kernel_omega1,
                 learn_omega_1=kernel_learn_omega1,
             )
-        elif kernel_type == "SSIREN6":
-            self.kernelnet = ck.SSIREN6(
+        elif kernel_type == "SIREN2":
+            self.kernelnet = ck.SIREN2(
                 dim_input_space=self.dim_input_space,
                 out_channels=out_channels * in_channels,
                 hidden_channels=kernel_no_hidden,
                 no_layers=kernel_no_layers,
                 init_scale=kernel_init_scale,
-                bias=True,
-                omega_0=kernel_omega0,
-                learn_omega_0=kernel_learn_omega0,
-                omega_1=kernel_omega1,
-                learn_omega_1=kernel_learn_omega1,
-            )
-        elif kernel_type == "LRF":
-            self.kernelnet = ck.LRF(
-                dim_input_space=self.dim_input_space,
-                out_channels=out_channels * in_channels,
-                hidden_channels=kernel_no_hidden,
-                init_scale=kernel_init_scale,
-                bias=True,
-                omega_0=kernel_omega0,
-                learn_omega_0=kernel_learn_omega0,
-                omega_1=kernel_omega1,
-                learn_omega_1=kernel_learn_omega1,
-            )
-        elif kernel_type == "LRF2":
-            self.kernelnet = ck.LRF2(
-                dim_input_space=self.dim_input_space,
-                out_channels=out_channels * in_channels,
-                hidden_channels=kernel_no_hidden,
-                no_layers=kernel_no_layers,
-                init_scale=0.1,
-                bias=True,
-                omega_0=kernel_omega0,
-                learn_omega_0=kernel_learn_omega0,
-                omega_1=kernel_omega1,
-                learn_omega_1=kernel_learn_omega1,
-            )
-        elif kernel_type == "RFN":
-            self.kernelnet = ck.RFN(
-                dim_input_space=self.dim_input_space,
-                out_channels=out_channels * in_channels,
-                hidden_channels=kernel_no_hidden,
-                no_layers=kernel_no_layers,
-                init_scale=kernel_init_scale,
-                weight_norm=kernel_weight_norm,
                 bias=True,
                 omega_0=kernel_omega0,
                 learn_omega_0=kernel_learn_omega0,
