@@ -50,9 +50,6 @@ def construct_optimizer(model, cfg):
         if isinstance(
             m,
             (
-                partial_equiv.ck.siren.SIRENLayer1d,
-                partial_equiv.ck.siren.SIRENLayer2d,
-                partial_equiv.ck.siren.SIRENLayer3d,
                 partial_equiv.ck.siren.SIRENLayerNd,
             ),
         ):

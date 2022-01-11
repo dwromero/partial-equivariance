@@ -16,6 +16,7 @@ conv:
   padding: ""
   partial_equiv: False
   cond_trans: False
+  cond_rot: False
   bias: True
 kernel:
   type: ""

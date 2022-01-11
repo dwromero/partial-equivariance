@@ -181,6 +181,7 @@ def classification_train(
             print(datetime.datetime.now())
 
             # log statistics of the epoch
+            print('LOG ACC/LOSS WANDB', epoch + 1)
             wandb.log(
                 {
                     "accuracy" + "_" + phase: epoch_acc,
@@ -194,6 +195,7 @@ def classification_train(
 
                 # Updates to the weights will not happen if the accuracy is equal but loss does not diminish
                 if (epoch_acc == best_acc) and (epoch_loss > best_loss):
+                    print('pass')
                     pass
                 else:
                     best_acc = epoch_acc
@@ -202,6 +204,7 @@ def classification_train(
                     best_model_wts = copy.deepcopy(model.state_dict())
                     save_model_to_wandb(model, optimizer, lr_scheduler, epoch=epoch + 1)
 
+                    print('wandb run summary')
                     # Log best results so far and the weights of the model.
                     wandb.run.summary["best_val_accuracy"] = best_acc
                     wandb.run.summary["best_val_loss"] = best_loss
@@ -215,6 +218,7 @@ def classification_train(
                     else:
                         test_acc = best_acc
                     wandb.run.summary["best_test_accuracy"] = test_acc
+                    print('wandb log acc test')
                     wandb.log(
                         {"accuracy_test": test_acc},
                         step=epoch + 1,
@@ -330,9 +334,6 @@ def log_and_print_omega_0s(
         if isinstance(
             m,
             (
-                ck.siren.SIRENLayer1d,
-                ck.siren.SIRENLayer2d,
-                ck.siren.SIRENLayer3d,
                 ck.siren.SIRENLayerNd,
             ),
         ):

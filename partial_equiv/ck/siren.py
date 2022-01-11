@@ -99,31 +99,25 @@ class SIRENBase(torch.nn.Module):
             tensor_omega_1.fill_(omega_1)
             self.register_buffer("omega_1", tensor_omega_1)
 
-    def forward(self, x):
-        x = x.clone()
-        if self.dim_input_space in [1, 2, 3]:
-            x = x * self.omega_0
-        elif self.dim_input_space == 4:
-            x[:, :2] *= self.omega_0
-            x[:, 2:] *= self.omega_1
-        elif self.dim_input_space == 5:
-            x[:, :3] *= self.omega_0
-            x[:, 3:] *= self.omega_1
-        else:
-            raise NotImplementedError(f"Unknown input space: {self.dim_input_space}")
+    def forward(self, x, N_omega0):
+        x_shape = x.shape
+        #out = x.clone()
+        out = x
 
-        # If dim_linear >3 , we cannot use a convolution operation. In this case, we must use a Linear layer instead.
-        # However, since transposes are expensive, we try to avoid using t his as much as possible.
-        if self.dim_linear > 3:
-            x_shape = x.shape
-            # Put in_channels dimension at last and compress all other dimensions to one [batch_size, -1, in_channels]
-            out = x.view(x_shape[0], x_shape[1], -1).transpose(1, 2)
-            # Pass through the network
-            out = self.kernel_net(out)
-            # Restore shape
-            out = out.transpose(1, 2).view(x_shape[0], -1, *x_shape[2:])
+        # Apply omega's on inputs
+        if N_omega0 > 0:
+            out[:, :N_omega0] *= self.omega_0
+            out[:, N_omega0:] *= self.omega_1
         else:
-            out = self.kernel_net(x)
+            out *= self.omega_0
+
+        # Put in_channels dimension at last and compress all other dimensions to one [batch_size, -1, in_channels]
+        out = out.view(x_shape[0], x_shape[1], -1).transpose(1, 2)
+        # Pass through the network
+        out = self.kernel_net(out)
+        # Restore shape
+        out = out.transpose(1, 2).view(x_shape[0], -1, *x_shape[2:])
+
         return out
 
     def initialize(self):
@@ -181,15 +175,10 @@ class SIREN(SIRENBase):
         learn_omega_1: bool,
     ):
 
-        # Get class of multiplied Linear Layers
-        if dim_linear <= 3:
-            Linear_hidden = globals()[f"SIRENLayer{dim_linear}d"]
-            Linear_out = getattr(gral.nn, f"Linear{dim_linear}d")
-        else:
-            # There are no native implementations of ConvNd layers, with N > 3. In this case, we must define
-            # Linear layers and perform permutations to achieve an equivalent point-wise conv in high dimensions.
-            Linear_hidden = globals()["SIRENLayerNd"]
-            Linear_out = torch.nn.Linear
+        # There are no native implementations of ConvNd layers, with N > 3. In this case, we must define
+        # Linear layers and perform permutations to achieve an equivalent point-wise conv in high dimensions.
+        Linear_hidden = globals()["SIRENLayerNd"]
+        Linear_out = torch.nn.Linear
 
         super().__init__(
             dim_input_space=dim_input_space,
@@ -207,89 +196,6 @@ class SIREN(SIRENBase):
             Linear_out=Linear_out,
         )
         self.dim_linear = dim_linear
-
-
-class SIRENLayer1d(torch.nn.Conv1d):
-    def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        bias: bool,
-    ):
-        """
-        Implements a Linear Layer of the form y = omega_0 * [W x + b] as in Sitzmann et al., 2020, Romero et al., 2021,
-        where x is 1 dimensional.
-        """
-        super().__init__(
-            in_channels=in_channels,
-            out_channels=out_channels,
-            kernel_size=1,
-            stride=1,
-            padding=0,
-            dilation=1,
-            bias=bias,
-        )
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return torch.nn.functional.conv1d(
-            x, self.weight, self.bias, stride=1, padding=0
-        )
-
-
-class SIRENLayer2d(torch.nn.Conv2d):
-    def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        bias: bool,
-    ):
-        """
-        Implements a Linear Layer of the form y = omega_0 * W x + b, where x is 2 dimensional
-        """
-        super().__init__(
-            in_channels=in_channels,
-            out_channels=out_channels,
-            kernel_size=1,
-            stride=1,
-            padding=0,
-            dilation=1,
-            bias=bias,
-        )
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return torch.nn.functional.conv2d(
-            x, self.weight, self.bias, stride=1, padding=0
-        )
-
-
-class SIRENLayer3d(torch.nn.Conv3d):
-    def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        bias: bool,
-    ):
-        """
-        Implements a Linear Layer of the form y = omega_0 * W x + b, where x is 2 dimensional
-        """
-        super().__init__(
-            in_channels=in_channels,
-            out_channels=out_channels,
-            kernel_size=1,
-            stride=1,
-            padding=0,
-            dilation=1,
-            bias=bias,
-        )
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return torch.nn.functional.conv3d(
-            x,
-            self.weight,
-            self.bias,
-            stride=1,
-            padding=0,
-        )
 
 
 class SIRENLayerNd(torch.nn.Linear):
@@ -310,3 +216,4 @@ class SIRENLayerNd(torch.nn.Linear):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return torch.nn.functional.linear(x, self.weight, self.bias)
+

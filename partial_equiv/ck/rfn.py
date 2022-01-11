@@ -19,7 +19,6 @@ class RFN(torch.nn.Module):
         hidden_channels: int,
         no_layers: int,
         init_scale: float,
-        weight_norm: bool,
         bias: bool,
         omega_0: float,
         learn_omega_0: bool,
@@ -40,15 +39,9 @@ class RFN(torch.nn.Module):
 
         # Construct the network
         # ---------------------
+        self.first_layer = nn.Linear(10, hidden_channels // 2, bias=False)
 
-        # 1st layer:
-
-        # Trick: initialize with 10 output channels and then remove input channels that are too  many after init
-        # so that next layers have the same weight values no matter the amount of input channels of first layer
-        self.first_layer = nn.Linear(10, hidden_channels, bias=bias)
-
-        self.act1 = gral.nn.Cos()
-        self.act2 = nn.ReLU(inplace=True)
+        self.act = nn.ReLU(inplace=True)
 
         self.mid_layers = nn.ModuleList([nn.Linear(hidden_channels, hidden_channels, bias=bias) for _ in range(self.no_layers - 2)])
         self.last_layer = nn.Linear(hidden_channels, out_channels, bias=bias)
@@ -77,50 +70,44 @@ class RFN(torch.nn.Module):
         self.initialize()
 
 
-    def forward(self, x):
+    def forward(self, x, N_omega0):
         assert x.size(1) == self.dim_input_space, f"Dim linear should equal dimension of input x.size(1)"
-
-        #out = x.clone()
-
         x_shape = x.shape
 
-        # Put in_channels dimension at last and compress all other dimensions to one [batch_size, -1, in_channels]
-        out = x.view(x_shape[0], x_shape[1], -1).transpose(1, 2) 
+        out = x.clone()
 
-        # # Apply omega's on inputs
+        # Apply omega's on inputs
+        if N_omega0 > 0:
+            out[:, :N_omega0] *= self.omega_0
+            out[:, N_omega0:] *= self.omega_1
+        else:
+            out *= self.omega_0
+
+        # Put in_channels dimension at last and compress all other dimensions to one [batch_size, -1, in_channels]
+        out = out.view(x_shape[0], x_shape[1], -1).transpose(1, 2) 
+
+        # # Apply omega on weights
+        # W = self.first_layer.weight.clone()
         # if self.dim_input_space in [1, 2, 3]:
-        #     out = out * self.omega_0
+        #     W *= self.omega_0
         # elif self.dim_input_space == 4:
-        #     out[:, :, :2] *= self.omega_0
-        #     out[:, :, 2:] *= self.omega_1
+        #     W[:, :2] *= self.omega_0
+        #     W[:, 2:] *= self.omega_1
         # elif self.dim_input_space == 5:
-        #     out[:, :, :3] *= self.omega_0
-        #     out[:, :, 3:] *= self.omega_1
+        #     W[:, :3] *= self.omega_0
+        #     W[:, 3:] *= self.omega_1
         # else:
         #     raise NotImplementedError(f"Unknown input space: {self.dim_input_space}")
-        # out = self.first_layer(out)
+        # out = torch.einsum('abc,dc->abd', out, W) + self.first_layer.bias.view(1, 1, -1)
 
-        # Apply omega on weights
-        W = self.first_layer.weight.clone()
-        if self.dim_input_space in [1, 2, 3]:
-            W *= self.omega_0
-        elif self.dim_input_space == 4:
-            W[:, :2] *= self.omega_0
-            W[:, 2:] *= self.omega_1
-        elif self.dim_input_space == 5:
-            W[:, :3] *= self.omega_0
-            W[:, 3:] *= self.omega_1
-        else:
-            raise NotImplementedError(f"Unknown input space: {self.dim_input_space}")
-        out = torch.einsum('abc,dc->abd', out, W) + self.first_layer.bias.view(1, 1, -1)
+        out = self.first_layer(out)
 
         # Forward-pass through kernel net
-        out = self.act1(out)
-        out = out * np.sqrt(2 / self.hidden_channels)
+        out = torch.cat([torch.cos(out), torch.sin(out)], dim=2)
 
         for layer in self.mid_layers:
             out = layer(out)
-            out = self.act2(out)
+            out = self.act(out)
 
         out = self.last_layer(out)
 
@@ -131,27 +118,15 @@ class RFN(torch.nn.Module):
 
 
     def initialize(self):
-        for (i, m) in enumerate(self.modules()):
-            if isinstance(
-                m, (torch.nn.Conv1d, torch.nn.Conv2d, torch.nn.Conv3d, torch.nn.Linear)
-            ):
-                if m == self.first_layer:
-                    print(f'Init first layer')
-                    # First layer: we initailize as 'random fourier features' and set input channels to correct number
-                    # See explanation of trick earlier
-                    self.first_layer.weight.data.normal_(0.0, 1.0)
-                    self.first_layer.bias.data.uniform_(0.0, 2 * np.pi)
-                    self.first_layer.weight.data = self.first_layer.weight.data[:, :self.dim_input_space]
+        self.first_layer.weight.data.normal_(0.0, 2 * math.pi)
+        if self.first_layer.bias:
+            self.first_layer.bias.data.zero_()
+        self.first_layer.weight.data = self.first_layer.weight.data[:, :self.dim_input_space]
 
-                    self.first_layer.weight.requires_grad = False
-                    self.first_layer.bias.requires_grad = False
-                else:
-                    print(f'Init {m}')
-                    w_std = sqrt(6.0 / m.weight.shape[1]) * self.init_scale
-                    m.weight.data.uniform_(
-                        -w_std,
-                        w_std,
-                    )
-                    if m.bias is not None:
-                        m.bias.data.zero_()
+        for layer in self.mid_layers:
+            layer.weight.data.normal_(0.0, np.sqrt(2 / self.hidden_channels))
+            layer.bias.data.zero_()
+
+        self.last_layer.weight.data.normal_(0.0, np.sqrt(2 / self.hidden_channels))
+        self.last_layer.bias.data.zero_()
 
