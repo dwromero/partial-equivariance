@@ -18,6 +18,7 @@ conv:
   cond_trans: False
   cond_rot: False
   bias: True
+  mask: False
 kernel:
   type: ""
   no_hidden: -1
