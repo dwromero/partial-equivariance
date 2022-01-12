@@ -277,6 +277,7 @@ class LiftingConv(ConvBase):
         #     base_group_config.no_samples,
         # )
         self.probs = None
+        self.register_buffer("conv_kernel", torch.zeros(1))
 
     def forward(self, x):
         """
@@ -417,8 +418,8 @@ class LiftingConv(ConvBase):
 
 
             # Filter values outside the sphere
-
             # TODO: temporary removed masking, should be applied at most efficient location
+
             mask = torch.norm(acted_rel_pos_Rd, dim=1) > 1.0
             if self.cond_trans:
                 mask = mask.view(mask.size(0), 1, 1, *kernel_size, 1, 1)
@@ -525,6 +526,8 @@ class GroupConv(ConvBase):
             self.probs = torch.nn.Parameter(probs)
         else:
             self.register_buffer("probs", probs)
+
+        self.register_buffer("conv_kernel", torch.zeros(1))
 
     def forward(
         self,
@@ -748,7 +751,7 @@ class GroupConv(ConvBase):
         # Get the kernel
         conv_kernel = self.kernelnet(acted_group_rel_pos, N_omega0)
 
-        if self.mark:
+        if self.mask:
             # TODO: write masking code at efficient location with generalized group convolution
             conv_kernel = conv_kernel.view(
                 no_samples * output_g_no_elems,
