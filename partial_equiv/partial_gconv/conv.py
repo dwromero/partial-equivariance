@@ -416,9 +416,9 @@ class LiftingConv(ConvBase):
                 )
 
 
-            Filter values outside the sphere
+            # Filter values outside the sphere
 
-            TODO: temporary removed masking, should be applied at most efficient location
+            # TODO: temporary removed masking, should be applied at most efficient location
             mask = torch.norm(acted_rel_pos_Rd, dim=1) > 1.0
             if self.cond_trans:
                 mask = mask.view(mask.size(0), 1, 1, *kernel_size, 1, 1)
@@ -749,7 +749,7 @@ class GroupConv(ConvBase):
         conv_kernel = self.kernelnet(acted_group_rel_pos, N_omega0)
 
         if self.mark:
-            TODO: write masking code at efficient location with generalized group convolution
+            # TODO: write masking code at efficient location with generalized group convolution
             conv_kernel = conv_kernel.view(
                 no_samples * output_g_no_elems,
                 self.out_channels,
