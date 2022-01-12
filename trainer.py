@@ -231,6 +231,23 @@ def classification_train(
                 # Otherwise, increase counter
                 epochs_no_improvement += 1
 
+                # Also log test accuracy without improvement
+
+                # Clean CUDA Memory
+                del inputs, outputs, labels
+                torch.cuda.empty_cache()
+                # Perform test and log results
+                if cfg.dataset in ["PCam"]:
+                    test_acc = tester.test(model, dataloaders["test"], cfg)
+                else:
+                    test_acc = best_acc
+                wandb.run.summary["best_test_accuracy"] = test_acc
+                print('wandb log acc test')
+                wandb.log(
+                    {"always_accuracy_test": test_acc},
+                    step=epoch + 1,
+                )
+
             if phase == "validation" and cfg.conv.partial_equiv:
                 # Log to wandb and print
                 log_and_print_probabilities(model, step=epoch + 1)
