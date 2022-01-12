@@ -50,6 +50,7 @@ class ConvBase(torch.nn.Module):
         part_rot = conv_config.partial_equiv
         cond_rot = conv_config.cond_rot
         cond_trans = conv_config.cond_trans
+        mask = conv_config.mask
 
         # Unpack values from group_config and save them in self.
         self.group = group
@@ -66,6 +67,7 @@ class ConvBase(torch.nn.Module):
         self.part_rot = part_rot
         self.cond_rot = cond_rot
         self.cond_trans = cond_trans
+        self.mask = mask
 
         # Get the dim_linear as well as the dim_input_space from the type of convolution.
         cond_dims = 0
@@ -397,33 +399,35 @@ class LiftingConv(ConvBase):
         # Get the kernel
         conv_kernel = self.kernelnet(acted_rel_pos, N_omega0)
 
-        # if self.cond_trans:
-        #     conv_kernel = conv_kernel.view(
-        #         no_samples * self.group_no_samples,
-        #         self.out_channels,
-        #         self.in_channels,
-        #         *kernel_size,
-        #         *image_size
-        #     )
-        # else:
-        #     conv_kernel = conv_kernel.view(
-        #         no_samples * self.group_no_samples,
-        #         self.out_channels,
-        #         self.in_channels,
-        #         *kernel_size,
-        #     )
+        if self.mask:
+            if self.cond_trans:
+                conv_kernel = conv_kernel.view(
+                    no_samples * self.group_no_samples,
+                    self.out_channels,
+                    self.in_channels,
+                    *kernel_size,
+                    *image_size
+                )
+            else:
+                conv_kernel = conv_kernel.view(
+                    no_samples * self.group_no_samples,
+                    self.out_channels,
+                    self.in_channels,
+                    *kernel_size,
+                )
 
 
-        # Filter values outside the sphere
+            Filter values outside the sphere
 
-        # TODO: temporary removed masking, should be applied at most efficient location
-        # mask = torch.norm(acted_rel_pos_Rd, dim=1) > 1.0
-        # if self.cond_trans:
-        #     mask = mask.view(mask.size(0), 1, 1, *kernel_size, 1, 1)
-        # else:
-        #     mask = mask.view(mask.size(0), 1, 1, *kernel_size)
+            TODO: temporary removed masking, should be applied at most efficient location
+            mask = torch.norm(acted_rel_pos_Rd, dim=1) > 1.0
+            if self.cond_trans:
+                mask = mask.view(mask.size(0), 1, 1, *kernel_size, 1, 1)
+            else:
+                mask = mask.view(mask.size(0), 1, 1, *kernel_size)
 
-        # mask = mask.expand_as(conv_kernel)
+            mask = mask.expand_as(conv_kernel)
+            conv_kernel[mask] = 0
 
         self.conv_kernel = conv_kernel
 
@@ -747,22 +751,23 @@ class GroupConv(ConvBase):
         # Get the kernel
         conv_kernel = self.kernelnet(acted_group_rel_pos, N_omega0)
 
-        # TODO: write masking code at efficient location with generalized group convolution
-        # conv_kernel = conv_kernel.view(
-        #     no_samples * output_g_no_elems,
-        #     self.out_channels,
-        #     self.in_channels,
-        #     *acted_group_rel_pos.shape[2:]
-        # )
-        # # Filter values outside the sphere
-        # mask = torch.norm(acted_rel_pos_Rd, dim=1) > 1.0
-        # if self.cond_trans:
-        #     mask = mask.view(mask.size(0), 1, 1, 1, *kernel_size, 1, 1)
-        # else:
-        #     mask = mask.view(mask.size(0), 1, 1, 1, *kernel_size)
-        # mask = mask.expand_as(conv_kernel)
+        if self.mark:
+            TODO: write masking code at efficient location with generalized group convolution
+            conv_kernel = conv_kernel.view(
+                no_samples * output_g_no_elems,
+                self.out_channels,
+                self.in_channels,
+                *acted_group_rel_pos.shape[2:]
+            )
+            # Filter values outside the sphere
+            mask = torch.norm(acted_rel_pos_Rd, dim=1) > 1.0
+            if self.cond_trans:
+                mask = mask.view(mask.size(0), 1, 1, 1, *kernel_size, 1, 1)
+            else:
+                mask = mask.view(mask.size(0), 1, 1, 1, *kernel_size)
+            mask = mask.expand_as(conv_kernel)
 
-        # conv_kernel[mask] = 0
+            conv_kernel[mask] = 0
 
         self.conv_kernel = conv_kernel
 
