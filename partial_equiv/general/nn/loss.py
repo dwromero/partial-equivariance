@@ -30,6 +30,8 @@ class LnLoss(torch.nn.Module):
         # Go through modules that are instances of CKConvs
         for m in model.modules():
             if isinstance(m, (LiftingConv, GroupConv, PointwiseGroupConv)):
+                print(m.conv_kernel.norm(self.norm_type))
+                exit(1)
                 loss += m.conv_kernel.norm(self.norm_type)
 
                 if m.bias is not None:

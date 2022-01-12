@@ -275,6 +275,7 @@ class LiftingConv(ConvBase):
         #     base_group_config.no_samples,
         # )
         self.probs = None
+        self.register_buffer("conv_kernel", torch.zeros(1))
 
     def forward(self, x):
         """
@@ -521,6 +522,8 @@ class GroupConv(ConvBase):
             self.probs = torch.nn.Parameter(probs)
         else:
             self.register_buffer("probs", probs)
+
+        self.register_buffer("conv_kernel", torch.zeros(1))
 
     def forward(
         self,
