@@ -40,15 +40,18 @@ def construct_dataset(
     training_set = dataset(
         partition="train",
         augment=cfg.augment,
+        rot_interval=cfg.dataset_params.rot_interval,
     )
     test_set = dataset(
         partition="test",
         augment="None",
+        rot_interval=cfg.dataset_params.rot_interval,
     )
     if cfg.dataset in ["PCam"]:
         validation_set = dataset(
             partition="valid",
             augment="None",
+            rot_interval=cfg.dataset_params.rot_interval,
         )
     else:
         validation_set = None
