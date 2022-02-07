@@ -101,6 +101,21 @@ class ConvBase(torch.nn.Module):
                 omega_1=kernel_omega1,
                 learn_omega_1=kernel_learn_omega1,
             )
+        elif kernel_type == "SIREN3":
+            self.kernelnet = ck.SIREN3(
+                dim_linear=self.dim_linear,
+                dim_input_space=self.dim_input_space,
+                out_channels=out_channels * in_channels,
+                hidden_channels=kernel_no_hidden,
+                no_layers=kernel_no_layers,
+                init_scale=kernel_init_scale,
+                weight_norm=kernel_weight_norm,
+                bias=True,
+                omega_0=kernel_omega0,
+                learn_omega_0=kernel_learn_omega0,
+                omega_1=kernel_omega1,
+                learn_omega_1=kernel_learn_omega1,
+            )
         elif kernel_type == "SIREN2":
             self.kernelnet = ck.SIREN2(
                 dim_input_space=self.dim_input_space,
@@ -330,7 +345,7 @@ class LiftingConv(ConvBase):
 
         assert not (self.cond_trans and self.cond_rot), f"cond_trans and cond_rot not implemented yet"
 
-        if self.cond_trans:
+        if self.cond_trans and not self.cond_rot:
             output_g_no_elems = self.group_no_samples
 
             acted_rel_pos = torch.cat(
@@ -366,7 +381,7 @@ class LiftingConv(ConvBase):
                 ),
                 dim=1,
             )
-        elif self.cond_rot:
+        elif self.cond_rot and not self.cond_trans:
             output_g_no_elems = self.group_no_samples
 
             acted_rel_pos = torch.cat(
@@ -389,6 +404,54 @@ class LiftingConv(ConvBase):
                 ),
                 dim=1,
             )
+        elif self.cond_rot and self.cond_trans:
+            print('Not implemented. first check individual whether we need separate omega for each subgroup')
+            exit(1)
+            
+            # output_g_no_elems = self.group_no_samples
+
+            # acted_rel_pos = torch.cat(
+            #     (
+            #         # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
+            #         # [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x]
+            #         # +->  [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
+            #         acted_rel_pos_Rd.contiguous().view(
+            #             no_samples * output_g_no_elems,
+            #             2,
+            #             *kernel_size,
+            #             1,
+            #             1)
+            #         .expand(
+            #             *(-1,) * 4, *image_size
+            #         ),
+            #         # Expand the output rel pos Rd output_g_no_elems times along the "group axis", and "output group axes"
+            #         # [2, output_size_y, output_size_x]
+            #         # +->  [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
+            #         output_rel_pos.contiguous().view(
+            #             1,
+            #             2,
+            #             1,
+            #             1,
+            #             *image_size)
+            #         .expand(
+            #             no_samples * output_g_no_elems,
+            #             -1,
+            #             *kernel_size,
+            #             -1,
+            #             -1
+            #         )
+            #         # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
+            #         # [no_samples, output_g_no_elems]
+            #         # +->  [no_samples * output_g_no_elems, 1, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
+            #         g_elems.float().contiguous().view(
+            #             no_samples * output_g_no_elems,
+            #             1,
+            #             1,
+            #             1, 1, 1).expand(-1, -1, *kernel_size, *image_size)
+            #     ),
+            #     dim=1,
+            # )
+
         else:
             acted_rel_pos = acted_rel_pos_Rd.contiguous()
 
@@ -620,7 +683,7 @@ class GroupConv(ConvBase):
         image_size = x.shape[-2:]
         print('c')
 
-        if self.cond_trans:
+        if self.cond_trans and not self.cond_rot:
             acted_group_rel_pos = torch.cat(
                 (
                     # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
@@ -677,7 +740,7 @@ class GroupConv(ConvBase):
                 ),
                 dim=1,
             )
-        elif self.cond_rot:
+        elif self.cond_rot and not self.cond_trans:
             acted_group_rel_pos = torch.cat(
                 (
                     # Expand the acted rel pos Rd input_g_no_elems times along the "group axis".
@@ -716,6 +779,9 @@ class GroupConv(ConvBase):
                 ),
                 dim=1,
             )
+        elif self.cond_rot and self.cond_trans:
+            print('Not implemented, need omega2 probably')
+            exit(1)
         else:
             acted_group_rel_pos = torch.cat(
                 (
@@ -818,10 +884,8 @@ class GroupConv(ConvBase):
 
             if self.kernelnet.omega_1 == 0.0:
                 assert (k_unf.std(2) == 0.0).all(), f"No equivariance check"
+            print(f'Distortion: {k_unf.std(2).std().item()}')
 
-            print(f'Distortion: {k_unf.std(2).std()}')
-
-            # out = einsum('bpx,opx->box', inp_unf.cpu(), k_unf.cpu()).to(inp_unf.device)
             out = einsum('bpx,opx->box', inp_unf, k_unf)
 
             # out = torch.nn.functional.fold(out, (32, 32), (1, 1)), equivalent that avoids mem copy:
