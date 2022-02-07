@@ -1,3 +1,4 @@
+from .mnist import MNIST
 from .rotmnist import RotatedMNIST
 from .mnist6_180 import MNIST6_180
 from .cifar10 import CIFAR10

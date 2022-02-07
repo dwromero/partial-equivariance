@@ -12,6 +12,7 @@ IMG_DATASETS = [
 ]
 
 DATASET_SIZES = {
+    "MNIST": 50000,
     "rotMNIST": 12000,
     "MNIST6-180": 11836,
     "MNIST6-M": 11836,
