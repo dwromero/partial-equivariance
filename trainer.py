@@ -256,12 +256,12 @@ def classification_train(
             lr_scheduler.step()
         print()
 
-        #  Check how many epochs without improvement have passed, and, if required, stop training.
-        if epochs_no_improvement == max_epochs_no_improvement:
-            print(
-                f"Stopping training due to {epochs_no_improvement} epochs of no improvement in validation accuracy."
-            )
-            break
+        # #  Check how many epochs without improvement have passed, and, if required, stop training.
+        # if epochs_no_improvement == max_epochs_no_improvement:
+        #     print(
+        #         f"Stopping training due to {epochs_no_improvement} epochs of no improvement in validation accuracy."
+        #     )
+        #     break
 
     # Report best results
     print("Best Val Acc: {:.4f}".format(best_acc))
