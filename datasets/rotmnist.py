@@ -12,6 +12,7 @@ from torchvision.datasets.utils import (
     download_and_extract_archive,
 )
 
+VALIDATION_SPLIT = [10000, 2000]
 
 class RotatedMNISTBase(VisionDataset):
     """Rotated MNIST datasets.

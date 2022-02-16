@@ -7,6 +7,7 @@ import torch
 from PIL import Image
 
 import torchvision
+import torchvision.transforms.functional as tv_F
 from torchvision.datasets import VisionDataset
 from torchvision.datasets.utils import (
     download_and_extract_archive,
@@ -131,8 +132,18 @@ class MNIST6_180_Base(VisionDataset):
         # Obtain only class of numbers 6
         mask_6 = targets == 6
 
-        data = data[mask_6]
+        data = data[mask_6].clone()
         targets = targets[mask_6]
+
+        # Extension with small rotations:
+        if self.rot_interval != 0:
+            rotation_function = torchvision.transforms.RandomRotation(
+                self.rot_interval,
+                interpolation=torchvision.transforms.InterpolationMode.BILINEAR,
+            )
+
+            for (index, data_point) in enumerate(data):
+                data[index] = rotation_function(data_point.unsqueeze(0)).squeeze(0)
 
         # Rotate the 6 samples, and append them to the dataset
         data = torch.cat(
@@ -243,6 +254,11 @@ class MNIST6_180(MNIST6_180_Base):
         else:
             root = utils.get_original_cwd()
             root = os.path.join(root, "data")
+
+        if "rot_interval" in kwargs.keys():
+            self.rot_interval = kwargs["rot_interval"]
+        else:
+            self.rot_interval = 0
 
         if partition == "train":
             train = True

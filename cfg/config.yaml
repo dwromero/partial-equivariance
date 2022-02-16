@@ -62,6 +62,8 @@ train:
   warm_decay: 0.0
   monotonic_decay_loss: 0.0
 dataset: ""
+dataset_params:
+  rot_interval: 0
 augment: None
 wandb:
   project: partial_equiv
