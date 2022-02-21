@@ -8,7 +8,6 @@ from omegaconf import OmegaConf
 # datasets
 from datasets import (
     # 2D Datasets
-    MNIST,
     RotatedMNIST,
     MNIST6_180,
     MNIST6_M,
@@ -35,7 +34,6 @@ def construct_dataset(
     """
 
     dataset = {
-        'MNIST': MNIST,
         "rotMNIST": RotatedMNIST,
         "MNIST6-180": MNIST6_180,
         "MNIST6-M": MNIST6_M,

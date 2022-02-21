@@ -1,4 +1,3 @@
-from .mnist import MNIST
 from .rotmnist import RotatedMNIST
 from .rotmnist import VALIDATION_SPLIT as RotMNIST_VALIDATION_SPLIT
 from .mnist6_180 import MNIST6_180
