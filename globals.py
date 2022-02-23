@@ -12,11 +12,11 @@ IMG_DATASETS = [
 ]
 
 DATASET_SIZES = {
-    "rotMNIST": 12000,
+    "rotMNIST": 10000,
     "MNIST6-180": 11836,
     "MNIST6-M": 11836,
-    "CIFAR10": 50000,
-    "CIFAR100": 50000,
-    "STL10": 5000,
+    "CIFAR10": 45000,
+    "CIFAR100": 45000,
+    #"STL10": 5000, TODO update size with validation set
     "PCam": 262144,
 }
