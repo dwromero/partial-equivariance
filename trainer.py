@@ -213,7 +213,7 @@ def classification_train(
                     del inputs, outputs, labels
                     torch.cuda.empty_cache()
                     # Perform test and log results
-                    if cfg.dataset in ["PCam"]:
+                    if cfg.dataset in ["rotMNIST", "CIFAR10", "CIFAR10", "CIFAR100", "PCam"]:
                         test_acc = tester.test(model, dataloaders["test"], cfg)
                     else:
                         test_acc = best_acc
