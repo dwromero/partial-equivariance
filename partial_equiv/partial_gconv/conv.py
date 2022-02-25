@@ -596,7 +596,6 @@ class GroupConv(ConvBase):
         self,
         input_tuple: Tuple[torch.Tensor, torch.Tensor],
     ):
-        print(2)
         """
         :param input_tuple: Consists of two elements:
             (1) The input function in the group [batch_size, in_channels, * ]
@@ -681,7 +680,6 @@ class GroupConv(ConvBase):
 
         kernel_size = acted_rel_pos_Rd.shape[-2:]
         image_size = x.shape[-2:]
-        print('c')
 
         if self.cond_trans and not self.cond_rot:
             acted_group_rel_pos = torch.cat(
@@ -817,10 +815,8 @@ class GroupConv(ConvBase):
         self.acted_rel_pos = acted_group_rel_pos
 
         # Get the kernel
-        print('k')
         conv_kernel = self.kernelnet(acted_group_rel_pos, N_omega0)
 
-        print('m')
         if self.mask:
             # TODO: write masking code at efficient location with generalized group convolution
             conv_kernel = conv_kernel.view(
@@ -841,7 +837,6 @@ class GroupConv(ConvBase):
 
         self.conv_kernel = conv_kernel
 
-        print('e')
         # Reshape conv_kernel for convolution
         if self.cond_trans:
             conv_kernel = conv_kernel.contiguous().view(
@@ -873,11 +868,9 @@ class GroupConv(ConvBase):
         else:
             raise NotImplementedError(f"Unknown padding [{self.padding}].")
 
-        print('u')
         # unfold (transfer input to patch space: bix' -> bpx)
         inp_unf = torch.nn.functional.unfold(inp_pad, kernel_size)
 
-        print('s')
         if self.cond_trans:
             # apply conditional kernel filter
             k_unf = conv_kernel.view(conv_kernel.size(0), conv_kernel.size(1)*kernel_size[0]*kernel_size[1], new_image_size[0]*new_image_size[1])
@@ -911,7 +904,6 @@ class GroupConv(ConvBase):
             # )
             # print(torch.mean(torch.abs(out - out_old)))
 
-        print('t')
         out = out.view(
             -1, output_g_no_elems, self.out_channels, *out.shape[2:]
         ).transpose(1, 2)
@@ -920,7 +912,6 @@ class GroupConv(ConvBase):
         if self.bias is not None:
             out = out + self.bias.view(1, -1, *(1,) * (len(out.shape) - 2))
 
-        print('-')
         return out, g_elems
 
 
