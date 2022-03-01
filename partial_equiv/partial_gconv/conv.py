@@ -374,7 +374,7 @@ class LiftingConv(ConvBase):
         kernel_size = acted_rel_pos_Rd.shape[-2:]
         image_size = x.shape[-2:]
 
-        assert not (self.cond_trans and self.cond_rot), f"cond_trans and cond_rot not implemented yet"
+        #assert not (self.cond_trans and self.cond_rot), f"cond_trans and cond_rot not implemented yet"
 
         if self.cond_trans and not self.cond_rot:
             output_g_no_elems = self.group_no_samples
@@ -438,25 +438,29 @@ class LiftingConv(ConvBase):
             )
             omegas = [0, 0, 1]
         elif self.cond_rot and self.cond_trans:
-            print('Not implemented. first check individual whether we need separate omega for each subgroup')
-            exit(1)
+            output_g_no_elems = self.group_no_samples
+
             acted_rel_pos = torch.cat(
                 (
                     # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
                     # [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x]
-                    # +->  [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x]
+                    # +->  [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
                     acted_rel_pos_Rd.contiguous().view(
                         no_samples * output_g_no_elems,
                         2,
-                        *kernel_size),
+                        *kernel_size,
+                        1,
+                        1).expand(-1, -1, -1, -1, *image_size),
                     # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
                     # [no_samples, output_g_no_elems]
-                    # +->  [no_samples * output_g_no_elems, 1, kernel_size_y, kernel_size_x]
+                    # +->  [no_samples * output_g_no_elems, 1, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
                     g_elems.float().contiguous().view(
                         no_samples * output_g_no_elems,
                         1,
                         1,
-                        1).expand(-1, -1, *kernel_size)
+                        1,
+                        1,
+                        1).expand(-1, -1, *kernel_size, *image_size),
                     # Expand the output rel pos Rd output_g_no_elems times along the "group axis", and "output group axes"
                     # [2, output_size_y, output_size_x]
                     # +->  [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
@@ -780,7 +784,7 @@ class GroupConv(ConvBase):
                         1,
                         1,
                         1,
-                        1).expand(-1, -1, input_g_no_elems, *kernel_size)
+                        1).expand(-1, -1, input_g_no_elems, *kernel_size),
                     # Expand the acted g elements along the "spatial axes".
                     # [no_samples, output_g_no_elems, input_g_no_elems, self.group.dimension_stabilizer]
                     # +->  [no_samples * output_g_no_elems, self.group.dimension_stabilizer, input_no_g_elems, kernel_size_y, kernel_size_x]
@@ -806,39 +810,30 @@ class GroupConv(ConvBase):
         elif self.cond_rot and self.cond_trans:
             acted_group_rel_pos = torch.cat(
                 (
-                    # Expand the acted rel pos Rd input_g_no_elems times along the "group axis".
+                    # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
                     # [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x]
-                    # +->  [no_samples * output_g_no_elems, 2, input_no_g_elems, kernel_size_y, kernel_size_x]
-                    acted_rel_pos_Rd.unsqueeze(2).expand(
-                        *(-1,) * 2, input_g_no_elems, *(-1,) * 2
+                    # +->  [no_samples * output_g_no_elems, 2, input_no_g_elems, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
+                    acted_rel_pos_Rd.contiguous().view(
+                        no_samples * output_g_no_elems,
+                        2,
+                        1,
+                        *kernel_size,
+                        1,
+                        1)
+                    .expand(
+                        *(-1,) * 2, input_g_no_elems, *(-1,) * 2, *new_image_size
                     ),
                     # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
                     # [no_samples, output_g_no_elems]
-                    # +->  [no_samples * output_g_no_elems, 1, input_no_g_elems, kernel_size_y, kernel_size_x]
+                    # +->  [no_samples * output_g_no_elems, 1, input_no_g_elems, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
                     g_elems.float().contiguous().view(
                         no_samples * output_g_no_elems,
                         1,
                         1,
                         1,
-                        1).expand(-1, -1, input_g_no_elems, *kernel_size)
-                    # Expand the acted g elements along the "spatial axes".
-                    # [no_samples, output_g_no_elems, input_g_no_elems, self.group.dimension_stabilizer]
-                    # +->  [no_samples * output_g_no_elems, self.group.dimension_stabilizer, input_no_g_elems, kernel_size_y, kernel_size_x]
-                    acted_g_elements.transpose(-1, -2)
-                    .contiguous()
-                    .view(
-                        no_samples * output_g_no_elems,
-                        self.group.dimension_stabilizer,
-                        input_g_no_elems,
                         1,
                         1,
-                    )
-                    .expand(
-                        -1,
-                        -1,
-                        -1,
-                        *kernel_size
-                    ),
+                        1).expand(-1, -1, input_g_no_elems, *kernel_size, *new_image_size),
                     # Expand the acted g elements along the "spatial axes", and "output group axes"
                     # [no_samples, output_g_no_elems, input_g_no_elems, self.group.dimension_stabilizer]
                     # +->  [no_samples * output_g_no_elems, self.group.dimension_stabilizer, input_no_g_elems, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
@@ -1081,10 +1076,11 @@ class PointwiseGroupConv(ConvBase):
                 input_g_no_elems,
             )
         )
+        omegas = [0]
         # Resulting grid: [no_samples * g_elems, group.dimension_stabilizer, self.input_g_elems]
 
         # Get the kernel
-        conv_kernel = self.kernelnet(acted_g_elements, -1).view(
+        conv_kernel = self.kernelnet(acted_g_elements, omegas).view(
             no_samples * output_g_no_elems,
             self.out_channels,
             self.in_channels,

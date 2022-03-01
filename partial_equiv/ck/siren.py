@@ -22,6 +22,8 @@ class SIRENBase(torch.nn.Module):
         learn_omega_0: bool,
         omega_1: float,
         learn_omega_1: bool,
+        omega_2: float,
+        learn_omega_2: bool,
         Linear_hidden: torch.nn.Module,
         Linear_out: torch.nn.Module,
     ):
@@ -99,20 +101,32 @@ class SIRENBase(torch.nn.Module):
             tensor_omega_1.fill_(omega_1)
             self.register_buffer("omega_1", tensor_omega_1)
 
+        # omega_1
+        if learn_omega_2:
+            self.omega_2 = torch.nn.Parameter(torch.Tensor(1))
+            with torch.no_grad():
+                self.omega_2.fill_(omega_2)
+        else:
+            tensor_omega_2 = torch.zeros(1)
+            tensor_omega_2.fill_(omega_2)
+            self.register_buffer("omega_2", tensor_omega_2)
+
     def forward(self, x, omegas):
         x_shape = x.shape
         #out = x.clone()
         out = x
 
+        print('o', omegas)
+        print('x', x.shape)
         assert len(omegas) == x.shape[1]
 
         for i, omega in enumerate(omegas):
             if omega == 0:
-                out[:, i] * = self.omega_0
+                out[:, i] *= self.omega_0
             elif omega == 1:
-                out[:, i] * = self.omega_1
+                out[:, i] *= self.omega_1
             elif omega == 2:
-                out[:, i] * = self.omega_2
+                out[:, i] *= self.omega_2
             else:
                 print('this should not happen')
                 exit(1)
@@ -179,6 +193,8 @@ class SIREN(SIRENBase):
         learn_omega_0: bool,
         omega_1: float,
         learn_omega_1: bool,
+        omega_2: float,
+        learn_omega_2: bool,
     ):
 
         # There are no native implementations of ConvNd layers, with N > 3. In this case, we must define
@@ -198,6 +214,8 @@ class SIREN(SIRENBase):
             learn_omega_0=learn_omega_0,
             omega_1=omega_1,
             learn_omega_1=learn_omega_1,
+            omega_2=omega_2,
+            learn_omega_2=learn_omega_2,
             Linear_hidden=Linear_hidden,
             Linear_out=Linear_out,
         )
