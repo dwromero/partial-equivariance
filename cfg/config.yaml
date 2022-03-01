@@ -28,6 +28,8 @@ kernel:
   learn_omega0: False
   omega1: 0.0
   learn_omega1: False
+  omega2: 0.0
+  learn_omega2: False
   init_scale: 0.01
   weight_norm: False
   norm: ""

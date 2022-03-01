@@ -40,6 +40,8 @@ class ConvBase(torch.nn.Module):
         kernel_learn_omega0 = kernel_config.learn_omega0
         kernel_omega1 = kernel_config.omega1
         kernel_learn_omega1 = kernel_config.learn_omega1
+        kernel_omega2 = kernel_config.omega2
+        kernel_learn_omega2 = kernel_config.learn_omega2
         kernel_size = kernel_config.size
         kernel_activation=kernel_config.activation
         kernel_norm=kernel_config.norm
@@ -100,6 +102,25 @@ class ConvBase(torch.nn.Module):
                 learn_omega_0=kernel_learn_omega0,
                 omega_1=kernel_omega1,
                 learn_omega_1=kernel_learn_omega1,
+                omega_2=kernel_omega2,
+                learn_omega_2=kernel_learn_omega2,
+            )
+        elif kernel_type == "SIRENRELU":
+            self.kernelnet = ck.SIRENRELU(
+                dim_linear=self.dim_linear,
+                dim_input_space=self.dim_input_space,
+                out_channels=out_channels * in_channels,
+                hidden_channels=kernel_no_hidden,
+                no_layers=kernel_no_layers,
+                init_scale=kernel_init_scale,
+                weight_norm=kernel_weight_norm,
+                bias=True,
+                omega_0=kernel_omega0,
+                learn_omega_0=kernel_learn_omega0,
+                omega_1=kernel_omega1,
+                learn_omega_1=kernel_learn_omega1,
+                omega_2=kernel_omega2,
+                learn_omega_2=kernel_learn_omega2,
             )
         elif kernel_type == "SIREN3":
             self.kernelnet = ck.SIREN3(
@@ -115,6 +136,8 @@ class ConvBase(torch.nn.Module):
                 learn_omega_0=kernel_learn_omega0,
                 omega_1=kernel_omega1,
                 learn_omega_1=kernel_learn_omega1,
+                omega_2=kernel_omega2,
+                learn_omega_2=kernel_learn_omega2,
             )
         elif kernel_type == "SIREN2":
             self.kernelnet = ck.SIREN2(
@@ -128,6 +151,8 @@ class ConvBase(torch.nn.Module):
                 learn_omega_0=kernel_learn_omega0,
                 omega_1=kernel_omega1,
                 learn_omega_1=kernel_learn_omega1,
+                omega_2=kernel_omega2,
+                learn_omega_2=kernel_learn_omega2,
             )
         elif kernel_type == "SIREN3":
             self.kernelnet = ck.SIREN3(
@@ -141,6 +166,8 @@ class ConvBase(torch.nn.Module):
                 learn_omega_0=kernel_learn_omega0,
                 omega_1=kernel_omega1,
                 learn_omega_1=kernel_learn_omega1,
+                omega_2=kernel_omega2,
+                learn_omega_2=kernel_learn_omega2,
             )
         elif kernel_type == "SIREN4":
             self.kernelnet = ck.SIREN4(
@@ -154,6 +181,8 @@ class ConvBase(torch.nn.Module):
                 learn_omega_0=kernel_learn_omega0,
                 omega_1=kernel_omega1,
                 learn_omega_1=kernel_learn_omega1,
+                omega_2=kernel_omega2,
+                learn_omega_2=kernel_learn_omega2,
             )
         elif kernel_type == "RFN":
             self.kernelnet = ck.RFN(
@@ -167,6 +196,8 @@ class ConvBase(torch.nn.Module):
                 learn_omega_0=kernel_learn_omega0,
                 omega_1=kernel_omega1,
                 learn_omega_1=kernel_learn_omega1,
+                omega_2=kernel_omega2,
+                learn_omega_2=kernel_learn_omega2,
             )
         elif kernel_type == "RFNet":
             self.kernelnet = ck.RFNet(
@@ -381,6 +412,7 @@ class LiftingConv(ConvBase):
                 ),
                 dim=1,
             )
+            omegas = [0, 0, 1, 1]
         elif self.cond_rot and not self.cond_trans:
             output_g_no_elems = self.group_no_samples
 
@@ -404,63 +436,55 @@ class LiftingConv(ConvBase):
                 ),
                 dim=1,
             )
+            omegas = [0, 0, 1]
         elif self.cond_rot and self.cond_trans:
             print('Not implemented. first check individual whether we need separate omega for each subgroup')
             exit(1)
-            
-            # output_g_no_elems = self.group_no_samples
-
-            # acted_rel_pos = torch.cat(
-            #     (
-            #         # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
-            #         # [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x]
-            #         # +->  [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
-            #         acted_rel_pos_Rd.contiguous().view(
-            #             no_samples * output_g_no_elems,
-            #             2,
-            #             *kernel_size,
-            #             1,
-            #             1)
-            #         .expand(
-            #             *(-1,) * 4, *image_size
-            #         ),
-            #         # Expand the output rel pos Rd output_g_no_elems times along the "group axis", and "output group axes"
-            #         # [2, output_size_y, output_size_x]
-            #         # +->  [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
-            #         output_rel_pos.contiguous().view(
-            #             1,
-            #             2,
-            #             1,
-            #             1,
-            #             *image_size)
-            #         .expand(
-            #             no_samples * output_g_no_elems,
-            #             -1,
-            #             *kernel_size,
-            #             -1,
-            #             -1
-            #         )
-            #         # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
-            #         # [no_samples, output_g_no_elems]
-            #         # +->  [no_samples * output_g_no_elems, 1, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
-            #         g_elems.float().contiguous().view(
-            #             no_samples * output_g_no_elems,
-            #             1,
-            #             1,
-            #             1, 1, 1).expand(-1, -1, *kernel_size, *image_size)
-            #     ),
-            #     dim=1,
-            # )
-
+            acted_rel_pos = torch.cat(
+                (
+                    # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
+                    # [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x]
+                    # +->  [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x]
+                    acted_rel_pos_Rd.contiguous().view(
+                        no_samples * output_g_no_elems,
+                        2,
+                        *kernel_size),
+                    # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
+                    # [no_samples, output_g_no_elems]
+                    # +->  [no_samples * output_g_no_elems, 1, kernel_size_y, kernel_size_x]
+                    g_elems.float().contiguous().view(
+                        no_samples * output_g_no_elems,
+                        1,
+                        1,
+                        1).expand(-1, -1, *kernel_size)
+                    # Expand the output rel pos Rd output_g_no_elems times along the "group axis", and "output group axes"
+                    # [2, output_size_y, output_size_x]
+                    # +->  [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
+                    output_rel_pos.contiguous().view(
+                        1,
+                        2,
+                        1,
+                        1,
+                        *image_size)
+                    .expand(
+                        no_samples * output_g_no_elems,
+                        -1,
+                        *kernel_size,
+                        -1,
+                        -1
+                    )
+                ),
+                dim=1,
+            )
+            omegas = [0, 0, 1, 2, 2]
         else:
             acted_rel_pos = acted_rel_pos_Rd.contiguous()
+            omegas = [0, 0]
 
-
-        N_omega0 = 2
         self.acted_rel_pos = acted_rel_pos
 
         # Get the kernel
-        conv_kernel = self.kernelnet(acted_rel_pos, N_omega0)
+        conv_kernel = self.kernelnet(acted_rel_pos, omegas)
 
         if self.mask:
             if self.cond_trans:
@@ -738,6 +762,7 @@ class GroupConv(ConvBase):
                 ),
                 dim=1,
             )
+            omegas = [0, 0, 1, 2, 2]
         elif self.cond_rot and not self.cond_trans:
             acted_group_rel_pos = torch.cat(
                 (
@@ -747,6 +772,15 @@ class GroupConv(ConvBase):
                     acted_rel_pos_Rd.unsqueeze(2).expand(
                         *(-1,) * 2, input_g_no_elems, *(-1,) * 2
                     ),
+                    # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
+                    # [no_samples, output_g_no_elems]
+                    # +->  [no_samples * output_g_no_elems, 1, input_no_g_elems, kernel_size_y, kernel_size_x]
+                    g_elems.float().contiguous().view(
+                        no_samples * output_g_no_elems,
+                        1,
+                        1,
+                        1,
+                        1).expand(-1, -1, input_g_no_elems, *kernel_size)
                     # Expand the acted g elements along the "spatial axes".
                     # [no_samples, output_g_no_elems, input_g_no_elems, self.group.dimension_stabilizer]
                     # +->  [no_samples * output_g_no_elems, self.group.dimension_stabilizer, input_no_g_elems, kernel_size_y, kernel_size_x]
@@ -765,6 +799,19 @@ class GroupConv(ConvBase):
                         -1,
                         *kernel_size
                     ),
+                ),
+                dim=1,
+            )
+            omegas = [0, 0, 1, 1]
+        elif self.cond_rot and self.cond_trans:
+            acted_group_rel_pos = torch.cat(
+                (
+                    # Expand the acted rel pos Rd input_g_no_elems times along the "group axis".
+                    # [no_samples * output_g_no_elems, 2, kernel_size_y, kernel_size_x]
+                    # +->  [no_samples * output_g_no_elems, 2, input_no_g_elems, kernel_size_y, kernel_size_x]
+                    acted_rel_pos_Rd.unsqueeze(2).expand(
+                        *(-1,) * 2, input_g_no_elems, *(-1,) * 2
+                    ),
                     # Expand the acted rel pos Rd input_g_no_elems times along the "group axis", and "output group axes"
                     # [no_samples, output_g_no_elems]
                     # +->  [no_samples * output_g_no_elems, 1, input_no_g_elems, kernel_size_y, kernel_size_x]
@@ -774,12 +821,66 @@ class GroupConv(ConvBase):
                         1,
                         1,
                         1).expand(-1, -1, input_g_no_elems, *kernel_size)
+                    # Expand the acted g elements along the "spatial axes".
+                    # [no_samples, output_g_no_elems, input_g_no_elems, self.group.dimension_stabilizer]
+                    # +->  [no_samples * output_g_no_elems, self.group.dimension_stabilizer, input_no_g_elems, kernel_size_y, kernel_size_x]
+                    acted_g_elements.transpose(-1, -2)
+                    .contiguous()
+                    .view(
+                        no_samples * output_g_no_elems,
+                        self.group.dimension_stabilizer,
+                        input_g_no_elems,
+                        1,
+                        1,
+                    )
+                    .expand(
+                        -1,
+                        -1,
+                        -1,
+                        *kernel_size
+                    ),
+                    # Expand the acted g elements along the "spatial axes", and "output group axes"
+                    # [no_samples, output_g_no_elems, input_g_no_elems, self.group.dimension_stabilizer]
+                    # +->  [no_samples * output_g_no_elems, self.group.dimension_stabilizer, input_no_g_elems, kernel_size_y, kernel_size_x, output_size_y, output_size_x]
+                    acted_g_elements.transpose(-1, -2)
+                    .contiguous()
+                    .view(
+                        no_samples * output_g_no_elems,
+                        self.group.dimension_stabilizer,
+                        input_g_no_elems,
+                        1,
+                        1,
+                        1,
+                        1,
+                    )
+                    .expand(
+                        -1,
+                        -1,
+                        -1,
+                        *kernel_size,
+                        *new_image_size
+                    ),
+                    # Expand the output rel pos Rd output_g_no_elems times along the "group axis", and "output group axes"
+                    # [2, output_size_x, output_size_y]
+                    # +->  [no_samples * output_g_no_elems, 2, input_no_g_elems, kernel_size_y, kernel_size_x, output_size_x, output_size_y]
+                    output_rel_pos.contiguous().view(
+                        1,
+                        2,
+                        1,
+                        1,
+                        1,
+                        *new_image_size)
+                        .expand(
+                        no_samples * output_g_no_elems,
+                        -1,
+                        input_g_no_elems,
+                        *kernel_size,
+                        -1,
+                        -1)
                 ),
                 dim=1,
             )
-        elif self.cond_rot and self.cond_trans:
-            print('Not implemented, need omega2 probably')
-            exit(1)
+            omegas = [0, 0, 1, 1, 2, 2]
         else:
             acted_group_rel_pos = torch.cat(
                 (
@@ -810,12 +911,12 @@ class GroupConv(ConvBase):
                 ),
                 dim=1,
             )
+            omegas = [0, 0, 1] # TODO: use dimension stabilizer arg?
 
-        N_omega0 = 2 + self.group.dimension_stabilizer
         self.acted_rel_pos = acted_group_rel_pos
 
         # Get the kernel
-        conv_kernel = self.kernelnet(acted_group_rel_pos, N_omega0)
+        conv_kernel = self.kernelnet(acted_group_rel_pos, omegas)
 
         if self.mask:
             # TODO: write masking code at efficient location with generalized group convolution

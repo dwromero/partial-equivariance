@@ -99,17 +99,23 @@ class SIRENBase(torch.nn.Module):
             tensor_omega_1.fill_(omega_1)
             self.register_buffer("omega_1", tensor_omega_1)
 
-    def forward(self, x, N_omega0):
+    def forward(self, x, omegas):
         x_shape = x.shape
         #out = x.clone()
         out = x
 
-        # Apply omega's on inputs
-        if N_omega0 > 0:
-            out[:, :N_omega0] *= self.omega_0
-            out[:, N_omega0:] *= self.omega_1
-        else:
-            out *= self.omega_0
+        assert len(omegas) == x.shape[1]
+
+        for i, omega in enumerate(omegas):
+            if omega == 0:
+                out[:, i] * = self.omega_0
+            elif omega == 1:
+                out[:, i] * = self.omega_1
+            elif omega == 2:
+                out[:, i] * = self.omega_2
+            else:
+                print('this should not happen')
+                exit(1)
 
         # Put in_channels dimension at last and compress all other dimensions to one [batch_size, -1, in_channels]
         out = out.view(x_shape[0], x_shape[1], -1).transpose(1, 2)
