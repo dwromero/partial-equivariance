@@ -1,4 +1,4 @@
-#PBS -lselect=1:ncpus=32:mem=192gb:ngpus=8:gpu_type=RTX6000
+#PBS -lselect=1:ncpus=24:mem=144gb:ngpus=6:gpu_type=RTX6000
 #PBS -lwalltime=24:00:00
 ls
 pwd

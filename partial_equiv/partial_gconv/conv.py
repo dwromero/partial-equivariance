@@ -105,23 +105,6 @@ class ConvBase(torch.nn.Module):
                 omega_2=kernel_omega2,
                 learn_omega_2=kernel_learn_omega2,
             )
-        elif kernel_type == "SIRENRELU":
-            self.kernelnet = ck.SIRENRELU(
-                dim_linear=self.dim_linear,
-                dim_input_space=self.dim_input_space,
-                out_channels=out_channels * in_channels,
-                hidden_channels=kernel_no_hidden,
-                no_layers=kernel_no_layers,
-                init_scale=kernel_init_scale,
-                weight_norm=kernel_weight_norm,
-                bias=True,
-                omega_0=kernel_omega0,
-                learn_omega_0=kernel_learn_omega0,
-                omega_1=kernel_omega1,
-                learn_omega_1=kernel_learn_omega1,
-                omega_2=kernel_omega2,
-                learn_omega_2=kernel_learn_omega2,
-            )
         elif kernel_type == "SIREN3":
             self.kernelnet = ck.SIREN3(
                 dim_linear=self.dim_linear,
@@ -766,7 +749,7 @@ class GroupConv(ConvBase):
                 ),
                 dim=1,
             )
-            omegas = [0, 0, 1, 2, 2]
+            omegas = [0, 0, 1, 1, 1]
         elif self.cond_rot and not self.cond_trans:
             acted_group_rel_pos = torch.cat(
                 (
@@ -906,7 +889,7 @@ class GroupConv(ConvBase):
                 ),
                 dim=1,
             )
-            omegas = [0, 0, 1] # TODO: use dimension stabilizer arg?
+            omegas = [0, 0, 0] # TODO: use dimension stabilizer arg?
 
         self.acted_rel_pos = acted_group_rel_pos
 
