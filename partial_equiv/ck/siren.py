@@ -116,8 +116,6 @@ class SIRENBase(torch.nn.Module):
         #out = x.clone()
         out = x
 
-        print('o', omegas)
-        print('x', x.shape)
         assert len(omegas) == x.shape[1]
 
         for i, omega in enumerate(omegas):
