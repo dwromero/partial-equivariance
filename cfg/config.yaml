@@ -68,7 +68,7 @@ dataset_params:
   rot_interval: 0
 augment: None
 wandb:
-  project: partial_equiv
+  project: main
   entity: relatex-equivariance-project
 device: cuda
 debug: False
