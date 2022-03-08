@@ -69,6 +69,7 @@ dataset_params:
 augment: None
 wandb:
   project: partial_equiv
+  entity: relatex-equivariance-project
 device: cuda
 debug: False
 pretrained: False
