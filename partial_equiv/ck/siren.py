@@ -18,6 +18,7 @@ class SIRENBase(torch.nn.Module):
         init_scale: float,
         weight_norm: bool,
         bias: bool,
+        fix_integer: bool,
         omega_0: float,
         learn_omega_0: bool,
         omega_1: float,
@@ -37,6 +38,7 @@ class SIRENBase(torch.nn.Module):
         self.no_layers = no_layers
 
         self.init_scale = init_scale
+        self.fix_integer = fix_integer
 
         ActivationFunction = gral.nn.Sine
 
@@ -148,6 +150,23 @@ class SIRENBase(torch.nn.Module):
                 if net_layer == 1:
                     w_std = 1 / m.weight.shape[1]
                     m.weight.data.uniform_(-w_std, w_std)
+
+                    if self.fix_integer:
+                        if m.weight.shape[1] == 6:
+                            print('fixed 6')
+                            m.weight.data[:, 2:4] = m.weight.data[:, 2:4] * 0.0 + 1.0
+                        elif m.weight.shape[1] == 5:
+                            print('fixed 5')
+                            m.weight.data[:, 2:3] = m.weight.data[:, 2:3] * 0.0 + 1.0
+                        elif m.weight.shape[1] == 4:
+                            print('fixed 4')
+                            m.weight.data[:, 2:4] = m.weight.data[:, 2:4] * 0.0 + 1.0
+                        elif m.weight.shape[1] == 3:
+                            print('fixed 3')
+                            m.weight.data[:, 2:3] = m.weight.data[:, 2:3] * 0.0 + 1.0
+                        else:
+                            print('no fix')
+
                 else:
                     w_std = sqrt(6.0 / m.weight.shape[1]) * self.init_scale
                     m.weight.data.uniform_(
@@ -187,6 +206,7 @@ class SIREN(SIRENBase):
         init_scale: float,
         weight_norm: bool,
         bias: bool,
+        fix_integer: bool,
         omega_0: float,
         learn_omega_0: bool,
         omega_1: float,
@@ -208,6 +228,7 @@ class SIREN(SIRENBase):
             no_layers=no_layers,
             init_scale=init_scale,
             bias=bias,
+            fix_integer=fix_integer,
             omega_0=omega_0,
             learn_omega_0=learn_omega_0,
             omega_1=omega_1,

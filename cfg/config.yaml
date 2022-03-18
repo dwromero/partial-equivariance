@@ -24,6 +24,7 @@ kernel:
   no_hidden: -1
   no_layers: -1
   size: -1
+  fix_integer: false
   omega0: 0.0
   learn_omega0: False
   omega1: 0.0
