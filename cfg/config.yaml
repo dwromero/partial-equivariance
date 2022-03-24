@@ -25,6 +25,8 @@ kernel:
   no_layers: -1
   size: -1
   fix_integer: false
+  fix_integer_with_bias: false
+  fix_integer_with_geom: false
   omega0: 0.0
   learn_omega0: False
   omega1: 0.0
@@ -69,8 +71,8 @@ dataset_params:
   rot_interval: 0
 augment: None
 wandb:
-  project: main
-  entity: relatex-equivariance-project
+  project: partial_equiv
+  entity: tychovdo
 device: cuda
 debug: False
 pretrained: False

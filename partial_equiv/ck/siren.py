@@ -19,6 +19,8 @@ class SIRENBase(torch.nn.Module):
         weight_norm: bool,
         bias: bool,
         fix_integer: bool,
+        fix_integer_with_bias: bool,
+        fix_integer_with_geom: bool,
         omega_0: float,
         learn_omega_0: bool,
         omega_1: float,
@@ -39,6 +41,8 @@ class SIRENBase(torch.nn.Module):
 
         self.init_scale = init_scale
         self.fix_integer = fix_integer
+        self.fix_integer_with_bias = fix_integer_with_bias
+        self.fix_integer_with_geom = fix_integer_with_geom
 
         ActivationFunction = gral.nn.Sine
 
@@ -151,7 +155,7 @@ class SIRENBase(torch.nn.Module):
                     w_std = 1 / m.weight.shape[1]
                     m.weight.data.uniform_(-w_std, w_std)
 
-                    if self.fix_integer:
+                    if self.fix_integer or self.fix_integer_with_bias:
                         if m.weight.shape[1] == 6:
                             print('fixed 6')
                             m.weight.data[:, 2:4] = m.weight.data[:, 2:4] * 0.0 + 1.0
@@ -167,6 +171,25 @@ class SIRENBase(torch.nn.Module):
                         else:
                             print('no fix')
 
+                    if type(self.fix_integer_with_geom) == float:
+                        print('FIX WITH GEOM!')
+                        p = self.fix_integer_with_geom
+                        if m.weight.shape[1] == 6:
+                            print('fixed 6')
+                            m.weight.data[:, 2:4] = m.weight.data[:, 2:4] * 0.0 + np.random.geometric(p, size=m.weight.data[:, 2:4].shape)
+                        elif m.weight.shape[1] == 5:
+                            print('fixed 5')
+                            m.weight.data[:, 2:3] = m.weight.data[:, 2:3] * 0.0 + np.random.geometric(p, size=m.weight.data[:, 2:3].shape)
+                        elif m.weight.shape[1] == 4:
+                            print('fixed 4')
+                            m.weight.data[:, 2:4] = m.weight.data[:, 2:4] * 0.0 + np.random.geometric(p, size=m.weight.data[:, 2:4].shape)
+                        elif m.weight.shape[1] == 3:
+                            print('fixed 3')
+                            m.weight.data[:, 2:3] = m.weight.data[:, 2:3] * 0.0 + np.random.geometric(p, size=m.weight.data[:, 2:3].shape)
+                        else:
+                            print('no fix')
+                        print(np.unique(m.weight.data.detach().cpu().numpy(), return_counts=True))
+
                 else:
                     w_std = sqrt(6.0 / m.weight.shape[1]) * self.init_scale
                     m.weight.data.uniform_(
@@ -176,8 +199,24 @@ class SIRENBase(torch.nn.Module):
                 net_layer += 1
                 # Important! Bias is not defined in original SIREN implementation
                 if m.bias is not None:
-                    # m.bias.data.uniform_(-1.0, 1.0)
-                    m.bias.data.zero_()
+                    if self.fix_integer_with_bias or (type(self.fix_integer_with_geom) == float):
+                        print('fixed with bias')
+                        if m.weight.shape[1] == 6:
+                            m.bias.data[2:4].uniform_(-1.0, 1.0)
+                            print('bias', m.bias.data.shape, '2:4')
+                        elif m.weight.shape[1] == 5:
+                            m.bias.data[2:3].uniform_(-1.0, 1.0)
+                            print('bias', m.bias.data.shape, '2:3')
+                        elif m.weight.shape[1] == 4:
+                            m.bias.data[2:4].uniform_(-1.0, 1.0)
+                            print('bias', m.bias.data.shape, '2:4')
+                        elif m.weight.shape[1] == 3:
+                            m.bias.data[2:3].uniform_(-1.0, 1.0)
+                            print('bias', m.bias.data.shape, '2:3')
+                        else:
+                            print('no fix')
+                    else:
+                        m.bias.data.zero_()
 
 
 #############################################
@@ -207,6 +246,8 @@ class SIREN(SIRENBase):
         weight_norm: bool,
         bias: bool,
         fix_integer: bool,
+        fix_integer_with_bias: bool,
+        fix_integer_with_geom,
         omega_0: float,
         learn_omega_0: bool,
         omega_1: float,
@@ -229,6 +270,8 @@ class SIREN(SIRENBase):
             init_scale=init_scale,
             bias=bias,
             fix_integer=fix_integer,
+            fix_integer_with_bias=fix_integer_with_bias,
+            fix_integer_with_geom=fix_integer_with_geom,
             omega_0=omega_0,
             learn_omega_0=learn_omega_0,
             omega_1=omega_1,

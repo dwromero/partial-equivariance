@@ -37,6 +37,8 @@ class ConvBase(torch.nn.Module):
         kernel_init_scale = kernel_config.init_scale
         kernel_weight_norm = kernel_config.weight_norm
         kernel_fix_integer = kernel_config.fix_integer
+        kernel_fix_integer_with_bias = kernel_config.fix_integer_with_bias
+        kernel_fix_integer_with_geom = kernel_config.fix_integer_with_geom
         kernel_omega0 = kernel_config.omega0
         kernel_learn_omega0 = kernel_config.learn_omega0
         kernel_omega1 = kernel_config.omega1
@@ -100,6 +102,8 @@ class ConvBase(torch.nn.Module):
                 weight_norm=kernel_weight_norm,
                 bias=True,
                 fix_integer=kernel_fix_integer,
+                fix_integer_with_bias=kernel_fix_integer_with_bias,
+                fix_integer_with_geom=kernel_fix_integer_with_geom,
                 omega_0=kernel_omega0,
                 learn_omega_0=kernel_learn_omega0,
                 omega_1=kernel_omega1,
@@ -118,6 +122,8 @@ class ConvBase(torch.nn.Module):
                 weight_norm=kernel_weight_norm,
                 bias=True,
                 fix_integer=kernel_fix_integer,
+                fix_integer_with_bias=kernel_fix_integer_with_bias,
+                fix_integer_with_geom=kernel_fix_integer_with_geom,
                 omega_0=kernel_omega0,
                 learn_omega_0=kernel_learn_omega0,
                 omega_1=kernel_omega1,
@@ -134,6 +140,8 @@ class ConvBase(torch.nn.Module):
                 init_scale=kernel_init_scale,
                 bias=True,
                 fix_integer=kernel_fix_integer,
+                fix_integer_with_bias=kernel_fix_integer_with_bias,
+                fix_integer_with_geom=kernel_fix_integer_with_geom,
                 omega_0=kernel_omega0,
                 learn_omega_0=kernel_learn_omega0,
                 omega_1=kernel_omega1,
@@ -150,6 +158,8 @@ class ConvBase(torch.nn.Module):
                 init_scale=kernel_init_scale,
                 bias=True,
                 fix_integer=kernel_fix_integer,
+                fix_integer_with_bias=kernel_fix_integer_with_bias,
+                fix_integer_with_geom=kernel_fix_integer_with_geom,
                 omega_0=kernel_omega0,
                 learn_omega_0=kernel_learn_omega0,
                 omega_1=kernel_omega1,
@@ -166,6 +176,8 @@ class ConvBase(torch.nn.Module):
                 init_scale=kernel_init_scale,
                 bias=True,
                 fix_integer=kernel_fix_integer,
+                fix_integer_with_bias=kernel_fix_integer_with_bias,
+                fix_integer_with_geom=kernel_fix_integer_with_geom,
                 omega_0=kernel_omega0,
                 learn_omega_0=kernel_learn_omega0,
                 omega_1=kernel_omega1,
@@ -182,6 +194,8 @@ class ConvBase(torch.nn.Module):
                 init_scale=kernel_init_scale,
                 bias=True,
                 fix_integer=kernel_fix_integer,
+                fix_integer_with_bias=kernel_fix_integer_with_bias,
+                fix_integer_with_geom=kernel_fix_integer_with_geom,
                 omega_0=kernel_omega0,
                 learn_omega_0=kernel_learn_omega0,
                 omega_1=kernel_omega1,
@@ -197,6 +211,8 @@ class ConvBase(torch.nn.Module):
                 dim_linear=self.dim_linear,
                 bias=True,
                 fix_integer=kernel_fix_integer,
+                fix_integer_with_bias=kernel_fix_integer_with_bias,
+                fix_integer_with_geom=kernel_fix_integer_with_geom,
                 omega_0=kernel_omega0,
             )
         elif kernel_type == "Gabor":
