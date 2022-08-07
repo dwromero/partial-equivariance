@@ -92,9 +92,6 @@ class SIREN2(torch.nn.Module):
         out = out.view(x_shape[0], x_shape[1], -1).transpose(1, 2)
 
         # Pass through the network
-        print(111, out.shape)
-        print(222, self.first_layer.weight.shape)
-        print(333, self.first_layer.bias.shape)
         out = torch.einsum('ijk,lk->ijl', out, self.first_layer.weight) + self.first_layer.bias.view(1, 1, -1)
         out = torch.sin(out)
 
@@ -118,16 +115,20 @@ class SIREN2(torch.nn.Module):
         # mid
         for m in self.mid_layers:
             w_std = sqrt(6.0 / self.hidden_channels)
-            m.weight.data.uniform_(-w_std, w_std)
+            # m.weight.data.uniform_(-w_std, w_std)
+            actual_std = np.sqrt(((2 * w_std) ** 2) / 12)
+            m.weight.data.normal(0.0, actual_std)
             if m.bias is not None:
                 m.bias.data.zero_()
 
         # last
         w_std = sqrt(6.0 / self.hidden_channels) * init_scale
-        self.last_layer.weight.data.uniform_(
-            -w_std,
-            w_std,
-        )
+        # self.last_layer.weight.data.uniform_(
+        #     -w_std,
+        #     w_std,
+        # )
+        actual_std = np.sqrt(((2 * w_std) ** 2) / 12)
+        m.weight.data.normal(0.0, actual_std)
         if self.last_layer.bias is not None:
             self.last_layer.bias.data.zero_()
 

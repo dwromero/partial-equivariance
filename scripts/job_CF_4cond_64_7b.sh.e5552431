@@ -1,0 +1,513 @@
+wandb: Currently logged in as: tychovdo (use `wandb login --relogin` to force relogin)
+wandb: Tracking run with wandb version 0.12.10
+wandb: Syncing run volcanic-hill-4840
+wandb: ⭐️ View project at https://wandb.ai/tychovdo/partial_equiv
+wandb: 🚀 View run at https://wandb.ai/tychovdo/partial_equiv/runs/22ac9i2d
+wandb: Run data is saved locally in /tmp/pbs.5552431.pbs/outputs/2022-05-14/04-01-25/wandb/run-20220514_040126-22ac9i2d
+wandb: Run `wandb offline` to turn off syncing.
+  0% 0/169001437 [00:00<?, ?it/s]  0% 33792/169001437 [00:00<15:17, 184129.33it/s]  0% 197632/169001437 [00:00<04:42, 598287.07it/s]  1% 885760/169001437 [00:00<01:23, 2023471.95it/s]  2% 2627584/169001437 [00:00<00:27, 6038138.97it/s]  3% 5260288/169001437 [00:00<00:14, 11544336.38it/s]  5% 8832000/169001437 [00:00<00:08, 18296430.25it/s]  7% 12387328/169001437 [00:00<00:06, 23217836.77it/s]  9% 15746048/169001437 [00:01<00:06, 22307282.31it/s] 11% 19317760/169001437 [00:01<00:05, 25796143.84it/s] 14% 22898688/169001437 [00:01<00:05, 28444661.95it/s] 16% 26274816/169001437 [00:01<00:04, 29926001.94it/s] 18% 29853696/169001437 [00:01<00:04, 31594948.31it/s] 20% 33424384/169001437 [00:01<00:04, 32777580.87it/s] 22% 37004288/169001437 [00:01<00:03, 33660629.78it/s] 24% 40567808/169001437 [00:01<00:04, 30333535.90it/s] 26% 43987968/169001437 [00:01<00:03, 31383509.28it/s] 28% 47440896/169001437 [00:02<00:03, 32262691.10it/s] 30% 50735104/169001437 [00:02<00:03, 32048946.88it/s] 32% 54182912/169001437 [00:02<00:03, 32745073.35it/s] 34% 57836544/169001437 [00:02<00:03, 33846078.60it/s] 36% 61408256/169001437 [00:02<00:03, 34394100.34it/s] 38% 64942080/169001437 [00:02<00:03, 34672953.20it/s] 40% 68425728/169001437 [00:02<00:03, 30888040.78it/s] 43% 71828480/169001437 [00:02<00:03, 31322873.73it/s] 44% 75170816/169001437 [00:02<00:02, 31723732.05it/s] 46% 78545920/169001437 [00:03<00:02, 32297066.68it/s] 49% 82117632/169001437 [00:03<00:02, 33113504.72it/s] 51% 85640192/169001437 [00:03<00:02, 33726218.60it/s] 53% 89235456/169001437 [00:03<00:02, 34379265.19it/s] 55% 92690432/169001437 [00:03<00:02, 31371958.89it/s] 57% 96175104/169001437 [00:03<00:02, 31575435.67it/s] 59% 99599360/169001437 [00:03<00:02, 31497415.74it/s] 61% 103121920/169001437 [00:03<00:02, 32538242.63it/s] 63% 106685440/169001437 [00:03<00:01, 33422381.50it/s] 65% 110281728/169001437 [00:03<00:01, 34157460.79it/s] 67% 113736704/169001437 [00:04<00:01, 34271988.92it/s] 69% 117178368/169001437 [00:04<00:01, 31922153.17it/s] 71% 120706048/169001437 [00:04<00:01, 32866600.53it/s] 73% 124026880/169001437 [00:04<00:01, 32597146.88it/s] 75% 127310848/169001437 [00:04<00:01, 31126822.28it/s] 77% 130909184/169001437 [00:04<00:01, 32467853.52it/s] 80% 134398976/169001437 [00:04<00:01, 32986719.67it/s] 82% 137757696/169001437 [00:04<00:00, 33011424.72it/s] 84% 141165568/169001437 [00:04<00:00, 31814431.30it/s] 86% 144721920/169001437 [00:05<00:00, 32881461.32it/s] 88% 148252672/169001437 [00:05<00:00, 33582192.22it/s] 90% 151627776/169001437 [00:05<00:00, 31745894.52it/s] 92% 154831872/169001437 [00:05<00:00, 31764062.28it/s] 94% 158405632/169001437 [00:05<00:00, 32905322.45it/s] 96% 161912832/169001437 [00:05<00:00, 33535586.82it/s] 98% 165431296/169001437 [00:05<00:00, 34019471.50it/s]100% 168845312/169001437 [00:05<00:00, 32589486.15it/s]169001984it [00:05, 29280355.56it/s]                   
+/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torch/functional.py:445: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at  /opt/conda/conda-bld/pytorch_1640811803361/work/aten/src/ATen/native/TensorShape.cpp:2157.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+wandb: Network error (ReadTimeout), entering retry loop.
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 105, in _run
+    self._process(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 305, in _process
+    self._sm.send(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 237, in send
+    send_handler(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 249, in send_request
+    logger.debug("send_request: {}".format(request_type))
+Message: 'send_request: stop_status'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 105, in _run
+    self._process(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 305, in _process
+    self._sm.send(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 235, in send
+    logger.debug("send: {}".format(record_type))
+Message: 'send: stats'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 106, in _run
+    self._finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 308, in _finish
+    self._sm.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 1075, in finish
+    logger.info("shutting down sender")
+Message: 'shutting down sender'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 106, in _run
+    self._finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 308, in _finish
+    self._sm.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 1079, in finish
+    self._dir_watcher.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/dir_watcher.py", line 283, in finish
+    logger.info("shutting down directory watcher")
+Message: 'shutting down directory watcher'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 106, in _run
+    self._finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 308, in _finish
+    self._sm.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 1079, in finish
+    self._dir_watcher.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/dir_watcher.py", line 313, in finish
+    logger.info("scan: %s", self._dir)
+Message: 'scan: %s'
+Arguments: ('/tmp/pbs.5552431.pbs/outputs/2022-05-14/04-01-25/wandb/run-20220514_040126-22ac9i2d/files',)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 106, in _run
+    self._finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 308, in _finish
+    self._sm.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 1079, in finish
+    self._dir_watcher.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/dir_watcher.py", line 327, in finish
+    logger.info("scan save: %s %s", file_path, save_name)
+Message: 'scan save: %s %s'
+Arguments: ('/tmp/pbs.5552431.pbs/outputs/2022-05-14/04-01-25/wandb/run-20220514_040126-22ac9i2d/files/checkpoint.pt', 'checkpoint.pt')
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 106, in _run
+    self._finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 308, in _finish
+    self._sm.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 1079, in finish
+    self._dir_watcher.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/dir_watcher.py", line 327, in finish
+    logger.info("scan save: %s %s", file_path, save_name)
+Message: 'scan save: %s %s'
+Arguments: ('/tmp/pbs.5552431.pbs/outputs/2022-05-14/04-01-25/wandb/run-20220514_040126-22ac9i2d/files/output.log', 'output.log')
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 106, in _run
+    self._finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 308, in _finish
+    self._sm.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 1079, in finish
+    self._dir_watcher.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/dir_watcher.py", line 327, in finish
+    logger.info("scan save: %s %s", file_path, save_name)
+Message: 'scan save: %s %s'
+Arguments: ('/tmp/pbs.5552431.pbs/outputs/2022-05-14/04-01-25/wandb/run-20220514_040126-22ac9i2d/files/wandb-metadata.json', 'wandb-metadata.json')
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 106, in _run
+    self._finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 308, in _finish
+    self._sm.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 1079, in finish
+    self._dir_watcher.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/dir_watcher.py", line 327, in finish
+    logger.info("scan save: %s %s", file_path, save_name)
+Message: 'scan save: %s %s'
+Arguments: ('/tmp/pbs.5552431.pbs/outputs/2022-05-14/04-01-25/wandb/run-20220514_040126-22ac9i2d/files/conda-environment.yaml', 'conda-environment.yaml')
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 106, in _run
+    self._finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 308, in _finish
+    self._sm.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 1079, in finish
+    self._dir_watcher.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/dir_watcher.py", line 327, in finish
+    logger.info("scan save: %s %s", file_path, save_name)
+Message: 'scan save: %s %s'
+Arguments: ('/tmp/pbs.5552431.pbs/outputs/2022-05-14/04-01-25/wandb/run-20220514_040126-22ac9i2d/files/requirements.txt', 'requirements.txt')
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 106, in _run
+    self._finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 308, in _finish
+    self._sm.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 1079, in finish
+    self._dir_watcher.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/dir_watcher.py", line 327, in finish
+    logger.info("scan save: %s %s", file_path, save_name)
+Message: 'scan save: %s %s'
+Arguments: ('/tmp/pbs.5552431.pbs/outputs/2022-05-14/04-01-25/wandb/run-20220514_040126-22ac9i2d/files/wandb-summary.json', 'wandb-summary.json')
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 106, in _run
+    self._finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 308, in _finish
+    self._sm.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 1079, in finish
+    self._dir_watcher.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/dir_watcher.py", line 327, in finish
+    logger.info("scan save: %s %s", file_path, save_name)
+Message: 'scan save: %s %s'
+Arguments: ('/tmp/pbs.5552431.pbs/outputs/2022-05-14/04-01-25/wandb/run-20220514_040126-22ac9i2d/files/config.yaml', 'config.yaml')
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 106, in _run
+    self._finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 308, in _finish
+    self._sm.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 1082, in finish
+    self._pusher.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/file_pusher.py", line 177, in finish
+    logger.info("shutting down file pusher")
+Message: 'shutting down file pusher'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 106, in _run
+    self._finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 308, in _finish
+    self._sm.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/sender.py", line 1083, in finish
+    self._pusher.join()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/file_pusher.py", line 182, in join
+    logger.info("waiting for file pusher")
+Message: 'waiting for file pusher'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/upload_job.py", line 56, in run
+    success = self.push()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/upload_job.py", line 137, in push
+    logger.info("Uploaded file %s", self.save_path)
+Message: 'Uploaded file %s'
+Arguments: ('/tmp/pbs.5552431.pbs/outputs/2022-05-14/04-01-25/wandb/run-20220514_040126-22ac9i2d/files/output.log',)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/upload_job.py", line 56, in run
+    success = self.push()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/upload_job.py", line 137, in push
+    logger.info("Uploaded file %s", self.save_path)
+Message: 'Uploaded file %s'
+Arguments: ('/tmp/pbs.5552431.pbs/outputs/2022-05-14/04-01-25/wandb/run-20220514_040126-22ac9i2d/files/wandb-summary.json',)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/upload_job.py", line 56, in run
+    success = self.push()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/upload_job.py", line 137, in push
+    logger.info("Uploaded file %s", self.save_path)
+Message: 'Uploaded file %s'
+Arguments: ('/tmp/pbs.5552431.pbs/outputs/2022-05-14/04-01-25/wandb/run-20220514_040126-22ac9i2d/files/config.yaml',)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/upload_job.py", line 56, in run
+    success = self.push()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/upload_job.py", line 137, in push
+    logger.info("Uploaded file %s", self.save_path)
+Message: 'Uploaded file %s'
+Arguments: ('/tmp/pbs.5552431.pbs/outputs/2022-05-14/04-01-25/wandb/run-20220514_040126-22ac9i2d/files/requirements.txt',)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 106, in _run
+    self._finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 263, in _finish
+    self._hm.finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/handler.py", line 739, in finish
+    logger.info("shutting down handler")
+Message: 'shutting down handler'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "<string>", line 1, in <module>
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/multiprocessing/spawn.py", line 116, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/multiprocessing/spawn.py", line 129, in _main
+    return self._bootstrap(parent_sentinel)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 164, in wandb_internal
+    logger.error("Thread {}:".format(thread.name), exc_info=exc_info)
+Message: 'Thread WriterThread:'
+Arguments: ()
+Thread WriterThread:
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 105, in _run
+    self._process(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 346, in _process
+    self._wm.write(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/writer.py", line 35, in write
+    self._ds.write(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/datastore.py", line 276, in write
+    ret = self._write_data(s)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/datastore.py", line 236, in _write_data
+    self._write_record(s)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/datastore.py", line 213, in _write_record
+    self._fp.write(s)
+OSError: [Errno 28] No space left on device
+wandb: ERROR Internal wandb error: file data was not synced
+Exception in thread NetStatThr:
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 910, in run
+    self._target(*self._args, **self._kwargs)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 148, in check_network_status
+    status_response = self._interface.communicate_network_status()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface.py", line 125, in communicate_network_status
+    resp = self._communicate_network_status(status)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 388, in _communicate_network_status
+    resp = self._communicate(req, local=True)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 213, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 218, in _communicate_async
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+Exception in thread ChkStopThr:
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 910, in run
+    self._target(*self._args, **self._kwargs)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 166, in check_status
+    status_response = self._interface.communicate_stop_status()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface.py", line 114, in communicate_stop_status
+    resp = self._communicate_stop_status(status)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 378, in _communicate_stop_status
+    resp = self._communicate(req, local=True)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 213, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 218, in _communicate_async
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+=>> PBS: job killed: walltime 86489 exceeded limit 86400

@@ -1,0 +1,98 @@
+wandb: Currently logged in as: tychovdo (use `wandb login --relogin` to force relogin)
+wandb: ERROR Error communicating with wandb process
+wandb: ERROR try: wandb.init(settings=wandb.Settings(start_method='fork'))
+wandb: ERROR or:  wandb.init(settings=wandb.Settings(start_method='thread'))
+wandb: ERROR For more info see: https://docs.wandb.ai/library/init#init-start-error
+Error executing job with overrides: ['base_group.name=SE2', 'base_group.no_samples=16', 'base_group.sample_per_batch_element=False', 'base_group.sample_per_layer=False', 'base_group.sampling_method=deterministic', 'conv.bias=True', 'conv.padding=same', 'conv.partial_equiv=False', 'dataset=CIFAR100', 'kernel.learn_omega0=False', 'kernel.no_hidden=32', 'kernel.no_layers=3', 'kernel.omega0=10', 'kernel.size=7', 'kernel.type=SIREN', 'kernel.weight_norm=False', 'net.dropout=0', 'net.no_blocks=2', 'net.no_hidden=32', 'net.norm=BatchNorm', 'net.pool_blocks=[1,2]', 'net.block_width_factors=[1,1,2,1]', 'net.type=CKResNet', 'no_workers=3', 'seed=100', 'train.batch_size=64', 'train.do=True', 'train.epochs=300', 'train.lr=0.001', 'train.scheduler=cosine', 'train.scheduler_params.warmup_epochs=5', 'train.weight_decay=0.0', 'train.lr_probs=1e-4', 'augment=resnet']
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/partial-equivariance/main.py", line 48, in main
+    wandb.init(
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_init.py", line 951, in init
+    run = wi.init()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_init.py", line 616, in init
+    raise UsageError(error_message)
+wandb.errors.UsageError: Error communicating with wandb process
+try: wandb.init(settings=wandb.Settings(start_method='fork'))
+or:  wandb.init(settings=wandb.Settings(start_method='thread'))
+For more info see: https://docs.wandb.ai/library/init#init-start-error
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+wandb: Currently logged in as: tychovdo (use `wandb login --relogin` to force relogin)
+wandb: wandb version 0.12.21 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.12.10
+wandb: Syncing run earthy-wave-4905
+wandb: ⭐️ View project at https://wandb.ai/tychovdo/partial_equiv
+wandb: 🚀 View run at https://wandb.ai/tychovdo/partial_equiv/runs/1m3dy9m1
+wandb: Run data is saved locally in /var/tmp/pbs.5964456.pbs/outputs/2022-07-30/14-19-20/wandb/run-20220730_141921-1m3dy9m1
+wandb: Run `wandb offline` to turn off syncing.
+  0% 0/169001437 [00:00<?, ?it/s]  0% 33792/169001437 [00:00<15:16, 184400.75it/s]  0% 197632/169001437 [00:00<04:43, 596054.24it/s]  0% 574464/169001437 [00:00<01:46, 1586494.79it/s]  1% 1459200/169001437 [00:00<00:43, 3819890.28it/s]  2% 3289088/169001437 [00:00<00:20, 8243609.90it/s]  4% 6407168/169001437 [00:00<00:12, 12734882.80it/s]  6% 9995264/169001437 [00:00<00:08, 18895115.11it/s]  8% 13566976/169001437 [00:01<00:06, 23529131.16it/s] 10% 17155072/169001437 [00:01<00:05, 27017576.84it/s] 12% 20546560/169001437 [00:01<00:05, 28995166.51it/s] 14% 23905280/169001437 [00:01<00:04, 30314151.10it/s] 16% 27444224/169001437 [00:01<00:04, 31800517.24it/s] 18% 30934016/169001437 [00:01<00:04, 32707403.08it/s] 20% 34254848/169001437 [00:01<00:04, 29279991.71it/s] 22% 37831680/169001437 [00:01<00:04, 30896646.46it/s] 24% 41404416/169001437 [00:01<00:03, 32251158.99it/s] 27% 44975104/169001437 [00:01<00:03, 33236640.79it/s] 29% 48352256/169001437 [00:02<00:03, 32672064.14it/s] 31% 52052992/169001437 [00:02<00:03, 33436876.68it/s] 33% 55424000/169001437 [00:02<00:03, 32181658.49it/s] 35% 58967040/169001437 [00:02<00:03, 32511497.00it/s] 37% 62358528/169001437 [00:02<00:03, 32716125.78it/s] 39% 65815552/169001437 [00:02<00:03, 33230717.62it/s] 41% 69288960/169001437 [00:02<00:03, 31964736.97it/s] 43% 72824832/169001437 [00:02<00:02, 32925665.75it/s] 45% 76366848/169001437 [00:02<00:02, 33644095.75it/s] 47% 79748096/169001437 [00:03<00:02, 32967069.87it/s] 49% 83313664/169001437 [00:03<00:02, 33735345.24it/s] 51% 86699008/169001437 [00:03<00:02, 32986384.44it/s] 53% 90008576/169001437 [00:03<00:02, 32874100.55it/s] 55% 93488128/169001437 [00:03<00:02, 33091052.43it/s] 57% 96802816/169001437 [00:03<00:02, 32070330.37it/s] 59% 100018176/169001437 [00:03<00:02, 32069218.19it/s] 61% 103400448/169001437 [00:03<00:02, 32567391.49it/s] 63% 106710016/169001437 [00:03<00:01, 32706392.53it/s] 65% 110019584/169001437 [00:03<00:01, 32389493.32it/s] 67% 113262592/169001437 [00:04<00:01, 32076838.29it/s] 69% 116472832/169001437 [00:04<00:01, 31388751.65it/s] 71% 119653376/169001437 [00:04<00:01, 31338179.08it/s] 73% 122913792/169001437 [00:04<00:01, 31420706.70it/s] 75% 126059520/169001437 [00:04<00:01, 31345372.33it/s] 76% 129205248/169001437 [00:04<00:01, 31375550.62it/s] 78% 132370432/169001437 [00:04<00:01, 31457238.63it/s] 80% 135517184/169001437 [00:04<00:01, 31339296.60it/s] 82% 138651648/169001437 [00:04<00:00, 31251751.90it/s] 84% 141853696/169001437 [00:04<00:00, 31477840.26it/s] 86% 145081344/169001437 [00:05<00:00, 31604376.12it/s] 88% 148242432/169001437 [00:05<00:00, 31595189.00it/s] 90% 151405568/169001437 [00:05<00:00, 31605276.11it/s] 92% 154649600/169001437 [00:05<00:00, 31776472.63it/s] 93% 157828096/169001437 [00:05<00:00, 31714816.30it/s] 95% 161000448/169001437 [00:05<00:00, 31707737.85it/s] 97% 164171776/169001437 [00:05<00:00, 31599757.22it/s] 99% 167707648/169001437 [00:05<00:00, 32718345.47it/s]169001984it [00:05, 28972749.57it/s]                   
+/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torch/functional.py:445: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at  /opt/conda/conda-bld/pytorch_1640811803361/work/aten/src/ATen/native/TensorShape.cpp:2157.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+wandb: Waiting for W&B process to finish, PID 653888... (success).
+wandb: - 10.61MB of 10.61MB uploaded (0.00MB deduped)wandb: \ 10.61MB of 10.61MB uploaded (0.00MB deduped)wandb: | 10.61MB of 10.61MB uploaded (0.00MB deduped)wandb: / 10.61MB of 10.62MB uploaded (0.00MB deduped)wandb: - 10.61MB of 13.99MB uploaded (0.00MB deduped)wandb: \ 11.09MB of 13.99MB uploaded (0.00MB deduped)wandb: | 13.99MB of 13.99MB uploaded (0.00MB deduped)wandb: / 13.99MB of 13.99MB uploaded (0.00MB deduped)wandb: - 13.99MB of 13.99MB uploaded (0.00MB deduped)wandb: \ 13.99MB of 13.99MB uploaded (0.00MB deduped)wandb: | 13.99MB of 13.99MB uploaded (0.00MB deduped)wandb: / 13.99MB of 13.99MB uploaded (0.00MB deduped)wandb: - 13.99MB of 13.99MB uploaded (0.00MB deduped)wandb: \ 13.99MB of 13.99MB uploaded (0.00MB deduped)wandb: | 13.99MB of 13.99MB uploaded (0.00MB deduped)wandb:                                                                                
+wandb: Run history:
+wandb:         accuracy_test ▁▂▂▃▄▅▅▅▅▆▆▆▇▇▇▇▇▇▇▇████████
+wandb:        accuracy_train ▁▂▃▄▅▅▅▆▆▆▆▆▆▇▇▇▇▇▇▇▇▇▇█████████████████
+wandb:   accuracy_validation ▁▃▆▆▇███████████████████████████████████
+wandb:            loss_train █▆▅▄▄▄▃▃▃▃▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:       loss_validation █▅▃▂▁▁▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▄▅▅▅▅▅▄▅▅▅▅▅▅▅
+wandb:                    lr ▅███████▇▇▇▇▇▆▆▆▆▅▅▅▅▄▄▄▃▃▃▃▂▂▂▂▂▁▁▁▁▁▁▁
+wandb: 
+wandb: Run summary:
+wandb:         accuracy_test 0.5369
+wandb:        accuracy_train 0.94584
+wandb:   accuracy_validation 0.5528
+wandb:    best_test_accuracy 0.5369
+wandb:     best_val_accuracy 0.559
+wandb:         best_val_loss 1.87402
+wandb:            loss_train 0.17186
+wandb:       loss_validation 2.57354
+wandb:                    lr 0.0
+wandb:             no_params 457748
+wandb: 
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 2 other file(s)
+wandb: Synced earthy-wave-4905: https://wandb.ai/tychovdo/partial_equiv/runs/1m3dy9m1
+wandb: Find logs at: ./outputs/2022-07-30/14-19-20/wandb/run-20220730_141921-1m3dy9m1/logs/debug.log
+wandb: 
+wandb: Currently logged in as: tychovdo (use `wandb login --relogin` to force relogin)
+wandb: wandb version 0.12.21 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.12.10
+wandb: Syncing run fluent-tree-4919
+wandb: ⭐️ View project at https://wandb.ai/tychovdo/partial_equiv
+wandb: 🚀 View run at https://wandb.ai/tychovdo/partial_equiv/runs/27putg4t
+wandb: Run data is saved locally in /var/tmp/pbs.5964456.pbs/outputs/2022-07-31/14-14-13/wandb/run-20220731_141414-27putg4t
+wandb: Run `wandb offline` to turn off syncing.
+/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torch/functional.py:445: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at  /opt/conda/conda-bld/pytorch_1640811803361/work/aten/src/ATen/native/TensorShape.cpp:2157.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+=>> PBS: job killed: walltime 86488 exceeded limit 86400

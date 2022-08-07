@@ -1,0 +1,19 @@
+wandb: Currently logged in as: tychovdo (use `wandb login --relogin` to force relogin)
+wandb: ERROR Error communicating with wandb process
+wandb: ERROR try: wandb.init(settings=wandb.Settings(start_method='fork'))
+wandb: ERROR or:  wandb.init(settings=wandb.Settings(start_method='thread'))
+wandb: ERROR For more info see: https://docs.wandb.ai/library/init#init-start-error
+Error executing job with overrides: ['base_group.name=SE2', 'base_group.no_samples=16', 'base_group.sample_per_batch_element=False', 'base_group.sample_per_layer=False', 'base_group.sampling_method=deterministic', 'conv.bias=True', 'conv.padding=same', 'conv.partial_equiv=False', 'dataset=CIFAR10', 'kernel.learn_omega0=False', 'kernel.no_hidden=32', 'kernel.no_layers=3', 'kernel.omega0=10', 'kernel.size=7', 'kernel.type=SIREN', 'kernel.weight_norm=False', 'net.dropout=0', 'net.no_blocks=2', 'net.no_hidden=32', 'net.norm=BatchNorm', 'net.pool_blocks=[1,2]', 'net.block_width_factors=[1,1,2,1]', 'net.type=CKResNet', 'no_workers=3', 'seed=102', 'train.batch_size=64', 'train.do=True', 'train.epochs=300', 'train.lr=0.001', 'train.scheduler=cosine', 'train.scheduler_params.warmup_epochs=5', 'train.weight_decay=0.0', 'train.lr_probs=1e-4', 'augment=resnet']
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/partial-equivariance/main.py", line 48, in main
+    wandb.init(
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_init.py", line 951, in init
+    run = wi.init()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_init.py", line 616, in init
+    raise UsageError(error_message)
+wandb.errors.UsageError: Error communicating with wandb process
+try: wandb.init(settings=wandb.Settings(start_method='fork'))
+or:  wandb.init(settings=wandb.Settings(start_method='thread'))
+For more info see: https://docs.wandb.ai/library/init#init-start-error
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.

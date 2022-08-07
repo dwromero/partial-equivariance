@@ -1,0 +1,154 @@
+wandb: Currently logged in as: tychovdo (use `wandb login --relogin` to force relogin)
+wandb: Tracking run with wandb version 0.12.10
+wandb: Syncing run pious-snowball-4838
+wandb: ⭐️ View project at https://wandb.ai/tychovdo/partial_equiv
+wandb: 🚀 View run at https://wandb.ai/tychovdo/partial_equiv/runs/12xpfj9t
+wandb: Run data is saved locally in /tmp/pbs.5552427.pbs/outputs/2022-05-14/03-30-15/wandb/run-20220514_033016-12xpfj9t
+wandb: Run `wandb offline` to turn off syncing.
+  0% 0/169001437 [00:00<?, ?it/s]  0% 33792/169001437 [00:00<15:18, 184017.93it/s]  0% 197632/169001437 [00:00<04:42, 597354.44it/s]  1% 869376/169001437 [00:00<01:14, 2257675.62it/s]  1% 1786880/169001437 [00:00<00:43, 3811920.92it/s]  2% 3798016/169001437 [00:00<00:20, 8196959.65it/s]  4% 7340032/169001437 [00:00<00:10, 15754729.20it/s]  6% 10716160/169001437 [00:00<00:07, 20330442.23it/s]  8% 13894656/169001437 [00:01<00:06, 23550051.88it/s] 10% 17384448/169001437 [00:01<00:05, 26815623.22it/s] 12% 20612096/169001437 [00:01<00:05, 28402649.92it/s] 14% 23823360/169001437 [00:01<00:04, 29452082.56it/s] 16% 27018240/169001437 [00:01<00:04, 30164282.75it/s] 18% 30529536/169001437 [00:01<00:04, 31631991.00it/s] 20% 33764352/169001437 [00:01<00:04, 31844709.70it/s] 22% 37013504/169001437 [00:01<00:04, 32036809.49it/s] 24% 40338432/169001437 [00:01<00:03, 32359426.02it/s] 26% 43591680/169001437 [00:01<00:03, 32149350.94it/s] 28% 46998528/169001437 [00:02<00:03, 32720263.36it/s] 30% 50279424/169001437 [00:02<00:03, 32156398.87it/s] 32% 53593088/169001437 [00:02<00:03, 31938561.11it/s] 34% 56837120/169001437 [00:02<00:03, 31511632.62it/s] 36% 60081152/169001437 [00:02<00:03, 31708968.83it/s] 37% 63259648/169001437 [00:02<00:03, 31621684.52it/s] 39% 66424832/169001437 [00:02<00:03, 31405485.34it/s] 41% 69829632/169001437 [00:02<00:03, 32113635.51it/s] 43% 73122816/169001437 [00:02<00:02, 32334787.24it/s] 45% 76358656/169001437 [00:02<00:02, 31926923.38it/s] 47% 79718400/169001437 [00:03<00:02, 32419841.84it/s] 49% 82969600/169001437 [00:03<00:02, 32150757.56it/s] 51% 86512640/169001437 [00:03<00:02, 33120532.75it/s] 53% 89828352/169001437 [00:03<00:02, 32505050.95it/s] 55% 93145088/169001437 [00:03<00:02, 32698659.41it/s] 57% 96470016/169001437 [00:03<00:02, 32814107.75it/s] 59% 99753984/169001437 [00:03<00:02, 32494135.97it/s] 61% 103006208/169001437 [00:03<00:02, 32289561.82it/s] 63% 106236928/169001437 [00:03<00:01, 32130724.04it/s] 65% 109462528/169001437 [00:04<00:01, 32152913.47it/s] 67% 112870400/169001437 [00:04<00:01, 32559452.58it/s] 69% 116299776/169001437 [00:04<00:01, 33070449.78it/s] 71% 119608320/169001437 [00:04<00:01, 31714026.85it/s] 73% 122979328/169001437 [00:04<00:01, 31812162.68it/s] 75% 126714880/169001437 [00:04<00:01, 33007777.27it/s] 77% 130159616/169001437 [00:04<00:01, 33425368.70it/s] 79% 133508096/169001437 [00:04<00:01, 33365826.91it/s] 81% 136849408/169001437 [00:04<00:00, 33052075.59it/s] 83% 140215296/169001437 [00:04<00:00, 33169439.53it/s] 85% 143535104/169001437 [00:05<00:00, 33137943.88it/s] 87% 146899968/169001437 [00:05<00:00, 33140191.03it/s] 89% 150215680/169001437 [00:05<00:00, 32654203.90it/s] 91% 153483264/169001437 [00:05<00:00, 32537861.30it/s] 93% 156812288/169001437 [00:05<00:00, 32575501.16it/s] 95% 160187392/169001437 [00:05<00:00, 32898111.11it/s] 97% 163478528/169001437 [00:05<00:00, 32575883.28it/s] 99% 166966272/169001437 [00:05<00:00, 33256027.12it/s]169001984it [00:05, 29095122.75it/s]                   
+/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torch/functional.py:445: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at  /opt/conda/conda-bld/pytorch_1640811803361/work/aten/src/ATen/native/TensorShape.cpp:2157.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+wandb: Network error (ReadTimeout), entering retry loop.
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "<string>", line 1, in <module>
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/multiprocessing/spawn.py", line 116, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/multiprocessing/spawn.py", line 129, in _main
+    return self._bootstrap(parent_sentinel)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 164, in wandb_internal
+    logger.error("Thread {}:".format(thread.name), exc_info=exc_info)
+Message: 'Thread WriterThread:'
+Arguments: ()
+Thread WriterThread:
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 105, in _run
+    self._process(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 346, in _process
+    self._wm.write(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/writer.py", line 35, in write
+    self._ds.write(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/datastore.py", line 276, in write
+    ret = self._write_data(s)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/datastore.py", line 236, in _write_data
+    self._write_record(s)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/datastore.py", line 213, in _write_record
+    self._fp.write(s)
+OSError: [Errno 28] No space left on device
+wandb: ERROR Internal wandb error: file data was not synced
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 79, in handle_exit
+    logger.info("Internal process exited")
+Message: 'Internal process exited'
+Arguments: ()
+Exception in thread NetStatThr:
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 910, in run
+    self._target(*self._args, **self._kwargs)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 148, in check_network_status
+    status_response = self._interface.communicate_network_status()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface.py", line 125, in communicate_network_status
+    resp = self._communicate_network_status(status)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 388, in _communicate_network_status
+    resp = self._communicate(req, local=True)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 213, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 218, in _communicate_async
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+Exception in thread ChkStopThr:
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 910, in run
+    self._target(*self._args, **self._kwargs)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 166, in check_status
+    status_response = self._interface.communicate_stop_status()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface.py", line 114, in communicate_stop_status
+    resp = self._communicate_stop_status(status)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 378, in _communicate_stop_status
+    resp = self._communicate(req, local=True)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 213, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 218, in _communicate_async
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+Error executing job with overrides: ['base_group.name=SE2', 'base_group.no_samples=4', 'base_group.sample_per_batch_element=False', 'base_group.sample_per_layer=True', 'base_group.sampling_method=random', 'conv.bias=True', 'conv.padding=same', 'conv.cond_rot=True', 'dataset=CIFAR100', 'kernel.learn_omega0=False', 'kernel.no_hidden=64', 'kernel.no_layers=3', 'kernel.omega0=10', 'kernel.learn_omega1=False', 'kernel.omega1=5', 'kernel.size=7', 'kernel.type=SIREN', 'kernel.weight_norm=False', 'net.dropout=0', 'net.no_blocks=2', 'net.no_hidden=32', 'net.norm=BatchNorm', 'net.pool_blocks=[1,2]', 'net.block_width_factors=[1,1,2,1]', 'net.type=CKResNet', 'no_workers=3', 'seed=100', 'train.batch_size=64', 'train.do=True', 'train.epochs=300', 'train.lr=0.001', 'train.scheduler=cosine', 'train.scheduler_params.warmup_epochs=5', 'train.weight_decay=0.0', 'train.lr_probs=1e-4', 'kernel.fix_integer=True']
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/partial-equivariance/main.py", line 97, in main
+    trainer.train(model, dataloaders, cfg)
+  File "/rds/general/user/tv21/home/partial-equivariance/trainer.py", line 48, in train
+    train_function(
+  File "/rds/general/user/tv21/home/partial-equivariance/trainer.py", line 205, in classification_train
+    save_model_to_wandb(model, optimizer, lr_scheduler, epoch=epoch + 1)
+  File "/rds/general/user/tv21/home/partial-equivariance/trainer.py", line 303, in save_model_to_wandb
+    wandb.save(path)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 1442, in save
+    self._backend.interface.publish_files(files_dict)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface.py", line 350, in publish_files
+    self._publish_files(files)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 326, in _publish_files
+    self._publish(rec)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_queue.py", line 49, in _publish
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+Error in atexit._run_exitfuncs:
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 1805, in _atexit_cleanup
+    self._on_finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 1951, in _on_finish
+    self.history._flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_history.py", line 59, in _flush
+    self._callback(row=self._data, step=self._step)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 1027, in _history_callback
+    self._backend.interface.publish_history(
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface.py", line 506, in publish_history
+    self._publish_history(history)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 59, in _publish_history
+    self._publish(rec)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_queue.py", line 49, in _publish
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 1814, in _atexit_cleanup
+    self._backend.cleanup()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/backend/backend.py", line 248, in cleanup
+    self.interface.join()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 458, in join
+    super().join()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface.py", line 599, in join
+    _ = self._communicate_shutdown()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 455, in _communicate_shutdown
+    _ = self._communicate(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 213, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 218, in _communicate_async
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown

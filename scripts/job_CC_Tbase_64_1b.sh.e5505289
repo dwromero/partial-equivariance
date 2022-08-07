@@ -1,0 +1,41 @@
+wandb: Currently logged in as: tychovdo (use `wandb login --relogin` to force relogin)
+wandb: wandb version 0.12.16 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.12.10
+wandb: Syncing run exalted-bee-4800
+wandb: ⭐️ View project at https://wandb.ai/tychovdo/partial_equiv
+wandb: 🚀 View run at https://wandb.ai/tychovdo/partial_equiv/runs/1jgw0sej
+wandb: Run data is saved locally in /tmp/pbs.5505289.pbs/outputs/2022-05-07/14-57-24/wandb/run-20220507_145725-1jgw0sej
+wandb: Run `wandb offline` to turn off syncing.
+  0% 0/169001437 [00:00<?, ?it/s]  0% 33792/169001437 [00:00<15:15, 184604.18it/s]  0% 181248/169001437 [00:00<04:19, 650096.90it/s]  0% 427008/169001437 [00:00<02:31, 1112833.24it/s]  1% 1247232/169001437 [00:00<00:51, 3261553.02it/s]  1% 2212864/169001437 [00:00<00:32, 5180756.47it/s]  3% 4899840/169001437 [00:00<00:14, 11706573.63it/s]  5% 8013824/169001437 [00:00<00:09, 17548992.63it/s]  7% 11453440/169001437 [00:00<00:06, 22539539.14it/s]  8% 14225408/169001437 [00:01<00:06, 24091756.68it/s] 10% 17483776/169001437 [00:01<00:05, 26637181.04it/s] 12% 21038080/169001437 [00:01<00:05, 29284752.90it/s] 14% 24020992/169001437 [00:01<00:04, 29370536.25it/s] 16% 27493376/169001437 [00:01<00:04, 30964151.01it/s] 18% 30738432/169001437 [00:01<00:04, 31408859.28it/s] 20% 34079744/169001437 [00:01<00:04, 30820819.71it/s] 22% 37487616/169001437 [00:01<00:04, 30871267.83it/s] 24% 40879104/169001437 [00:01<00:04, 31347141.77it/s] 26% 44073984/169001437 [00:01<00:03, 31506296.06it/s] 28% 47236096/169001437 [00:02<00:03, 31338377.40it/s] 30% 50547712/169001437 [00:02<00:03, 31859307.11it/s] 32% 54068224/169001437 [00:02<00:03, 32809646.06it/s] 34% 57354240/169001437 [00:02<00:03, 32655904.62it/s] 36% 60623872/169001437 [00:02<00:03, 32627177.38it/s] 38% 63889408/169001437 [00:02<00:03, 32322917.27it/s] 40% 67306496/169001437 [00:02<00:03, 32869934.66it/s] 42% 70714368/169001437 [00:02<00:02, 33164103.42it/s] 44% 74033152/169001437 [00:02<00:02, 32819335.63it/s] 46% 77317120/169001437 [00:03<00:02, 32232413.10it/s] 48% 80626688/169001437 [00:03<00:02, 32303859.48it/s] 50% 83919872/169001437 [00:03<00:02, 32475950.84it/s] 52% 87176192/169001437 [00:03<00:02, 32501612.85it/s] 54% 90428416/169001437 [00:03<00:02, 32145337.46it/s] 55% 93684736/169001437 [00:03<00:02, 30415906.32it/s] 57% 96830464/169001437 [00:03<00:02, 30706580.12it/s] 59% 99916800/169001437 [00:03<00:02, 30679044.18it/s] 61% 102995968/169001437 [00:03<00:02, 30333648.40it/s] 63% 106480640/169001437 [00:03<00:01, 31576199.62it/s] 65% 109904896/169001437 [00:04<00:01, 31632683.37it/s] 67% 113312768/169001437 [00:04<00:01, 32284233.52it/s] 69% 116624384/169001437 [00:04<00:01, 32527457.13it/s] 71% 120030208/169001437 [00:04<00:01, 32854609.52it/s] 73% 123319296/169001437 [00:04<00:01, 32453447.64it/s] 75% 126568448/169001437 [00:04<00:01, 30296187.11it/s] 77% 130023424/169001437 [00:04<00:01, 31494740.93it/s] 79% 133563392/169001437 [00:04<00:01, 32605768.79it/s] 81% 136848384/169001437 [00:04<00:00, 32669408.65it/s] 83% 140299264/169001437 [00:04<00:00, 33209105.49it/s] 85% 143721472/169001437 [00:05<00:00, 33432671.47it/s] 87% 147244032/169001437 [00:05<00:00, 33643504.71it/s] 89% 150615040/169001437 [00:05<00:00, 33412746.71it/s] 91% 153979904/169001437 [00:05<00:00, 33481735.00it/s] 93% 157331456/169001437 [00:05<00:00, 30712405.47it/s] 95% 160646144/169001437 [00:05<00:00, 31350432.32it/s] 97% 164250624/169001437 [00:05<00:00, 32634028.41it/s] 99% 167545856/169001437 [00:05<00:00, 32658736.44it/s]169001984it [00:05, 28849771.63it/s]                   
+/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torch/functional.py:445: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at  /opt/conda/conda-bld/pytorch_1640811803361/work/aten/src/ATen/native/TensorShape.cpp:2157.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+wandb: Network error (ReadTimeout), entering retry loop.
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+wandb: Network error (ReadTimeout), entering retry loop.
+wandb: Network error (ReadTimeout), entering retry loop.
+wandb: Network error (ReadTimeout), entering retry loop.
+wandb: Network error (ReadTimeout), entering retry loop.
+wandb: Network error (ReadTimeout), entering retry loop.
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+wandb: Network error (ReadTimeout), entering retry loop.
+wandb: Network error (ReadTimeout), entering retry loop.
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+wandb: Network error (ReadTimeout), entering retry loop.
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+wandb: Network error (ReadTimeout), entering retry loop.
+wandb: Network error (ReadTimeout), entering retry loop.
+wandb: Network error (ReadTimeout), entering retry loop.
+wandb: Network error (ReadTimeout), entering retry loop.
+=>> PBS: job killed: walltime 172905 exceeded limit 172800

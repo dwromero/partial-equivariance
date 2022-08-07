@@ -1,0 +1,1051 @@
+/var/tmp/pbs.5552415.pbs
+Sat May 14 00:26:17 2022       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 510.60.02    Driver Version: 510.60.02    CUDA Version: 11.6     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Quadro RTX 6000     On   | 00000000:01:00.0 Off |                  Off |
+| 33%   36C    P8     5W / 260W |      1MiB / 24576MiB |      0%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   1  Quadro RTX 6000     On   | 00000000:25:00.0 Off |                  Off |
+| 33%   36C    P8    13W / 260W |      1MiB / 24576MiB |      0%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   2  Quadro RTX 6000     On   | 00000000:41:00.0 Off |                  Off |
+| 33%   36C    P8    15W / 260W |      1MiB / 24576MiB |      0%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   3  Quadro RTX 6000     On   | 00000000:61:00.0 Off |                  Off |
+| 41%   65C    P2   190W / 260W |   7004MiB / 24576MiB |    100%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   4  Quadro RTX 6000     On   | 00000000:81:00.0 Off |                  Off |
+| 33%   34C    P8    16W / 260W |      1MiB / 24576MiB |      0%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   5  Quadro RTX 6000     On   | 00000000:A1:00.0 Off |                  Off |
+| 33%   34C    P8     4W / 260W |      1MiB / 24576MiB |      0%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   6  Quadro RTX 6000     On   | 00000000:C1:00.0 Off |                  Off |
+| 33%   35C    P8     8W / 260W |      1MiB / 24576MiB |      0%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   7  Quadro RTX 6000     On   | 00000000:E1:00.0 Off |                  Off |
+| 33%   35C    P8     9W / 260W |      1MiB / 24576MiB |      0%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|    3   N/A  N/A   3825779      C   python                           6999MiB |
++-----------------------------------------------------------------------------+
+              total        used        free      shared  buff/cache   available
+Mem:     1056637752   141454784   897170840    16912692    18012128   893409156
+Swap:             0           0           0
+starting script.
+Input arguments:
+net:
+  type: CKResNet
+  no_hidden: 32
+  no_blocks: 2
+  dropout: 0
+  norm: BatchNorm
+  bottleneck_factor_skip_connection: 2
+  block_width_factors:
+  - 1
+  - 1
+  - 2
+  - 1
+  pool_blocks:
+  - 1
+  - 2
+  last_conv_T2: false
+  learnable_final_pooling: false
+  final_spatial_dim:
+  - 1
+  - 1
+conv:
+  padding: same
+  partial_equiv: false
+  cond_trans: false
+  cond_rot: true
+  bias: true
+  mask: true
+kernel:
+  type: SIREN
+  no_hidden: 64
+  no_layers: 3
+  size: 7
+  fix_integer: true
+  fix_integer_with_bias: false
+  fix_integer_with_geom: false
+  omega0: 10
+  learn_omega0: false
+  omega1: 10
+  learn_omega1: false
+  omega2: 0.0
+  learn_omega2: false
+  init_scale: 0.01
+  weight_norm: false
+  norm: ''
+  activation: ''
+base_group:
+  name: SE2
+  no_samples: 4
+  sample_per_batch_element: false
+  sample_per_layer: true
+  sampling_method: random
+  gumbel_init_temp: 0.5
+  gumbel_end_temp: 0.0001
+train:
+  do: true
+  batch_size: 64
+  epochs: 300
+  lr: 0.001
+  lr_probs: 0.0001
+  lr_omega0: 0.0
+  gradient_clip: 0.0
+  weight_decay: 0.0
+  optimizer: Adam
+  optimizer_params:
+    nesterov: null
+    momentum: null
+  scheduler: cosine
+  scheduler_params:
+    decay_steps: -1
+    decay_factor: -1
+    patience: -1
+    warmup_epochs: 5
+  warm_decay: 0.0
+  monotonic_decay_loss: 0.0
+dataset: CIFAR10
+dataset_params:
+  rot_interval: 0
+augment: None
+wandb:
+  project: partial_equiv
+  entity: tychovdo
+device: cuda
+debug: false
+pretrained: false
+seed: 100
+cuda_visible_devices:
+- -1
+comment: ''
+no_workers: 3
+
+
+Automatic Parameters:
+ dataset = CIFAR10, net_type = CKResNet, in_channels = 3,out_channels = 10, sampling_method = SamplingMethods.RANDOM
+fixed 3
+Block 1/2
+fixed 4
+fixed 4
+no fix
+Block 2/2
+fixed 4
+fixed 4
+no fix
+fixed 4
+Number of parameters: 936426
+GPU's available: 0
+Downloading https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz to /tmp/pbs.5552415.pbs/data_37242329880/cifar-10-python.tar.gz
+Extracting /tmp/pbs.5552415.pbs/data_37242329880/cifar-10-python.tar.gz to /tmp/pbs.5552415.pbs/data_37242329880
+Downloading https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz to /tmp/pbs.5552415.pbs/data_289532534631/cifar-10-python.tar.gz
+Extracting /tmp/pbs.5552415.pbs/data_289532534631/cifar-10-python.tar.gz to /tmp/pbs.5552415.pbs/data_289532534631
+Modified arguments:
+net:
+  type: CKResNet
+  no_hidden: 32
+  no_blocks: 2
+  dropout: 0
+  norm: BatchNorm
+  bottleneck_factor_skip_connection: 2
+  block_width_factors:
+  - 1
+  - 1
+  - 2
+  - 1
+  pool_blocks:
+  - 1
+  - 2
+  last_conv_T2: false
+  learnable_final_pooling: false
+  final_spatial_dim:
+  - 1
+  - 1
+conv:
+  padding: same
+  partial_equiv: false
+  cond_trans: false
+  cond_rot: true
+  bias: true
+  mask: true
+kernel:
+  type: SIREN
+  no_hidden: 64
+  no_layers: 3
+  size: 7
+  fix_integer: true
+  fix_integer_with_bias: false
+  fix_integer_with_geom: false
+  omega0: 10
+  learn_omega0: false
+  omega1: 10
+  learn_omega1: false
+  omega2: 0.0
+  learn_omega2: false
+  init_scale: 0.01
+  weight_norm: false
+  norm: ''
+  activation: ''
+base_group:
+  name: SE2
+  no_samples: 4
+  sample_per_batch_element: false
+  sample_per_layer: true
+  sampling_method: RANDOM
+  gumbel_init_temp: 0.5
+  gumbel_end_temp: 0.0001
+train:
+  do: true
+  batch_size: 64
+  epochs: 300
+  lr: 0.001
+  lr_probs: 0.0001
+  lr_omega0: 0.0
+  gradient_clip: 0.0
+  weight_decay: 0.0
+  optimizer: Adam
+  optimizer_params:
+    nesterov: null
+    momentum: null
+  scheduler: cosine
+  scheduler_params:
+    decay_steps: -1
+    decay_factor: -1
+    patience: -1
+    warmup_epochs: 5
+  warm_decay: 0.0
+  monotonic_decay_loss: 0.0
+dataset: CIFAR10
+dataset_params:
+  rot_interval: 0
+augment: None
+wandb:
+  project: partial_equiv
+  entity: tychovdo
+device: cpu
+debug: false
+pretrained: false
+seed: 100
+cuda_visible_devices:
+- -1
+comment: ''
+no_workers: 3
+
+2022-05-14 00:27:10.099236
+Epoch 1/300
+------------------------------
+Learning Rate: 0.0
+Learning Rate: 0.0
+Learning Rate: 0.0
+------------------------------
+Iter 1 / 704
+Iter 2 / 704
+Iter 3 / 704
+Iter 4 / 704
+Iter 5 / 704
+Iter 6 / 704
+Iter 7 / 704
+Iter 8 / 704
+Iter 9 / 704
+Iter 10 / 704
+Iter 11 / 704
+Iter 12 / 704
+Iter 13 / 704
+Iter 14 / 704
+Iter 15 / 704
+Iter 16 / 704
+Iter 17 / 704
+Iter 18 / 704
+Iter 19 / 704
+Iter 20 / 704
+Iter 21 / 704
+Iter 22 / 704
+Iter 23 / 704
+Iter 24 / 704
+Iter 25 / 704
+Iter 26 / 704
+Iter 27 / 704
+Iter 28 / 704
+Iter 29 / 704
+Iter 30 / 704
+Iter 31 / 704
+Iter 32 / 704
+Iter 33 / 704
+Iter 34 / 704
+Iter 35 / 704
+Iter 36 / 704
+Iter 37 / 704
+Iter 38 / 704
+Iter 39 / 704
+Iter 40 / 704
+Iter 41 / 704
+Iter 42 / 704
+Iter 43 / 704
+Iter 44 / 704
+Iter 45 / 704
+Iter 46 / 704
+Iter 47 / 704
+Iter 48 / 704
+Iter 49 / 704
+Iter 50 / 704
+Iter 51 / 704
+Iter 52 / 704
+Iter 53 / 704
+Iter 54 / 704
+Iter 55 / 704
+Iter 56 / 704
+Iter 57 / 704
+Iter 58 / 704
+Iter 59 / 704
+Iter 60 / 704
+Iter 61 / 704
+Iter 62 / 704
+Iter 63 / 704
+Iter 64 / 704
+Iter 65 / 704
+Iter 66 / 704
+Iter 67 / 704
+Iter 68 / 704
+Iter 69 / 704
+Iter 70 / 704
+Iter 71 / 704
+Iter 72 / 704
+Iter 73 / 704
+Iter 74 / 704
+Iter 75 / 704
+Iter 76 / 704
+Iter 77 / 704
+Iter 78 / 704
+Iter 79 / 704
+Iter 80 / 704
+Iter 81 / 704
+Iter 82 / 704
+Iter 83 / 704
+Iter 84 / 704
+Iter 85 / 704
+Iter 86 / 704
+Iter 87 / 704
+Iter 88 / 704
+Iter 89 / 704
+Iter 90 / 704
+Iter 91 / 704
+Iter 92 / 704
+Iter 93 / 704
+Iter 94 / 704
+Iter 95 / 704
+Iter 96 / 704
+Iter 97 / 704
+Iter 98 / 704
+Iter 99 / 704
+Iter 100 / 704
+Iter 101 / 704
+Iter 102 / 704
+Iter 103 / 704
+Iter 104 / 704
+Iter 105 / 704
+Iter 106 / 704
+Iter 107 / 704
+Iter 108 / 704
+Iter 109 / 704
+Iter 110 / 704
+Iter 111 / 704
+Iter 112 / 704
+Iter 113 / 704
+Iter 114 / 704
+Iter 115 / 704
+Iter 116 / 704
+Iter 117 / 704
+Iter 118 / 704
+Iter 119 / 704
+Iter 120 / 704
+Iter 121 / 704
+Iter 122 / 704
+Iter 123 / 704
+Iter 124 / 704
+Iter 125 / 704
+Iter 126 / 704
+Iter 127 / 704
+Iter 128 / 704
+Iter 129 / 704
+Iter 130 / 704
+Iter 131 / 704
+Iter 132 / 704
+Iter 133 / 704
+Iter 134 / 704
+Iter 135 / 704
+Iter 136 / 704
+Iter 137 / 704
+Iter 138 / 704
+Iter 139 / 704
+Iter 140 / 704
+Iter 141 / 704
+Iter 142 / 704
+Iter 143 / 704
+Iter 144 / 704
+Iter 145 / 704
+Iter 146 / 704
+Iter 147 / 704
+Iter 148 / 704
+Iter 149 / 704
+Iter 150 / 704
+Iter 151 / 704
+Iter 152 / 704
+Iter 153 / 704
+Iter 154 / 704
+Iter 155 / 704
+Iter 156 / 704
+Iter 157 / 704
+Iter 158 / 704
+Iter 159 / 704
+Iter 160 / 704
+Iter 161 / 704
+Iter 162 / 704
+Iter 163 / 704
+Iter 164 / 704
+Iter 165 / 704
+Iter 166 / 704
+Iter 167 / 704
+Iter 168 / 704
+Iter 169 / 704
+Iter 170 / 704
+Iter 171 / 704
+Iter 172 / 704
+Iter 173 / 704
+Iter 174 / 704
+Iter 175 / 704
+Iter 176 / 704
+Iter 177 / 704
+Iter 178 / 704
+Iter 179 / 704
+Iter 180 / 704
+Iter 181 / 704
+Iter 182 / 704
+Iter 183 / 704
+Iter 184 / 704
+Iter 185 / 704
+Iter 186 / 704
+Iter 187 / 704
+Iter 188 / 704
+Iter 189 / 704
+Iter 190 / 704
+Iter 191 / 704
+Iter 192 / 704
+Iter 193 / 704
+Iter 194 / 704
+Iter 195 / 704
+Iter 196 / 704
+Iter 197 / 704
+Iter 198 / 704
+Iter 199 / 704
+Iter 200 / 704
+Iter 201 / 704
+Iter 202 / 704
+Iter 203 / 704
+Iter 204 / 704
+Iter 205 / 704
+Iter 206 / 704
+Iter 207 / 704
+Iter 208 / 704
+Iter 209 / 704
+Iter 210 / 704
+Iter 211 / 704
+Iter 212 / 704
+Iter 213 / 704
+Iter 214 / 704
+Iter 215 / 704
+Iter 216 / 704
+Iter 217 / 704
+Iter 218 / 704
+Iter 219 / 704
+Iter 220 / 704
+Iter 221 / 704
+Iter 222 / 704
+Iter 223 / 704
+Iter 224 / 704
+Iter 225 / 704
+Iter 226 / 704
+Iter 227 / 704
+Iter 228 / 704
+Iter 229 / 704
+Iter 230 / 704
+Iter 231 / 704
+Iter 232 / 704
+Iter 233 / 704
+Iter 234 / 704
+Iter 235 / 704
+Iter 236 / 704
+Iter 237 / 704
+Iter 238 / 704
+Iter 239 / 704
+Iter 240 / 704
+Iter 241 / 704
+Iter 242 / 704
+Iter 243 / 704
+Iter 244 / 704
+Iter 245 / 704
+Iter 246 / 704
+Iter 247 / 704
+Iter 248 / 704
+Iter 249 / 704
+Iter 250 / 704
+Iter 251 / 704
+Iter 252 / 704
+Iter 253 / 704
+Iter 254 / 704
+Iter 255 / 704
+Iter 256 / 704
+Iter 257 / 704
+Iter 258 / 704
+Iter 259 / 704
+Iter 260 / 704
+Iter 261 / 704
+Iter 262 / 704
+Iter 263 / 704
+Iter 264 / 704
+Iter 265 / 704
+Iter 266 / 704
+Iter 267 / 704
+Iter 268 / 704
+Iter 269 / 704
+Iter 270 / 704
+Iter 271 / 704
+Iter 272 / 704
+Iter 273 / 704
+Iter 274 / 704
+Iter 275 / 704
+Iter 276 / 704
+Iter 277 / 704
+Iter 278 / 704
+Iter 279 / 704
+Iter 280 / 704
+Iter 281 / 704
+Iter 282 / 704
+Iter 283 / 704
+Iter 284 / 704
+Iter 285 / 704
+Iter 286 / 704
+Iter 287 / 704
+Iter 288 / 704
+Iter 289 / 704
+Iter 290 / 704
+Iter 291 / 704
+Iter 292 / 704
+Iter 293 / 704
+Iter 294 / 704
+Iter 295 / 704
+Iter 296 / 704
+Iter 297 / 704
+Iter 298 / 704
+Iter 299 / 704
+Iter 300 / 704
+Iter 301 / 704
+Iter 302 / 704
+Iter 303 / 704
+Iter 304 / 704
+Iter 305 / 704
+Iter 306 / 704
+Iter 307 / 704
+Iter 308 / 704
+Iter 309 / 704
+Iter 310 / 704
+Iter 311 / 704
+Iter 312 / 704
+Iter 313 / 704
+Iter 314 / 704
+Iter 315 / 704
+Iter 316 / 704
+Iter 317 / 704
+Iter 318 / 704
+Iter 319 / 704
+Iter 320 / 704
+Iter 321 / 704
+Iter 322 / 704
+Iter 323 / 704
+Iter 324 / 704
+Iter 325 / 704
+Iter 326 / 704
+Iter 327 / 704
+Iter 328 / 704
+Iter 329 / 704
+Iter 330 / 704
+Iter 331 / 704
+Iter 332 / 704
+Iter 333 / 704
+Iter 334 / 704
+Iter 335 / 704
+Iter 336 / 704
+Iter 337 / 704
+Iter 338 / 704
+Iter 339 / 704
+Iter 340 / 704
+Iter 341 / 704
+Iter 342 / 704
+Iter 343 / 704
+Iter 344 / 704
+Iter 345 / 704
+Iter 346 / 704
+Iter 347 / 704
+Iter 348 / 704
+Iter 349 / 704
+Iter 350 / 704
+Iter 351 / 704
+Iter 352 / 704
+Iter 353 / 704
+Iter 354 / 704
+Iter 355 / 704
+Iter 356 / 704
+Iter 357 / 704
+Iter 358 / 704
+Iter 359 / 704
+Iter 360 / 704
+Iter 361 / 704
+Iter 362 / 704
+Iter 363 / 704
+Iter 364 / 704
+Iter 365 / 704
+Iter 366 / 704
+Iter 367 / 704
+Iter 368 / 704
+Iter 369 / 704
+Iter 370 / 704
+Iter 371 / 704
+Iter 372 / 704
+Iter 373 / 704
+Iter 374 / 704
+Iter 375 / 704
+Iter 376 / 704
+Iter 377 / 704
+Iter 378 / 704
+Iter 379 / 704
+Iter 380 / 704
+Iter 381 / 704
+Iter 382 / 704
+Iter 383 / 704
+Iter 384 / 704
+Iter 385 / 704
+Iter 386 / 704
+Iter 387 / 704
+Iter 388 / 704
+Iter 389 / 704
+Iter 390 / 704
+Iter 391 / 704
+Iter 392 / 704
+Iter 393 / 704
+Iter 394 / 704
+Iter 395 / 704
+Iter 396 / 704
+Iter 397 / 704
+Iter 398 / 704
+Iter 399 / 704
+Iter 400 / 704
+Iter 401 / 704
+Iter 402 / 704
+Iter 403 / 704
+Iter 404 / 704
+Iter 405 / 704
+Iter 406 / 704
+Iter 407 / 704
+Iter 408 / 704
+Iter 409 / 704
+Iter 410 / 704
+Iter 411 / 704
+Iter 412 / 704
+Iter 413 / 704
+Iter 414 / 704
+Iter 415 / 704
+Iter 416 / 704
+Iter 417 / 704
+Iter 418 / 704
+Iter 419 / 704
+Iter 420 / 704
+Iter 421 / 704
+Iter 422 / 704
+Iter 423 / 704
+Iter 424 / 704
+Iter 425 / 704
+Iter 426 / 704
+Iter 427 / 704
+Iter 428 / 704
+Iter 429 / 704
+Iter 430 / 704
+Iter 431 / 704
+Iter 432 / 704
+Iter 433 / 704
+Iter 434 / 704
+Iter 435 / 704
+Iter 436 / 704
+Iter 437 / 704
+Iter 438 / 704
+Iter 439 / 704
+Iter 440 / 704
+Iter 441 / 704
+Iter 442 / 704
+Iter 443 / 704
+Iter 444 / 704
+Iter 445 / 704
+Iter 446 / 704
+Iter 447 / 704
+Iter 448 / 704
+Iter 449 / 704
+Iter 450 / 704
+Iter 451 / 704
+Iter 452 / 704
+Iter 453 / 704
+Iter 454 / 704
+Iter 455 / 704
+Iter 456 / 704
+Iter 457 / 704
+Iter 458 / 704
+Iter 459 / 704
+Iter 460 / 704
+Iter 461 / 704
+Iter 462 / 704
+Iter 463 / 704
+Iter 464 / 704
+Iter 465 / 704
+Iter 466 / 704
+Iter 467 / 704
+Iter 468 / 704
+Iter 469 / 704
+Iter 470 / 704
+Iter 471 / 704
+Iter 472 / 704
+Iter 473 / 704
+Iter 474 / 704
+Iter 475 / 704
+Iter 476 / 704
+Iter 477 / 704
+Iter 478 / 704
+Iter 479 / 704
+Iter 480 / 704
+Iter 481 / 704
+Iter 482 / 704
+Iter 483 / 704
+Iter 484 / 704
+Iter 485 / 704
+Iter 486 / 704
+Iter 487 / 704
+Iter 488 / 704
+Iter 489 / 704
+Iter 490 / 704
+Iter 491 / 704
+Iter 492 / 704
+Iter 493 / 704
+Iter 494 / 704
+Iter 495 / 704
+Iter 496 / 704
+Iter 497 / 704
+Iter 498 / 704
+Iter 499 / 704
+Iter 500 / 704
+Iter 501 / 704
+Iter 502 / 704
+Iter 503 / 704
+Iter 504 / 704
+Iter 505 / 704
+Iter 506 / 704
+Iter 507 / 704
+Iter 508 / 704
+Iter 509 / 704
+Iter 510 / 704
+Iter 511 / 704
+Iter 512 / 704
+Iter 513 / 704
+Iter 514 / 704
+Iter 515 / 704
+Iter 516 / 704
+Iter 517 / 704
+Iter 518 / 704
+Iter 519 / 704
+Iter 520 / 704
+Iter 521 / 704
+Iter 522 / 704
+Iter 523 / 704
+Iter 524 / 704
+Iter 525 / 704
+Iter 526 / 704
+Iter 527 / 704
+Iter 528 / 704
+Iter 529 / 704
+Iter 530 / 704
+Iter 531 / 704
+Iter 532 / 704
+Iter 533 / 704
+Iter 534 / 704
+Iter 535 / 704
+Iter 536 / 704
+Iter 537 / 704
+Iter 538 / 704
+Iter 539 / 704
+Iter 540 / 704
+Iter 541 / 704
+Iter 542 / 704
+Iter 543 / 704
+Iter 544 / 704
+Iter 545 / 704
+Iter 546 / 704
+Iter 547 / 704
+Iter 548 / 704
+Iter 549 / 704
+Iter 550 / 704
+Iter 551 / 704
+Iter 552 / 704
+Iter 553 / 704
+Iter 554 / 704
+Iter 555 / 704
+Iter 556 / 704
+Iter 557 / 704
+Iter 558 / 704
+Iter 559 / 704
+Iter 560 / 704
+Iter 561 / 704
+Iter 562 / 704
+Iter 563 / 704
+Iter 564 / 704
+Iter 565 / 704
+Iter 566 / 704
+Iter 567 / 704
+Iter 568 / 704
+Iter 569 / 704
+Iter 570 / 704
+Iter 571 / 704
+Iter 572 / 704
+Iter 573 / 704
+Iter 574 / 704
+Iter 575 / 704
+Iter 576 / 704
+Iter 577 / 704
+Iter 578 / 704
+Iter 579 / 704
+Iter 580 / 704
+Iter 581 / 704
+Iter 582 / 704
+Iter 583 / 704
+Iter 584 / 704
+Iter 585 / 704
+Iter 586 / 704
+Iter 587 / 704
+Iter 588 / 704
+Iter 589 / 704
+Iter 590 / 704
+Iter 591 / 704
+Iter 592 / 704
+Iter 593 / 704
+Iter 594 / 704
+Iter 595 / 704
+Iter 596 / 704
+Iter 597 / 704
+Iter 598 / 704
+Iter 599 / 704
+Iter 600 / 704
+Iter 601 / 704
+Iter 602 / 704
+Iter 603 / 704
+Iter 604 / 704
+Iter 605 / 704
+Iter 606 / 704
+Iter 607 / 704
+Iter 608 / 704
+Iter 609 / 704
+Iter 610 / 704
+Iter 611 / 704
+Iter 612 / 704
+Iter 613 / 704
+Iter 614 / 704
+Iter 615 / 704
+Iter 616 / 704
+Iter 617 / 704
+Iter 618 / 704
+Iter 619 / 704
+Iter 620 / 704
+Iter 621 / 704
+Iter 622 / 704
+Iter 623 / 704
+Iter 624 / 704
+Iter 625 / 704
+Iter 626 / 704
+Iter 627 / 704
+Iter 628 / 704
+Iter 629 / 704
+Iter 630 / 704
+Iter 631 / 704
+Iter 632 / 704
+Iter 633 / 704
+Iter 634 / 704
+Iter 635 / 704
+Iter 636 / 704
+Iter 637 / 704
+Iter 638 / 704
+Iter 639 / 704
+Iter 640 / 704
+Iter 641 / 704
+Iter 642 / 704
+Iter 643 / 704
+Iter 644 / 704
+Iter 645 / 704
+Iter 646 / 704
+Iter 647 / 704
+Iter 648 / 704
+Iter 649 / 704
+Iter 650 / 704
+Iter 651 / 704
+Iter 652 / 704
+Iter 653 / 704
+Iter 654 / 704
+Iter 655 / 704
+Iter 656 / 704
+Iter 657 / 704
+Iter 658 / 704
+Iter 659 / 704
+Iter 660 / 704
+Iter 661 / 704
+Iter 662 / 704
+Iter 663 / 704
+Iter 664 / 704
+Iter 665 / 704
+Iter 666 / 704
+Iter 667 / 704
+Iter 668 / 704
+Iter 669 / 704
+Iter 670 / 704
+Iter 671 / 704
+Iter 672 / 704
+Iter 673 / 704
+Iter 674 / 704
+Iter 675 / 704
+Iter 676 / 704
+Iter 677 / 704
+Iter 678 / 704
+Iter 679 / 704
+Iter 680 / 704
+Iter 681 / 704
+Iter 682 / 704
+Iter 683 / 704
+Iter 684 / 704
+Iter 685 / 704
+Iter 686 / 704
+Iter 687 / 704
+Iter 688 / 704
+Iter 689 / 704
+Iter 690 / 704
+Iter 691 / 704
+Iter 692 / 704
+Iter 693 / 704
+Iter 694 / 704
+Iter 695 / 704
+Iter 696 / 704
+Iter 697 / 704
+Iter 698 / 704
+Iter 699 / 704
+Iter 700 / 704
+Iter 701 / 704
+Iter 702 / 704
+Iter 703 / 704
+Iter 704 / 704
+train Loss: 1.9828 Acc: 0.2909
+2022-05-14 08:05:19.466396
+LOG ACC/LOSS WANDB 1
+Iter 1 / 79
+Iter 2 / 79
+Iter 3 / 79
+Iter 4 / 79
+Iter 5 / 79
+Iter 6 / 79
+Iter 7 / 79
+Iter 8 / 79
+Iter 9 / 79
+Iter 10 / 79
+Iter 11 / 79
+Iter 12 / 79
+Iter 13 / 79
+Iter 14 / 79
+Iter 15 / 79
+Iter 16 / 79
+Iter 17 / 79
+Iter 18 / 79
+Iter 19 / 79
+Iter 20 / 79
+Iter 21 / 79
+Iter 22 / 79
+Iter 23 / 79
+Iter 24 / 79
+Iter 25 / 79
+Iter 26 / 79
+Iter 27 / 79
+Iter 28 / 79
+Iter 29 / 79
+Iter 30 / 79
+Iter 31 / 79
+Iter 32 / 79
+Iter 33 / 79
+Iter 34 / 79
+Iter 35 / 79
+Iter 36 / 79
+Iter 37 / 79
+Iter 38 / 79
+Iter 39 / 79
+Iter 40 / 79
+Iter 41 / 79
+Iter 42 / 79
+Iter 43 / 79
+Iter 44 / 79
+Iter 45 / 79
+Iter 46 / 79
+Iter 47 / 79
+Iter 48 / 79
+Iter 49 / 79
+Iter 50 / 79
+Iter 51 / 79
+Iter 52 / 79
+Iter 53 / 79
+Iter 54 / 79
+Iter 55 / 79
+Iter 56 / 79
+Iter 57 / 79
+Iter 58 / 79
+Iter 59 / 79
+Iter 60 / 79
+Iter 61 / 79
+Iter 62 / 79
+Iter 63 / 79
+Iter 64 / 79
+Iter 65 / 79
+Iter 66 / 79
+Iter 67 / 79
+Iter 68 / 79
+Iter 69 / 79
+Iter 70 / 79
+Iter 71 / 79
+Iter 72 / 79
+Iter 73 / 79
+Iter 74 / 79
+Iter 75 / 79
+Iter 76 / 79
+Iter 77 / 79
+Iter 78 / 79
+Iter 79 / 79
+validation Loss: 1.7865 Acc: 0.3542
+2022-05-14 08:30:06.101761
+LOG ACC/LOSS WANDB 1
+script done.

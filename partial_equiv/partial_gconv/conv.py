@@ -111,8 +111,8 @@ class ConvBase(torch.nn.Module):
                 omega_2=kernel_omega2,
                 learn_omega_2=kernel_learn_omega2,
             )
-        elif kernel_type == "SIREN3":
-            self.kernelnet = ck.SIREN3(
+        elif kernel_type == "SIREN2":
+            self.kernelnet = ck.SIREN2(
                 dim_linear=self.dim_linear,
                 dim_input_space=self.dim_input_space,
                 out_channels=out_channels * in_channels,
@@ -120,42 +120,6 @@ class ConvBase(torch.nn.Module):
                 no_layers=kernel_no_layers,
                 init_scale=kernel_init_scale,
                 weight_norm=kernel_weight_norm,
-                bias=True,
-                fix_integer=kernel_fix_integer,
-                fix_integer_with_bias=kernel_fix_integer_with_bias,
-                fix_integer_with_geom=kernel_fix_integer_with_geom,
-                omega_0=kernel_omega0,
-                learn_omega_0=kernel_learn_omega0,
-                omega_1=kernel_omega1,
-                learn_omega_1=kernel_learn_omega1,
-                omega_2=kernel_omega2,
-                learn_omega_2=kernel_learn_omega2,
-            )
-        elif kernel_type == "SIREN2":
-            self.kernelnet = ck.SIREN2(
-                dim_input_space=self.dim_input_space,
-                out_channels=out_channels * in_channels,
-                hidden_channels=kernel_no_hidden,
-                no_layers=kernel_no_layers,
-                init_scale=kernel_init_scale,
-                bias=True,
-                fix_integer=kernel_fix_integer,
-                fix_integer_with_bias=kernel_fix_integer_with_bias,
-                fix_integer_with_geom=kernel_fix_integer_with_geom,
-                omega_0=kernel_omega0,
-                learn_omega_0=kernel_learn_omega0,
-                omega_1=kernel_omega1,
-                learn_omega_1=kernel_learn_omega1,
-                omega_2=kernel_omega2,
-                learn_omega_2=kernel_learn_omega2,
-            )
-        elif kernel_type == "SIREN3":
-            self.kernelnet = ck.SIREN3(
-                dim_input_space=self.dim_input_space,
-                out_channels=out_channels * in_channels,
-                hidden_channels=kernel_no_hidden,
-                no_layers=kernel_no_layers,
-                init_scale=kernel_init_scale,
                 bias=True,
                 fix_integer=kernel_fix_integer,
                 fix_integer_with_bias=kernel_fix_integer_with_bias,

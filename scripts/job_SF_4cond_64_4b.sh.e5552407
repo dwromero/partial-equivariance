@@ -1,0 +1,190 @@
+wandb: Currently logged in as: tychovdo (use `wandb login --relogin` to force relogin)
+wandb: Tracking run with wandb version 0.12.10
+wandb: Syncing run curious-gorge-4826
+wandb: ⭐️ View project at https://wandb.ai/tychovdo/partial_equiv
+wandb: 🚀 View run at https://wandb.ai/tychovdo/partial_equiv/runs/3t98d4lt
+wandb: Run data is saved locally in /tmp/pbs.5552407.pbs/outputs/2022-05-13/17-51-45/wandb/run-20220513_175146-3t98d4lt
+wandb: Run `wandb offline` to turn off syncing.
+  0% 0/170498071 [00:00<?, ?it/s]  0% 33792/170498071 [00:00<15:24, 184431.94it/s]  0% 197632/170498071 [00:00<04:44, 598130.13it/s]  0% 836608/170498071 [00:00<01:18, 2169715.60it/s]  1% 1803264/170498071 [00:00<00:43, 3849581.18it/s]  3% 4430848/170498071 [00:00<00:16, 9848891.92it/s]  5% 7963648/170498071 [00:00<00:09, 16892015.18it/s]  7% 11569152/170498071 [00:00<00:07, 22317164.81it/s]  9% 15115264/170498071 [00:01<00:05, 26101864.30it/s] 11% 18629632/170498071 [00:01<00:06, 24534653.97it/s] 13% 22316032/170498071 [00:01<00:05, 27440594.24it/s] 15% 25887744/170498071 [00:01<00:04, 29668836.17it/s] 17% 29394944/170498071 [00:01<00:04, 31173075.21it/s] 19% 32785408/170498071 [00:01<00:04, 31943885.91it/s] 21% 36470784/170498071 [00:01<00:04, 33362638.18it/s] 23% 40010752/170498071 [00:01<00:03, 33683913.58it/s] 25% 43427840/170498071 [00:01<00:04, 30592622.54it/s] 27% 46793728/170498071 [00:02<00:03, 31428959.22it/s] 29% 50054144/170498071 [00:02<00:03, 31745600.87it/s] 31% 53658624/170498071 [00:02<00:03, 31624705.70it/s] 34% 57230336/170498071 [00:02<00:03, 32778413.89it/s] 36% 60769280/170498071 [00:02<00:03, 33522880.49it/s] 38% 64340992/170498071 [00:02<00:03, 34158127.27it/s] 40% 67879936/170498071 [00:02<00:03, 31845552.81it/s] 42% 71222272/170498071 [00:02<00:03, 32250075.92it/s] 44% 74646528/170498071 [00:02<00:02, 32798054.55it/s] 46% 78129152/170498071 [00:02<00:02, 33384003.63it/s] 48% 81489920/170498071 [00:03<00:02, 31466720.87it/s] 50% 84849664/170498071 [00:03<00:02, 31687544.10it/s] 52% 88507392/170498071 [00:03<00:02, 33079257.93it/s] 54% 91840512/170498071 [00:03<00:02, 31295801.42it/s] 56% 95415296/170498071 [00:03<00:02, 32544595.93it/s] 58% 98981888/170498071 [00:03<00:02, 33437172.72it/s] 60% 102512640/170498071 [00:03<00:02, 33979714.24it/s] 62% 105931776/170498071 [00:03<00:01, 32728364.51it/s] 64% 109304832/170498071 [00:03<00:01, 33015810.10it/s] 66% 112623616/170498071 [00:04<00:01, 32600010.71it/s] 68% 116098048/170498071 [00:04<00:01, 31271314.55it/s] 70% 119358464/170498071 [00:04<00:01, 31612695.29it/s] 72% 122790912/170498071 [00:04<00:01, 32388672.17it/s] 74% 126059520/170498071 [00:04<00:01, 32406310.45it/s] 76% 129614848/170498071 [00:04<00:01, 33326541.58it/s] 78% 132958208/170498071 [00:04<00:01, 33182658.47it/s] 80% 136438784/170498071 [00:04<00:01, 33661584.34it/s] 82% 140015616/170498071 [00:04<00:00, 34285633.00it/s] 84% 143449088/170498071 [00:04<00:00, 33645387.48it/s] 86% 146834432/170498071 [00:05<00:00, 31888353.77it/s] 88% 150093824/170498071 [00:05<00:00, 32088826.85it/s] 90% 153322496/170498071 [00:05<00:00, 32051654.94it/s] 92% 156664832/170498071 [00:05<00:00, 32294917.75it/s] 94% 160285696/170498071 [00:05<00:00, 32804729.41it/s] 96% 163644416/170498071 [00:05<00:00, 32893611.86it/s] 98% 167164928/170498071 [00:05<00:00, 33569726.24it/s]170499072it [00:05, 29294409.89it/s]                   
+  0% 0/170498071 [00:00<?, ?it/s]  0% 33792/170498071 [00:00<15:28, 183571.05it/s]  0% 197632/170498071 [00:00<04:45, 597023.16it/s]  0% 656384/170498071 [00:00<01:32, 1843120.57it/s]  1% 1754112/170498071 [00:00<00:39, 4283768.35it/s]  2% 3572736/170498071 [00:00<00:22, 7467103.06it/s]  4% 6849536/170498071 [00:00<00:11, 14238929.68it/s]  6% 10576896/170498071 [00:00<00:07, 20636209.12it/s]  8% 13829120/170498071 [00:01<00:06, 23973673.20it/s] 10% 17254400/170498071 [00:01<00:05, 26937308.95it/s] 12% 20792320/170498071 [00:01<00:05, 29392258.30it/s] 14% 24183808/170498071 [00:01<00:04, 30704791.69it/s] 16% 27395072/170498071 [00:01<00:04, 31066253.57it/s] 18% 30606336/170498071 [00:01<00:04, 31319683.03it/s] 20% 34154496/170498071 [00:01<00:04, 32556584.26it/s] 22% 37651456/170498071 [00:01<00:04, 31986276.60it/s] 24% 40879104/170498071 [00:01<00:04, 31927376.28it/s] 26% 44188672/170498071 [00:01<00:03, 32265567.72it/s] 28% 47580160/170498071 [00:02<00:04, 30696999.42it/s] 30% 50955264/170498071 [00:02<00:03, 31539454.05it/s] 32% 54232064/170498071 [00:02<00:03, 31882197.83it/s] 34% 57439232/170498071 [00:02<00:03, 31794615.95it/s] 36% 60916736/170498071 [00:02<00:03, 32665330.28it/s] 38% 64194560/170498071 [00:02<00:03, 32497454.18it/s] 40% 67543040/170498071 [00:02<00:03, 32788650.17it/s] 42% 70828032/170498071 [00:02<00:03, 32628918.15it/s] 43% 74138624/170498071 [00:02<00:02, 32547920.95it/s] 46% 77604864/170498071 [00:02<00:02, 33173742.01it/s] 48% 81104896/170498071 [00:03<00:02, 33716593.53it/s] 50% 84480000/170498071 [00:03<00:02, 33698946.65it/s] 52% 87852032/170498071 [00:03<00:02, 33161347.56it/s] 53% 91171840/170498071 [00:03<00:02, 33082794.31it/s] 55% 94482432/170498071 [00:03<00:02, 33013697.04it/s] 57% 97785856/170498071 [00:03<00:02, 32649584.39it/s] 59% 101204992/170498071 [00:03<00:02, 32328267.33it/s] 61% 104498176/170498071 [00:03<00:02, 31925614.28it/s] 63% 107693056/170498071 [00:03<00:01, 31752604.00it/s] 65% 111051776/170498071 [00:04<00:01, 32223605.64it/s] 67% 114276352/170498071 [00:04<00:01, 31104207.30it/s] 69% 117395456/170498071 [00:04<00:01, 31052424.96it/s] 71% 120648704/170498071 [00:04<00:01, 31483509.03it/s] 73% 123814912/170498071 [00:04<00:01, 31461092.88it/s] 75% 127239168/170498071 [00:04<00:01, 30814989.34it/s] 77% 130466816/170498071 [00:04<00:01, 31207499.60it/s] 79% 133841920/170498071 [00:04<00:01, 31789738.04it/s] 80% 137238528/170498071 [00:04<00:01, 32425369.64it/s] 82% 140633088/170498071 [00:04<00:00, 32872443.19it/s] 84% 143926272/170498071 [00:05<00:00, 32851766.89it/s] 86% 147215360/170498071 [00:05<00:00, 32693749.61it/s] 88% 150488064/170498071 [00:05<00:00, 31976346.06it/s] 90% 153846784/170498071 [00:05<00:00, 32276220.23it/s] 92% 157189120/170498071 [00:05<00:00, 32583819.90it/s] 94% 160596992/170498071 [00:05<00:00, 32916336.36it/s] 96% 163922944/170498071 [00:05<00:00, 31419087.29it/s] 98% 167281664/170498071 [00:05<00:00, 32027274.07it/s]170499072it [00:05, 29030765.11it/s]                   
+/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torch/functional.py:445: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at  /opt/conda/conda-bld/pytorch_1640811803361/work/aten/src/ATen/native/TensorShape.cpp:2157.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/upload_job.py", line 56, in run
+    success = self.push()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/upload_job.py", line 137, in push
+    logger.info("Uploaded file %s", self.save_path)
+Message: 'Uploaded file %s'
+Arguments: ('/tmp/pbs.5552407.pbs/outputs/2022-05-13/17-51-45/wandb/run-20220513_175146-3t98d4lt/files/config.yaml',)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 930, in _bootstrap
+    self._bootstrap_inner()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/upload_job.py", line 56, in run
+    success = self.push()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/filesync/upload_job.py", line 137, in push
+    logger.info("Uploaded file %s", self.save_path)
+Message: 'Uploaded file %s'
+Arguments: ('/tmp/pbs.5552407.pbs/outputs/2022-05-13/17-51-45/wandb/run-20220513_175146-3t98d4lt/files/wandb-summary.json',)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "<string>", line 1, in <module>
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/multiprocessing/spawn.py", line 116, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/multiprocessing/spawn.py", line 129, in _main
+    return self._bootstrap(parent_sentinel)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 164, in wandb_internal
+    logger.error("Thread {}:".format(thread.name), exc_info=exc_info)
+Message: 'Thread WriterThread:'
+Arguments: ()
+Thread WriterThread:
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 54, in run
+    self._run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal_util.py", line 105, in _run
+    self._process(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 346, in _process
+    self._wm.write(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/writer.py", line 35, in write
+    self._ds.write(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/datastore.py", line 276, in write
+    ret = self._write_data(s)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/datastore.py", line 236, in _write_data
+    self._write_record(s)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/datastore.py", line 213, in _write_record
+    self._fp.write(s)
+OSError: [Errno 28] No space left on device
+wandb: ERROR Internal wandb error: file data was not synced
+--- Logging error ---
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1087, in emit
+    self.flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/logging/__init__.py", line 1067, in flush
+    self.stream.flush()
+OSError: [Errno 28] No space left on device
+Call stack:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/internal/internal.py", line 79, in handle_exit
+    logger.info("Internal process exited")
+Message: 'Internal process exited'
+Arguments: ()
+Exception in thread NetStatThr:
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 910, in run
+    self._target(*self._args, **self._kwargs)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 148, in check_network_status
+    status_response = self._interface.communicate_network_status()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface.py", line 125, in communicate_network_status
+    resp = self._communicate_network_status(status)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 388, in _communicate_network_status
+    resp = self._communicate(req, local=True)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 213, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 218, in _communicate_async
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+Exception in thread ChkStopThr:
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/threading.py", line 910, in run
+    self._target(*self._args, **self._kwargs)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 166, in check_status
+    status_response = self._interface.communicate_stop_status()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface.py", line 114, in communicate_stop_status
+    resp = self._communicate_stop_status(status)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 378, in _communicate_stop_status
+    resp = self._communicate(req, local=True)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 213, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 218, in _communicate_async
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+Error executing job with overrides: ['base_group.name=SE2', 'base_group.no_samples=4', 'base_group.sample_per_batch_element=False', 'base_group.sample_per_layer=True', 'base_group.sampling_method=random', 'conv.bias=True', 'conv.padding=same', 'conv.cond_rot=True', 'dataset=CIFAR10', 'kernel.learn_omega0=False', 'kernel.no_hidden=64', 'kernel.no_layers=3', 'kernel.omega0=10', 'kernel.learn_omega1=False', 'kernel.omega1=4', 'kernel.size=7', 'kernel.type=SIREN', 'kernel.weight_norm=False', 'net.dropout=0', 'net.no_blocks=2', 'net.no_hidden=32', 'net.norm=BatchNorm', 'net.pool_blocks=[1,2]', 'net.block_width_factors=[1,1,2,1]', 'net.type=CKResNet', 'no_workers=3', 'seed=100', 'train.batch_size=64', 'train.do=True', 'train.epochs=300', 'train.lr=0.001', 'train.scheduler=cosine', 'train.scheduler_params.warmup_epochs=5', 'train.weight_decay=0.0', 'train.lr_probs=1e-4', 'kernel.fix_integer=True']
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/partial-equivariance/main.py", line 97, in main
+    trainer.train(model, dataloaders, cfg)
+  File "/rds/general/user/tv21/home/partial-equivariance/trainer.py", line 48, in train
+    train_function(
+  File "/rds/general/user/tv21/home/partial-equivariance/trainer.py", line 205, in classification_train
+    save_model_to_wandb(model, optimizer, lr_scheduler, epoch=epoch + 1)
+  File "/rds/general/user/tv21/home/partial-equivariance/trainer.py", line 303, in save_model_to_wandb
+    wandb.save(path)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 1442, in save
+    self._backend.interface.publish_files(files_dict)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface.py", line 350, in publish_files
+    self._publish_files(files)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 326, in _publish_files
+    self._publish(rec)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_queue.py", line 49, in _publish
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+Error in atexit._run_exitfuncs:
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 1805, in _atexit_cleanup
+    self._on_finish()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 1951, in _on_finish
+    self.history._flush()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_history.py", line 59, in _flush
+    self._callback(row=self._data, step=self._step)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 1027, in _history_callback
+    self._backend.interface.publish_history(
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface.py", line 506, in publish_history
+    self._publish_history(history)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 59, in _publish_history
+    self._publish(rec)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_queue.py", line 49, in _publish
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/wandb_run.py", line 1814, in _atexit_cleanup
+    self._backend.cleanup()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/backend/backend.py", line 248, in cleanup
+    self.interface.join()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 458, in join
+    super().join()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface.py", line 599, in join
+    _ = self._communicate_shutdown()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 455, in _communicate_shutdown
+    _ = self._communicate(record)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 213, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/wandb/sdk/interface/interface_shared.py", line 218, in _communicate_async
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown

@@ -1,0 +1,142 @@
+wandb: Currently logged in as: tychovdo (use `wandb login --relogin` to force relogin)
+wandb: Tracking run with wandb version 0.12.10
+wandb: Syncing run astral-pond-4809
+wandb: ⭐️ View project at https://wandb.ai/tychovdo/partial_equiv
+wandb: 🚀 View run at https://wandb.ai/tychovdo/partial_equiv/runs/2wp9pund
+wandb: Run data is saved locally in /tmp/pbs.5505299.pbs/outputs/2022-05-09/15-01-41/wandb/run-20220509_150142-2wp9pund
+wandb: Run `wandb offline` to turn off syncing.
+Error executing job with overrides: ['base_group.name=SE2', 'base_group.no_samples=1', 'base_group.sample_per_batch_element=False', 'base_group.sample_per_layer=False', 'base_group.sampling_method=deterministic', 'conv.bias=True', 'conv.padding=same', 'conv.cond_trans=True', 'dataset=CIFAR100', 'kernel.learn_omega0=False', 'kernel.no_hidden=64', 'kernel.no_layers=3', 'kernel.omega0=10', 'kernel.learn_omega1=False', 'kernel.omega1=11', 'kernel.size=7', 'kernel.type=SIREN', 'kernel.weight_norm=False', 'net.dropout=0', 'net.no_blocks=2', 'net.no_hidden=64', 'net.norm=BatchNorm', 'net.pool_blocks=[1,2]', 'net.block_width_factors=[1,1,2,1]', 'net.type=CKResNet', 'no_workers=3', 'seed=100', 'train.batch_size=64', 'train.do=True', 'train.epochs=300', 'train.lr=0.001', 'train.scheduler=cosine', 'train.scheduler_params.warmup_epochs=5', 'train.weight_decay=0.0', 'train.lr_probs=1e-4', 'conv.mask=False']
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/partial-equivariance/main.py", line 78, in main
+    dataloaders = construct_dataloaders(cfg)
+  File "/rds/general/user/tv21/home/partial-equivariance/dataset_constructor.py", line 80, in construct_dataloaders
+    training_set, validation_set, test_set = construct_dataset(cfg)
+  File "/rds/general/user/tv21/home/partial-equivariance/dataset_constructor.py", line 46, in construct_dataset
+    training_set = dataset(
+  File "/rds/general/user/tv21/home/partial-equivariance/datasets/cifar100.py", line 47, in __init__
+    super().__init__(root=root, train=train, transform=transform, download=True)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torchvision/datasets/cifar.py", line 66, in __init__
+    self.download()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torchvision/datasets/cifar.py", line 144, in download
+    download_and_extract_archive(self.url, self.root, filename=self.filename, md5=self.tgz_md5)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torchvision/datasets/utils.py", line 427, in download_and_extract_archive
+    download_url(url, download_root, filename, md5)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torchvision/datasets/utils.py", line 130, in download_url
+    url = _get_redirect_url(url, max_hops=max_redirect_hops)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torchvision/datasets/utils.py", line 78, in _get_redirect_url
+    with urllib.request.urlopen(urllib.request.Request(url, headers=headers)) as response:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+wandb: Waiting for W&B process to finish, PID 1386399... (failed 1). Press ctrl-c to abort syncing.
+wandb: - 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: \ 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: | 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: / 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb:                                                                                
+wandb: Run summary:
+wandb:   no_params 3519684
+wandb: 
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Synced astral-pond-4809: https://wandb.ai/tychovdo/partial_equiv/runs/2wp9pund
+wandb: Find logs at: ./outputs/2022-05-09/15-01-41/wandb/run-20220509_150142-2wp9pund/logs/debug.log
+wandb: 
+wandb: Currently logged in as: tychovdo (use `wandb login --relogin` to force relogin)
+wandb: Tracking run with wandb version 0.12.10
+wandb: Syncing run exalted-lion-4811
+wandb: ⭐️ View project at https://wandb.ai/tychovdo/partial_equiv
+wandb: 🚀 View run at https://wandb.ai/tychovdo/partial_equiv/runs/1iu3niwy
+wandb: Run data is saved locally in /tmp/pbs.5505299.pbs/outputs/2022-05-09/15-04-04/wandb/run-20220509_150405-1iu3niwy
+wandb: Run `wandb offline` to turn off syncing.
+Error executing job with overrides: ['base_group.name=SE2', 'base_group.no_samples=1', 'base_group.sample_per_batch_element=False', 'base_group.sample_per_layer=False', 'base_group.sampling_method=deterministic', 'conv.bias=True', 'conv.padding=same', 'conv.cond_trans=True', 'dataset=CIFAR100', 'kernel.learn_omega0=False', 'kernel.no_hidden=64', 'kernel.no_layers=3', 'kernel.omega0=10', 'kernel.learn_omega1=False', 'kernel.omega1=11', 'kernel.size=7', 'kernel.type=SIREN', 'kernel.weight_norm=False', 'net.dropout=0', 'net.no_blocks=2', 'net.no_hidden=64', 'net.norm=BatchNorm', 'net.pool_blocks=[1,2]', 'net.block_width_factors=[1,1,2,1]', 'net.type=CKResNet', 'no_workers=3', 'seed=101', 'train.batch_size=64', 'train.do=True', 'train.epochs=300', 'train.lr=0.001', 'train.scheduler=cosine', 'train.scheduler_params.warmup_epochs=5', 'train.weight_decay=0.0', 'train.lr_probs=1e-4', 'conv.mask=False']
+Traceback (most recent call last):
+  File "/rds/general/user/tv21/home/partial-equivariance/main.py", line 78, in main
+    dataloaders = construct_dataloaders(cfg)
+  File "/rds/general/user/tv21/home/partial-equivariance/dataset_constructor.py", line 80, in construct_dataloaders
+    training_set, validation_set, test_set = construct_dataset(cfg)
+  File "/rds/general/user/tv21/home/partial-equivariance/dataset_constructor.py", line 46, in construct_dataset
+    training_set = dataset(
+  File "/rds/general/user/tv21/home/partial-equivariance/datasets/cifar100.py", line 47, in __init__
+    super().__init__(root=root, train=train, transform=transform, download=True)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torchvision/datasets/cifar.py", line 66, in __init__
+    self.download()
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torchvision/datasets/cifar.py", line 144, in download
+    download_and_extract_archive(self.url, self.root, filename=self.filename, md5=self.tgz_md5)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torchvision/datasets/utils.py", line 427, in download_and_extract_archive
+    download_url(url, download_root, filename, md5)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torchvision/datasets/utils.py", line 130, in download_url
+    url = _get_redirect_url(url, max_hops=max_redirect_hops)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torchvision/datasets/utils.py", line 78, in _get_redirect_url
+    with urllib.request.urlopen(urllib.request.Request(url, headers=headers)) as response:
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/urllib/request.py", line 214, in urlopen
+    return opener.open(url, data, timeout)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/urllib/request.py", line 523, in open
+    response = meth(req, response)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/urllib/request.py", line 632, in http_response
+    response = self.parent.error(
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/urllib/request.py", line 561, in error
+    return self._call_chain(*args)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/urllib/request.py", line 494, in _call_chain
+    result = func(*args)
+  File "/rds/general/user/tv21/home/anaconda3/lib/python3.9/urllib/request.py", line 641, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+wandb: Waiting for W&B process to finish, PID 1386456... (failed 1). Press ctrl-c to abort syncing.
+wandb: - 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: \ 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: | 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: / 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb:                                                                                
+wandb: Run summary:
+wandb:   no_params 3519684
+wandb: 
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Synced exalted-lion-4811: https://wandb.ai/tychovdo/partial_equiv/runs/1iu3niwy
+wandb: Find logs at: ./outputs/2022-05-09/15-04-04/wandb/run-20220509_150405-1iu3niwy/logs/debug.log
+wandb: 
+wandb: Currently logged in as: tychovdo (use `wandb login --relogin` to force relogin)
+wandb: Tracking run with wandb version 0.12.10
+wandb: Syncing run bumbling-star-4813
+wandb: ⭐️ View project at https://wandb.ai/tychovdo/partial_equiv
+wandb: 🚀 View run at https://wandb.ai/tychovdo/partial_equiv/runs/3p9d6fmp
+wandb: Run data is saved locally in /tmp/pbs.5505299.pbs/outputs/2022-05-09/15-06-19/wandb/run-20220509_150620-3p9d6fmp
+wandb: Run `wandb offline` to turn off syncing.
+  0% 0/169001437 [00:00<?, ?it/s]  0% 33792/169001437 [00:00<15:13, 184965.07it/s]  0% 197632/169001437 [00:00<04:42, 598582.90it/s]  0% 705536/169001437 [00:00<01:24, 2001940.43it/s]  1% 1737728/169001437 [00:00<00:39, 4207156.65it/s]  2% 3621888/169001437 [00:00<00:22, 7511247.79it/s]  4% 7160832/169001437 [00:00<00:10, 15000607.17it/s]  6% 10729472/169001437 [00:00<00:07, 20738140.92it/s]  8% 14271488/169001437 [00:01<00:06, 24902659.83it/s] 11% 17844224/169001437 [00:01<00:05, 28024718.46it/s] 13% 21431296/169001437 [00:01<00:04, 30308075.56it/s] 15% 24876032/169001437 [00:01<00:04, 31525681.54it/s] 17% 28128256/169001437 [00:01<00:04, 31784361.85it/s] 19% 31377408/169001437 [00:01<00:04, 31845879.75it/s] 20% 34611200/169001437 [00:01<00:04, 28902828.69it/s] 23% 38178816/169001437 [00:01<00:04, 30778791.80it/s] 25% 41659392/169001437 [00:01<00:03, 31920479.88it/s] 27% 45000704/169001437 [00:01<00:03, 32349788.09it/s] 29% 48382976/169001437 [00:02<00:03, 32776530.98it/s] 31% 51692544/169001437 [00:02<00:03, 32751556.94it/s] 33% 55018496/169001437 [00:02<00:03, 32731351.61it/s] 35% 58393600/169001437 [00:02<00:03, 32922947.99it/s] 37% 61697024/169001437 [00:02<00:03, 32881788.17it/s] 38% 64993280/169001437 [00:02<00:03, 32562871.95it/s] 40% 68255744/169001437 [00:02<00:03, 31588831.20it/s] 42% 71648256/169001437 [00:02<00:03, 31137871.91it/s] 44% 75049984/169001437 [00:02<00:02, 31961114.39it/s] 46% 78473216/169001437 [00:03<00:02, 32619193.34it/s] 48% 81947648/169001437 [00:03<00:02, 33241679.50it/s] 51% 85427200/169001437 [00:03<00:02, 33695716.56it/s] 53% 88803328/169001437 [00:03<00:02, 33457132.36it/s] 55% 92153856/169001437 [00:03<00:02, 32871814.45it/s] 56% 95446016/169001437 [00:03<00:02, 32735425.79it/s] 58% 98845696/169001437 [00:03<00:02, 32552379.40it/s] 61% 102253568/169001437 [00:03<00:02, 32762278.02it/s] 62% 105532416/169001437 [00:03<00:01, 32333571.34it/s] 64% 108790784/169001437 [00:03<00:01, 32248628.14it/s] 66% 112352256/169001437 [00:04<00:01, 33236918.92it/s] 69% 115770368/169001437 [00:04<00:01, 33072697.03it/s] 70% 119096320/169001437 [00:04<00:01, 33123886.21it/s] 72% 122411008/169001437 [00:04<00:01, 32423565.80it/s] 74% 125657088/169001437 [00:04<00:01, 32379358.50it/s] 76% 128898048/169001437 [00:04<00:01, 32274004.75it/s] 78% 132252672/169001437 [00:04<00:01, 32427237.03it/s] 80% 135562240/169001437 [00:04<00:01, 32454816.52it/s] 82% 139019264/169001437 [00:04<00:00, 32974729.10it/s] 84% 142354432/169001437 [00:04<00:00, 33086312.86it/s] 86% 145720320/169001437 [00:05<00:00, 33007988.46it/s] 88% 149022720/169001437 [00:05<00:00, 32893567.71it/s] 90% 152312832/169001437 [00:05<00:00, 32374407.31it/s] 92% 155616256/169001437 [00:05<00:00, 32515085.76it/s] 94% 159040512/169001437 [00:05<00:00, 31819095.21it/s] 96% 162300928/169001437 [00:05<00:00, 31695905.42it/s] 98% 165643264/169001437 [00:05<00:00, 32193855.13it/s]100% 168867840/169001437 [00:05<00:00, 32031549.96it/s]169001984it [00:05, 29213527.08it/s]                   
+/rds/general/user/tv21/home/anaconda3/lib/python3.9/site-packages/torch/functional.py:445: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at  /opt/conda/conda-bld/pytorch_1640811803361/work/aten/src/ATen/native/TensorShape.cpp:2157.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+wandb: Network error (ReadTimeout), entering retry loop.
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+wandb: Network error (ReadTimeout), entering retry loop.
+wandb: Network error (ReadTimeout), entering retry loop.
+wandb: Network error (ReadTimeout), entering retry loop.
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+wandb: Network error (ReadTimeout), entering retry loop.
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+wandb: Network error (ReadTimeout), entering retry loop.
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[34m[1mwandb[0m: [33mWARNING[0m Saving files without folders. If you want to preserve sub directories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+=>> PBS: job killed: walltime 172877 exceeded limit 172800

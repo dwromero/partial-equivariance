@@ -1,0 +1,144 @@
+/var/tmp/pbs.5967867.pbs
+Wed Aug  3 11:12:25 2022       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 510.60.02    Driver Version: 510.60.02    CUDA Version: 11.6     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Quadro RTX 6000     On   | 00000000:1B:00.0 Off |                  Off |
+| 33%   33C    P8    19W / 260W |      1MiB / 24576MiB |      0%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   1  Quadro RTX 6000     On   | 00000000:1C:00.0 Off |                  Off |
+| 52%   73C    P2   254W / 260W |   8702MiB / 24576MiB |     94%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   2  Quadro RTX 6000     On   | 00000000:1D:00.0 Off |                  Off |
+| 98%   87C    P2   256W / 260W |   8694MiB / 24576MiB |     92%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   3  Quadro RTX 6000     On   | 00000000:1E:00.0 Off |                  Off |
+| 33%   34C    P8    24W / 260W |      1MiB / 24576MiB |      0%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   4  Quadro RTX 6000     On   | 00000000:89:00.0 Off |                  Off |
+| 33%   35C    P8    30W / 260W |      1MiB / 24576MiB |      0%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   5  Quadro RTX 6000     On   | 00000000:8A:00.0 Off |                  Off |
+| 33%   36C    P8    27W / 260W |      1MiB / 24576MiB |      0%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   6  Quadro RTX 6000     On   | 00000000:8B:00.0 Off |                  Off |
+| 34%   36C    P8    25W / 260W |      1MiB / 24576MiB |      0%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   7  Quadro RTX 6000     On   | 00000000:8C:00.0 Off |                  Off |
+| 33%   35C    P8    26W / 260W |      1MiB / 24576MiB |      0%   E. Process |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|    1   N/A  N/A   2736593      C   python                           8699MiB |
+|    2   N/A  N/A   2736593      C   python                           8691MiB |
++-----------------------------------------------------------------------------+
+starting script.
+Input arguments:
+net:
+  type: CKResNet
+  no_hidden: 32
+  no_blocks: 2
+  dropout: 0
+  norm: BatchNorm
+  bottleneck_factor_skip_connection: 2
+  block_width_factors:
+  - 1
+  - 1
+  - 2
+  - 1
+  pool_blocks:
+  - 1
+  - 2
+  last_conv_T2: false
+  learnable_final_pooling: false
+  final_spatial_dim:
+  - 1
+  - 1
+conv:
+  padding: same
+  partial_equiv: false
+  cond_trans: false
+  cond_rot: false
+  bias: true
+  mask: true
+kernel:
+  type: SIREN
+  no_hidden: 32
+  no_layers: 3
+  size: 7
+  fix_integer: false
+  fix_integer_with_bias: false
+  fix_integer_with_geom: false
+  omega0: 10
+  learn_omega0: false
+  omega1: 0.0
+  learn_omega1: false
+  omega2: 0.0
+  learn_omega2: false
+  init_scale: 0.01
+  weight_norm: false
+  norm: ''
+  activation: ''
+base_group:
+  name: SE2
+  no_samples: 16
+  sample_per_batch_element: false
+  sample_per_layer: false
+  sampling_method: deterministic
+  gumbel_init_temp: 0.5
+  gumbel_end_temp: 0.0001
+train:
+  do: true
+  batch_size: 64
+  epochs: 300
+  lr: 0.001
+  lr_probs: 0.0001
+  lr_omega0: 0.0
+  gradient_clip: 0.0
+  weight_decay: 0.0
+  optimizer: Adam
+  optimizer_params:
+    nesterov: null
+    momentum: null
+  scheduler: cosine
+  scheduler_params:
+    decay_steps: -1
+    decay_factor: -1
+    patience: -1
+    warmup_epochs: 5
+  warm_decay: 0.0
+  monotonic_decay_loss: 0.0
+dataset: CIFAR10
+dataset_params:
+  rot_interval: 0
+augment: resnet
+wandb:
+  project: partial_equiv
+  entity: tychovdo
+device: cuda
+debug: false
+pretrained: false
+seed: 102
+cuda_visible_devices:
+- -1
+comment: ''
+no_workers: 3
+
+Problem at: /rds/general/user/tv21/home/partial-equivariance/main.py 48 main
+script done.
