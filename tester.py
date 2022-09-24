@@ -1,5 +1,9 @@
 import torch
 
+from tqdm import tqdm
+
+import wandb
+
 # project
 from globals import IMG_DATASETS
 
@@ -28,7 +32,7 @@ def classification_test(model, test_loader, cfg):
 
     with torch.no_grad():
         # Iterate through data
-        for data in test_loader:
+        for data in tqdm(test_loader, desc="Test"):
 
             inputs, labels = data
             # inputs = torch.rot90(inputs, k=3, dims=(-1,-2))
@@ -43,6 +47,7 @@ def classification_test(model, test_loader, cfg):
 
     # Print results
     test_acc = correct / total
+    wandb.run.summary["best_test_accuracy"] = test_acc
     print(f"Accuracy of the network on the {total} test samples: {(100 * test_acc)}")
 
     return test_acc
