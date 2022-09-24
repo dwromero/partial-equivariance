@@ -5,6 +5,8 @@ import os
 import os.path
 from hydra import utils
 
+VALIDATION_SPLIT = [45000, 5000]
+
 
 class CIFAR10(datasets.CIFAR10):
     def __init__(

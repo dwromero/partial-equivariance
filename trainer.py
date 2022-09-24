@@ -2,6 +2,7 @@ import copy
 import datetime
 import os
 from hydra import utils
+from tqdm import tqdm
 
 # torch
 import torch
@@ -120,7 +121,7 @@ def classification_train(
             total = 0
 
             # iterate over data
-            for data in dataloaders[phase]:
+            for data in tqdm(dataloaders[phase], desc=f"Epoch {epoch} / {phase}"):
 
                 inputs, labels = data
                 inputs = inputs.to(device)
@@ -206,16 +207,17 @@ def classification_train(
                     # Clean CUDA Memory
                     del inputs, outputs, labels
                     torch.cuda.empty_cache()
-                    # Perform test and log results
-                    if cfg.dataset in ["PCam"]:
-                        test_acc = tester.test(model, dataloaders["test"], cfg)
-                    else:
-                        test_acc = best_acc
-                    wandb.run.summary["best_test_accuracy"] = test_acc
-                    wandb.log(
-                        {"accuracy_test": test_acc},
-                        step=epoch + 1,
-                    )
+
+                    # # Perform test and log results
+                    # if cfg.dataset in ["rotMNIST", "CIFAR10", "CIFAR10", "CIFAR100", "PCam"]:
+                    #     test_acc = tester.test(model, dataloaders["test"], cfg)
+                    # else:
+                    #     test_acc = best_acc
+                    # wandb.run.summary["best_test_accuracy"] = test_acc
+                    # wandb.log(
+                    #     {"accuracy_test": test_acc},
+                    #     step=epoch + 1,
+                    # )
 
                     # Reset counter of epochs without progress
                     epochs_no_improvement = 0

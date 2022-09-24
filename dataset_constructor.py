@@ -1,10 +1,9 @@
 import torch
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader, random_split
 
 # typing
 from typing import Tuple, Dict
 from omegaconf import OmegaConf
-
 
 # datasets
 from datasets import (
@@ -16,6 +15,13 @@ from datasets import (
     CIFAR100,
     STL10,
     PCam,
+)
+
+# validation splits
+from datasets import (
+    rotMNIST_VALIDATION_SPLIT,
+    CIFAR10_VALIDATION_SPLIT,
+    CIFAR100_VALIDATION_SPLIT,
 )
 
 
@@ -47,11 +53,18 @@ def construct_dataset(
         augment="None",
         rot_interval=cfg.dataset_params.rot_interval,
     )
+    # validation dataset
     if cfg.dataset in ["PCam"]:
         validation_set = dataset(
             partition="valid",
             augment="None",
             rot_interval=cfg.dataset_params.rot_interval,
+        )
+    elif cfg.dataset in ['rotMNIST', 'CIFAR10', 'CIFAR100']:
+        training_set, validation_set = random_split(
+            training_set,
+            eval(f'{cfg.dataset}_VALIDATION_SPLIT'),
+            generator=torch.Generator().manual_seed(42),
         )
     else:
         validation_set = None
@@ -73,6 +86,7 @@ def construct_dataloaders(
         training_set,
         batch_size=cfg.train.batch_size,
         shuffle=True,
+        drop_last=True,
         num_workers=num_workers,
         pin_memory=False,
     )
@@ -82,6 +96,7 @@ def construct_dataloaders(
         shuffle=False,
         num_workers=num_workers,
         pin_memory=False,
+        drop_last=False,
     )
     if validation_set is not None:
         val_loader = torch.utils.data.DataLoader(
@@ -90,6 +105,7 @@ def construct_dataloaders(
             shuffle=False,
             num_workers=num_workers,
             pin_memory=False,
+            drop_last=False,
         )
     else:
         val_loader = test_loader

@@ -20,7 +20,7 @@ from partial_equiv.groups import Group
 from omegaconf import OmegaConf
 
 
-class ConvBNActDropoutBlock(torch.nn.Module):
+class ConvNormNonlin(torch.nn.Module):
     def __init__(
         self,
         in_channels: int,
@@ -29,7 +29,6 @@ class ConvBNActDropoutBlock(torch.nn.Module):
         base_group_config: OmegaConf,
         kernel_config: OmegaConf,
         conv_config: OmegaConf,
-        dropout: float,
         NormType: torch.nn.Module,
     ):
         super().__init__()
@@ -44,9 +43,6 @@ class ConvBNActDropoutBlock(torch.nn.Module):
             conv_config=conv_config,
         )
 
-        # Dropout layer
-        self.dp = ApplyFirstElem(torch.nn.Dropout(dropout))
-
         # Normalization layer
         self.norm = ApplyFirstElem(NormType(out_channels))
 
@@ -54,13 +50,10 @@ class ConvBNActDropoutBlock(torch.nn.Module):
         self.activ = ApplyFirstElem(torch.nn.ReLU())
 
     def forward(self, input_tuple):
-        return self.dp(self.activ(self.norm(self.conv(input_tuple))))
+        return self.activ(self.norm(self.conv(input_tuple)))
 
 
 class GCNN(torch.nn.Module):
-    """
-    Group Equivariant Network as in Cohen & Welling, 2016.
-    """
 
     def __init__(
         self,
@@ -80,7 +73,9 @@ class GCNN(torch.nn.Module):
         norm = net_config.norm
         no_blocks = net_config.no_blocks
         dropout = net_config.dropout
+        dropout_blocks = net_config.dropout_blocks
         pool_blocks = net_config.pool_blocks
+        block_width_factors = net_config.block_width_factors
 
         # Params in self
         self.in_channels = in_channels
@@ -104,24 +99,47 @@ class GCNN(torch.nn.Module):
             kernel_config=kernel_config,
             conv_config=conv_config,
         )
-        # Lifting Dropout layer
-        self.lift_dropout = ApplyFirstElem(torch.nn.Dropout(dropout))
-        # Lifting normalization layer
         self.lift_norm = ApplyFirstElem(NormType(hidden_channels))
+        self.lift_nonlinear = ApplyFirstElem(torch.nn.ReLU())
 
-        # Group layers
+        # Define blocks
+        # Create vector of width_factors:
+        # If value is zero, then all values are one
+        if block_width_factors[0] == 0.0:
+            width_factors = (1,) * no_blocks
+        else:
+            width_factors = [
+                (factor,) * n_blcks
+                for factor, n_blcks in gral.utils.pairwise_iterable(block_width_factors)
+            ]
+            width_factors = [
+                factor for factor_tuple in width_factors for factor in factor_tuple
+            ]
+
+        if len(width_factors) != no_blocks:
+            raise ValueError(
+                "The size of the width_factors does not matched the number of blocks in the network."
+            )
+
         blocks = []
         for i in range(no_blocks):
+            print(f"Block {i + 1}/{no_blocks}")
+
+            if i == 0:
+                input_ch = hidden_channels
+                hidden_ch = int(hidden_channels * width_factors[i])
+            else:
+                input_ch = int(hidden_channels * width_factors[i - 1])
+                hidden_ch = int(hidden_channels * width_factors[i])
 
             blocks.append(
-                ConvBNActDropoutBlock(
-                    in_channels=hidden_channels,
-                    out_channels=hidden_channels,
+                ConvNormNonlin(
+                    in_channels=input_ch,
+                    out_channels=hidden_ch,
                     group=base_group,
                     base_group_config=base_group_config,
                     kernel_config=kernel_config,
                     conv_config=conv_config,
-                    dropout=dropout,
                     NormType=NormType,
                 )
             )
@@ -138,26 +156,32 @@ class GCNN(torch.nn.Module):
                     )
                 )
 
+            # Pool layer
+            if (i + 1) in dropout_blocks:
+                blocks.append(ApplyFirstElem(torch.nn.Dropout2d(dropout)))
+
         self.blocks = torch.nn.Sequential(*blocks)
 
         # Last layer
-        self.last_conv = partial_gconv.GroupConv(
-            in_channels=hidden_channels,
-            out_channels=out_channels,
-            group=copy.deepcopy(base_group),
-            base_group_config=base_group_config,
-            kernel_config=kernel_config,
-            conv_config=conv_config,
-        )
+        if block_width_factors[0] == 0.0:
+            final_no_hidden = hidden_channels
+        else:
+            final_no_hidden = int(hidden_channels * block_width_factors[-2])
+        self.last_layer = torch.nn.Linear(in_features=final_no_hidden, out_features=out_channels)
 
-        # Activation layer
-        self.activ = ApplyFirstElem(torch.nn.ReLU())
+        # # Last layer
+        # self.last_conv = partial_gconv.GroupConv(
+        #     in_channels=hidden_channels,
+        #     out_channels=out_channels,
+        #     group=copy.deepcopy(base_group),
+        #     base_group_config=base_group_config,
+        #     kernel_config=kernel_config,
+        #     conv_config=conv_config,
+        # )
 
     def forward(self, x):
-        out, g_samples = self.lift_dropout(
-            self.activ(self.lift_norm(self.lift_conv(x)))
-        )
+        out, g_samples = self.lift_nonlinear(self.lift_norm(self.lift_conv(x)))
         out, g_samples = self.blocks([out, g_samples])
-        out, _ = self.last_conv([out, g_samples])
-        out = torch.mean(out, dim=(-1, -2), keepdim=True)
-        return torch.max(out, dim=-3)[0].view(-1, self.out_channels)
+        out = torch.mean(out, dim=(-1, -2, -3))
+        out = self.last_layer(out)
+        return out
