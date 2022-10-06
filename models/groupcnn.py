@@ -12,11 +12,14 @@ from functools import partial
 # project
 import partial_equiv.partial_gconv as partial_gconv
 import partial_equiv.general as gral
+import partial_equiv.groups as groups
 from partial_equiv.general.nn import ApplyFirstElem
 
 # typing
 from typing import Tuple, Union
-from partial_equiv.groups import Group
+import torchvision.transforms.functional as TF
+import torch.nn.functional as F
+from partial_equiv.groups import Group, SamplingMethods
 from omegaconf import OmegaConf
 
 
@@ -169,19 +172,122 @@ class GCNN(torch.nn.Module):
             final_no_hidden = int(hidden_channels * block_width_factors[-2])
         self.last_layer = torch.nn.Linear(in_features=final_no_hidden, out_features=out_channels)
 
-        # # Last layer
-        # self.last_conv = partial_gconv.GroupConv(
-        #     in_channels=hidden_channels,
-        #     out_channels=out_channels,
-        #     group=copy.deepcopy(base_group),
-        #     base_group_config=base_group_config,
-        #     kernel_config=kernel_config,
-        #     conv_config=conv_config,
-        # )
-
     def forward(self, x):
         out, g_samples = self.lift_nonlinear(self.lift_norm(self.lift_conv(x)))
         out, g_samples = self.blocks([out, g_samples])
         out = torch.mean(out, dim=(-1, -2, -3))
         out = self.last_layer(out)
         return out
+
+
+class AugerinoGCNN(torch.nn.Module):
+    def __init__(
+        self,
+        in_channels: int,
+        out_channels: int,
+        base_group: Group,
+        net_config: OmegaConf,
+        base_group_config: OmegaConf,
+        kernel_config: OmegaConf,
+        conv_config: OmegaConf,
+        **kwargs,
+    ):
+        super().__init__()
+
+        assert net_config.last_conv_T2 is False
+        assert net_config.learnable_final_pooling is False
+        assert conv_config.partial_equiv is False
+        assert base_group_config.sampling_method is SamplingMethods.RANDOM
+        assert base_group_config.sample_per_batch_element is False
+        assert base_group_config.sample_per_layer is False
+
+        # The group is used to sample transformations
+        self.augment_sampler = copy.deepcopy(base_group)
+        self.sampler_type = base_group_config.name
+        self.group_no_samples = base_group_config.no_samples
+        self.group_sampling_method = base_group_config.sampling_method
+        # Probabilities
+        probs = self.augment_sampler.construct_probability_variables(
+            self.group_sampling_method,
+            self.group_no_samples,
+        )
+        self.probs = torch.nn.Parameter(probs)
+
+        # Modify the config files of the model, to make it a CNN
+        base_group_config_modif = copy.deepcopy(base_group_config)
+        base_group_config_modif.no_samples = 1
+        base_group_config_modif.sampling_method = SamplingMethods.DETERMINISTIC
+        # The group must be SE2, deterministic, with a single sample.
+        base_group = groups.SE2(
+            gumbel_init_temperature=self.augment_sampler.gumbel_init_temperature,
+            gumbel_end_temperature=self.augment_sampler.gumbel_end_temperature,
+            gumbel_no_iterations=self.augment_sampler.gumbel_no_iterations,
+        )
+
+        # Create base network
+        self.net = GCNN(
+            in_channels=in_channels,
+            out_channels=out_channels,
+            base_group=base_group,
+            net_config=net_config,
+            base_group_config=base_group_config_modif,
+            kernel_config=kernel_config,
+            conv_config=conv_config,
+        )
+
+    def forward(self, x):
+        # Sample elements
+        g_elements = self.augment_sampler.sample_from_stabilizer(
+            no_samples=1,
+            no_elements=self.group_no_samples,
+            method=self.group_sampling_method,
+            device=x.device,
+            partial_equivariance=True,
+            probs=self.probs,
+        )
+        if len(g_elements.shape) == 2:
+            g_elements = g_elements.unsqueeze(-1)
+
+        # Use them to augment input
+        x_modif = torch.stack(
+            [
+                self.transformation(x, element)
+                for element in g_elements[0]
+            ],
+            dim=0,
+        )
+        x_modif = x_modif.view(-1, *x_modif.shape[2:])
+
+        # pass through the network
+        out_modif = self.net(x_modif)
+        out_modif = out_modif.view(g_elements.shape[1], -1, *out_modif.shape[1:])
+
+        # Get final result: Average of responses
+        return out_modif.mean(dim=0)
+
+    @staticmethod
+    def transformation(x, element):
+        x_modif = rot_img(x, element[0], dtype=x.dtype)
+        if element.shape[0] == 2 and element[-1].item() == -1:
+            x_modif = TF.hflip(x_modif)
+        return x_modif
+
+
+def get_rot_mat(theta):
+    cos = torch.cos(theta)
+    sin = torch.sin(theta)
+
+    R = torch.zeros(2, 3, device=theta.device, dtype=theta.dtype)
+    R[0, 0] = cos
+    R[0, 1] = -sin
+    R[1, 0] = sin
+    R[1, 1] = cos
+
+    return R
+
+
+def rot_img(x, theta, dtype):
+    rot_mat = get_rot_mat(theta)[None, ...].type(dtype).repeat(x.shape[0], 1, 1)
+    grid = F.affine_grid(rot_mat, x.size(), align_corners=True).type(dtype)
+    x = F.grid_sample(x, grid)
+    return x
