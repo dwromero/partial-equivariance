@@ -9,7 +9,6 @@ import numpy as np
 
 # project
 from .group import Group, SamplingMethods
-from .SO2 import SE2
 
 # typing
 from typing import Optional

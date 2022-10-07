@@ -1,8 +1,7 @@
 import torch
 
 
-# From LieConv
-class Expression(torch.nn.Module):
+class FunctionAsModule(torch.nn.Module):
     def __init__(self, func):
         """
         Creates a torch.nn.Module that applies the function func.
@@ -21,4 +20,4 @@ def Multiply(
     """
     out = omega_0 * x
     """
-    return Expression(lambda x: omega_0 * x)
+    return FunctionAsModule(lambda x: omega_0 * x)

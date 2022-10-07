@@ -146,7 +146,7 @@ class ConvBase(torch.nn.Module):
 
             kernel_size = torch.zeros(1).int()
 
-            # Decide the extend of the rel_positions vector
+            # Decide the extent of the rel_positions vector
             if self.kernel_size == "full":
                 kernel_size[0] = (2 * x.shape[-1]) - 1
             elif self.kernel_size == "same":

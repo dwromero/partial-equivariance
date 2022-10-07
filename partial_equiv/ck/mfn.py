@@ -14,7 +14,6 @@ class MFNBase(torch.nn.Module):
     Expects the child class to define the 'filters' attribute, which should be
     a nn.ModuleList of n_layers+1 filters with output equal to hidden_size.
     """
-
     def __init__(
         self,
         hidden_channels: int,

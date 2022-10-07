@@ -1,9 +1,5 @@
 import copy
-import math
-
 import torch
-
-# other
 from functools import partial
 
 # project
@@ -13,10 +9,8 @@ import partial_equiv.groups as groups
 from partial_equiv.general.nn import ApplyFirstElem
 import torchvision.transforms.functional as TF
 import torch.nn.functional as F
-from torchvision.transforms import InterpolationMode
 
 # typing
-from typing import Tuple, Union
 from partial_equiv.groups import Group, SamplingMethods
 from omegaconf import OmegaConf
 
@@ -53,16 +47,12 @@ class CKResBlock(torch.nn.Module):
             out_channels=out_channels,
             group=copy.deepcopy(group),
         )
-
         # Norm layers:
         self.norm_out = ApplyFirstElem(NormType(out_channels))
-
         # Dropout layer
         self.dp = ApplyFirstElem(torch.nn.Dropout(dropout))
-
         # Activation
         self.activ = ApplyFirstElem(torch.nn.ReLU())
-
         # Pool
         if pool:
             pool = partial_gconv.pool.MaxPoolRn(
@@ -84,7 +74,6 @@ class CKResBlock(torch.nn.Module):
             # Make the width of the network smaller
             kernel_config_shortcut = copy.deepcopy(kernel_config)
             kernel_config_shortcut.no_hidden = kernel_config_shortcut.no_hidden // 2
-
             # Create the shortcut
             shortcut.append(
                 partial_gconv.PointwiseGroupConv(
@@ -96,21 +85,10 @@ class CKResBlock(torch.nn.Module):
                     conv_config=conv_config,
                 )
             )
-
             self.shortcut_is_pointwise = True
         else:
             self.shortcut_is_pointwise = False
         self.shortcut = torch.nn.Sequential(*shortcut)
-        # self.shortcut = ApplyFirstElem(torch.nn.Sequential(*shortcut))
-
-    # def forward(self, input_tuple):
-    #     shortcut, _ = self.shortcut(input_tuple)
-    #     # Following Sosnovik et al. 2020, dropout placed after first ReLU.
-    #     out, g_elems = self.dp(self.activ(self.norm1(self.gconv1(input_tuple))))
-    #     out, g_elems = self.norm2(self.gconv2([out, g_elems]))
-    #     out = out + shortcut
-    #     out, g_elems = self.activ([out, g_elems])
-    #     return out, g_elems
 
     def forward(self, input_tuple):
         x, input_g_elems = input_tuple
@@ -296,8 +274,6 @@ class CKResNet(torch.nn.Module):
         self.out_layer = LastLinearType(
             in_channels=final_no_hidden, out_channels=out_channels
         )
-        # Initialize
-        # torch.nn.init.kaiming_normal_(self.out_layer.weight)
 
     def forward(self, x):
         # Lifting
@@ -414,40 +390,25 @@ class AugerinoCKResNet(torch.nn.Module):
 
     @staticmethod
     def transformation(x, element):
-        # x_modif = TF.rotate(x,
-        #                    element[0].item() * 360/(2. * math.pi),
-        #                   InterpolationMode.BILINEAR,
-        #                   )
         x_modif = rot_img(x, element[0], dtype=x.dtype)
         if element.shape[0] == 2 and element[-1].item() == -1:
             x_modif = TF.hflip(x_modif)
         return x_modif
 
+
 def get_rot_mat(theta):
+    R = torch.zeros(2, 3, device=theta.device, dtype=theta.dtype)
     cos = torch.cos(theta)
     sin = torch.sin(theta)
-
-    R = torch.zeros(2, 3, device=theta.device, dtype=theta.dtype)
     R[0, 0] = cos
     R[0, 1] = -sin
     R[1, 0] = sin
     R[1, 1] = cos
-
     return R
+
 
 def rot_img(x, theta, dtype):
     rot_mat = get_rot_mat(theta)[None, ...].type(dtype).repeat(x.shape[0], 1, 1)
     grid = F.affine_grid(rot_mat, x.size(), align_corners=True).type(dtype)
     x = F.grid_sample(x, grid)
     return x
-
-
-
-
-
-
-
-
-
-
-

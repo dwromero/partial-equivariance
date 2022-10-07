@@ -1,24 +1,16 @@
-"""
-This file implements a simple group CNN as in Cohen & Welling 2016. The difference is that here the filters are
-parameterized as MLPs on the group, and thus can be sampled at arbitrary angles.
-"""
-# torch
 import copy
 import torch
-
-# other
-from functools import partial
+import torchvision.transforms.functional as TF
+import torch.nn.functional as F
 
 # project
 import partial_equiv.partial_gconv as partial_gconv
 import partial_equiv.general as gral
 import partial_equiv.groups as groups
 from partial_equiv.general.nn import ApplyFirstElem
+from .ckresnet import rot_img
 
 # typing
-from typing import Tuple, Union
-import torchvision.transforms.functional as TF
-import torch.nn.functional as F
 from partial_equiv.groups import Group, SamplingMethods
 from omegaconf import OmegaConf
 
@@ -271,23 +263,3 @@ class AugerinoGCNN(torch.nn.Module):
         if element.shape[0] == 2 and element[-1].item() == -1:
             x_modif = TF.hflip(x_modif)
         return x_modif
-
-
-def get_rot_mat(theta):
-    cos = torch.cos(theta)
-    sin = torch.sin(theta)
-
-    R = torch.zeros(2, 3, device=theta.device, dtype=theta.dtype)
-    R[0, 0] = cos
-    R[0, 1] = -sin
-    R[1, 0] = sin
-    R[1, 1] = cos
-
-    return R
-
-
-def rot_img(x, theta, dtype):
-    rot_mat = get_rot_mat(theta)[None, ...].type(dtype).repeat(x.shape[0], 1, 1)
-    grid = F.affine_grid(rot_mat, x.size(), align_corners=True).type(dtype)
-    x = F.grid_sample(x, grid)
-    return x

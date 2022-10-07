@@ -1,10 +1,94 @@
-# partial-equivariance
+## Learning Partial Equivariances From Data
 
-Here's an example of how to run the code:
+This repository contains the source code accompanying the NeurIPS 2022 paper:
 
-For partial equivariance: 
+[Learning Partial Equivariances From Data](https://arxiv.org/abs/2110.10211) <br/>**[David W. Romero](https://www.davidromero.ml/), [Suhas Lohit](https://suhaslohit.github.io/)**.
+
+#### Abstract
+Group Convolutional Neural Networks (G-CNNs) constrain learned features to respect the symmetries in the selected group, 
+and lead to better generalization when these symmetries appear in the data. If this is not the case, however, equivariance
+leads to overly constrained models and worse performance. Frequently, transformations occurring in data can be better 
+represented by a subset of a group than by a group as a whole, e.g., rotations in $[-90^{\circ}, 90^{\circ}]$. In such cases, 
+a model that respects equivariance *partially* is better suited to represent the data. In addition, relevant transformations
+may differ for low and high-level features. For instance, full rotation equivariance is useful to describe edge orientations
+in a face, but partial rotation equivariance is better suited to describe face poses relative to the camera. In other words, 
+the optimal level of equivariance may differ per layer. In this work, we introduce *Partial G-CNNs*: G-CNNs able to learn 
+layer-wise levels of partial and full equivariance to discrete, continuous groups and combinations thereof as part of training. 
+Partial G-CNNs retain full equivariance when beneficial, e.g., for rotated MNIST, but adjust it whenever it becomes harmful, e.g., 
+for classification of 6/9 digits or natural images. We empirically show that partial G-CNNs pair G-CNNs when full equivariance 
+is advantageous, and outperform them otherwise.
+
+### Install
+
+The required dependencies can be installed by running:
 ```
-main.py base_group.name=SE2 base_group.no_samples=16 base_group.sample_per_batch_element=False base_group.sample_per_layer=True base_group.sampling_method=random conv.bias=True conv.padding=same conv.partial_equiv=True dataset=CIFAR10 kernel.learn_omega0=False kernel.no_hidden=32 kernel.no_layers=3 kernel.omega0=10 kernel.size=7 kernel.type=SIREN kernel.weight_norm=False net.dropout=0 net.no_blocks=2 net.no_hidden=32 net.norm=BatchNorm net.pool_blocks=[1,2] net.block_width_factors=[1,1,2,1] net.type=CKResNet no_workers=3 seed=0 train.batch_size=64 train.do=True train.epochs=300 train.lr=0.001 train.scheduler=cosine train.scheduler_params.warmup_epochs=5 train.weight_decay=0.0001 train.lr_probs=1e-4
+conda env create -f conda_requirements.yaml
+```
+This will create the conda environment `partial_equiv` with the correct dependencies.
+
+### Repository structure
+
+This repository is organized as follows:
+
+* `partial_equiv` contains the main PyTorch library of partial equivariant models.
+  * `ck` contains several continuous parameterizations for the conv. kernels (SIREN, MLP, etc).
+  * `general` implements several general layers such as schedulers, utilities, activation functions, etc.
+  * `groups` presents a general structure for the implementation of groups, with specific implementations for `SE2` nad `E2`.
+  * `partial_gconv` contains lifting, pooling as well as (partial) group convolutional layers.
+* `models` and `datasets` contain the models and datasets used throughout our experiments;
+* `cfg` contains the default configuration of `main.py` scripts, in YAML. We use Hydra with OmegaConf to manage the configuration of our experiments.
+* `EXPERIMENTS.md` contains commands to replicate the experiments from the paper.
+* `tests` presents multiple scripts that verify the equivariance of our layers.
+* `*_constructor.py` serve as constructors of datasets and models. `optim` creates optimizers and learning rate schedulers.
+* `trainer.py` and `tester.py` implement the training and testing routines of the repository.
+* `main.py` is the main file of the repository. It is used to execute training and perform testing. 
+* some jupyter notebooks are provided, which are used to construct the plots in our paper.
+
+### Using the code
+
+#### Execution
+All our experiments are runned via `main.py` passing the corresponding configurations. The flags (and thus the configuraions) are handled by [Hydra](https://hydra.cc/docs/intro). 
+See `cfg/config.yaml` for all available flags. Flags can be passed as `xxx.yyy=value`.
+
+- `net.*` describes settings for the networks (GCNN, ResNet, Augerino, etc). (model definitions in `models`).
+- `conv.*` describes settings for the convolution, e.g., whether its partially equivariant. 
+- `kernel.*` describes settings for the construction of the continuous convolutional kernels, e.g., SIREN, MLP.
+- `base_group.*` describes the group to be used, as well as the number of samples and the sampling type to be used. It also handles configurations for the Gumbel Softmax if required.
+- `train.*` specifies the training arguments, e.g., batch size, learning rates, optimizer and schedulers.
+- `dataset.*` specifies the dataset to be used
+- `debug=True` specifies whether this is a dry_run.
+
+#### Reproducing our experiments
+
+The commands used for the experiments reported in our paper can be found at [experiments/README.md](EXPERIMENTS.md/README.md).
+
+### Cite
+If you found this work useful in your research, please consider citing:
+
+```
+@article{romero2021learning,
+  title={Learning Partial Equivariances from Data},
+  author={Romero, David W and Lohit, Suhas},
+  journal={arXiv preprint arXiv:2110.10211},
+  year={2021}
+}
 ```
 
-If you want a full-equivariant model, you can set `conv.partial_equiv=False`.
+### Contact 
+David W. Romero: d.w.romeroguzman@vu.nl,
+Suhas Lohit: slohit@merl.com
+
+### Copyright and License
+
+This repository strongly relies on https://github.com/rjbruin/flexconv protected under the MIT license. This includes the files:
+* `datasets/cifar10.py`, `datasets/cifar100.py`, `datasets/pcam.py`, `datasets/stl10.py`, `datasets/stl10.py`
+* `models/ckresnet.py`
+* `partial_equiv/ck/*`, `partial_equiv/general/utils/*`
+* `dataset_constructor.py`, `main.py`, `model_constructor.py`, `optim.py`, `tester.py`, `trainer.py`.
+
+The rest of the files has :
+```
+Copyright (c) 2021 Mitsubishi Electric Research Laboratories (MERL)
+```
+
+

@@ -1,5 +1,4 @@
 import torch
-import torch.nn as nn
 
 # typing
 from typing import Tuple
@@ -11,8 +10,7 @@ class ApplyFirstElem(torch.nn.Module):
         module: torch.nn.Module,
     ):
         """
-        Wrapper used to apply an input torch.nn.Module along the first element of an array
-
+        Wrapper used to apply an input torch.nn.Module along the first element of an array.
         :param module:
         """
         super().__init__()

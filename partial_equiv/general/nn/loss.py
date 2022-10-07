@@ -1,10 +1,6 @@
 import torch
 from partial_equiv.partial_gconv.conv import LiftingConv, GroupConv, PointwiseGroupConv
-from torch.nn import Conv1d, Conv2d, Conv3d
 from models import CKResNet
-
-# typing
-from typing import Union
 
 
 class LnLoss(torch.nn.Module):
@@ -34,11 +30,6 @@ class LnLoss(torch.nn.Module):
 
                 if m.bias is not None:
                     loss += m.bias.norm(self.norm_type)
-
-            # if isinstance(m, (Conv1d, Conv2d, Conv3d)):
-            #     loss += m.weight.norm(self.norm_type)
-            #     loss += m.bias.norm(self.norm_type)
-
         loss = self.weight_loss * loss
         return loss
 
@@ -71,7 +62,6 @@ class MonotonicPartialEquivarianceLoss(torch.nn.Module):
             if isinstance(m, (GroupConv)):
                 if m.probs is not None and (m.probs.nelement() != 0):
                     learned_equivariances.append(m.probs)
-
         # Take the difference between the next element, and the previous.
         # Then check if it's larger than 0. If that;'s the case, then
         # the network is increasing, and thus, must be penalized.

@@ -1,17 +1,14 @@
+# Taken from https://github.com/mfinzi/LieConv
+
 # torch
 import torch
-from partial_equiv.general.nn.misc import Expression
+from partial_equiv.general.nn.misc import FunctionAsModule
 
 
 def Swish():
-    """
-    out = x * sigmoid(x)
-    """
-    return Expression(lambda x: x * torch.sigmoid(x))
+    """x * sigmoid(x)"""
+    return FunctionAsModule(lambda x: x * torch.sigmoid(x))
 
 
 def Sine():
-    """
-    out = sin(x)
-    """
-    return Expression(lambda x: torch.sin(x))
+    return FunctionAsModule(lambda x: torch.sin(x))

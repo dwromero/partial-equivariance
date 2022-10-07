@@ -29,7 +29,7 @@ def construct_optimizer(model, cfg):
     if lr_omega0 == 0.0:
         lr_omega0 = lr
 
-    # Divide params in omega_0s, probs, and others
+    # Divide params in probs, omega_0s and others
     all_parameters = set(model.parameters())
     # probs
     probs = []
@@ -43,7 +43,6 @@ def construct_optimizer(model, cfg):
             )
     probs = set(probs)
     other_params = all_parameters - probs
-
     # omega_0
     omega_0s = []
     for m in model.modules():
@@ -64,7 +63,6 @@ def construct_optimizer(model, cfg):
             )
     omega_0s = set(omega_0s)
     other_params = other_params - omega_0s
-
     # The parameters must be given as a list
     probs = list(probs)
     omega_0s = list(omega_0s)

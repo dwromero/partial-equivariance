@@ -6,7 +6,6 @@ net:
   dropout: 0.0
   norm: ""
   bottleneck_factor_skip_connection: 2
-  # finzi_lift: False
   block_width_factors: [0.0, ]
   pool_blocks: [-1, ]
   dropout_blocks: [-1, ]

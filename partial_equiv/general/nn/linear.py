@@ -9,7 +9,7 @@ def Linear1d(
     bias: bool = True,
 ) -> torch.nn.Module:
     """
-    Implements a Linear Layer in terms of a point-wise convolution.
+    Implements a Linear Layer in terms of a pointwise convolution.
     """
     return nn.Conv1d(in_channels, out_channels, kernel_size=1, stride=stride, bias=bias)
 
@@ -21,7 +21,7 @@ def Linear2d(
     bias: bool = True,
 ) -> torch.nn.Module:
     """
-    Implements a Linear Layer in terms of a point-wise convolution.
+    Implements a Linear Layer in terms of a pointwise convolution.
     """
     return nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride, bias=bias)
 
@@ -33,6 +33,6 @@ def Linear3d(
     bias: bool = True,
 ) -> torch.nn.Module:
     """
-    Implements a Linear Layer in terms of a point-wise convolution.
+    Implements a Linear Layer in terms of a pointwise convolution.
     """
     return nn.Conv3d(in_channels, out_channels, kernel_size=1, stride=stride, bias=bias)

@@ -55,7 +55,6 @@ class MAGNetLayer(torch.nn.Module):
     """
     Anisotropic Gabor Filters
     """
-
     def __init__(
         self,
         dim_input_space: int,

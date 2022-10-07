@@ -1,7 +1,5 @@
 import torch
 from torch.nn.utils import weight_norm as w_norm
-import numpy as np
-from torch import nn
 from math import sqrt
 
 # project
@@ -33,8 +31,6 @@ class SIRENBase(torch.nn.Module):
 
         ActivationFunction = gral.nn.Sine
 
-        # Construct the network
-        # ---------------------
         # 1st layer:
         kernel_net = [
             Linear_hidden(
@@ -42,7 +38,6 @@ class SIRENBase(torch.nn.Module):
             ),
             ActivationFunction(),
         ]
-
         # Hidden layers:
         for _ in range(no_layers - 2):
             kernel_net.extend(
@@ -57,7 +52,6 @@ class SIRENBase(torch.nn.Module):
                     ActivationFunction(),
                 ]
             )
-
         # Last layer:
         kernel_net.extend(
             [
@@ -102,16 +96,6 @@ class SIRENBase(torch.nn.Module):
                 if net_layer == 1:
                     w_std = 1 / m.weight.shape[1]
                     m.weight.data.uniform_(-w_std, w_std)
-                # TODO: Does not seem to be necessary. Not desirable bc. we dont always know the kernel size beforehand.
-                # # Last layer
-                # elif net_layer == self.no_layers:
-                #     kernel_size = 7
-                #     fan_in = self.dim_linear * (kernel_size ** 2)
-                #     w_std = np.sqrt(6 / m.weight.shape[1]) / (np.sqrt(fan_in))
-                #     m.weight.data.uniform_(
-                #         -w_std,
-                #         w_std,
-                #     )
                 else:
                     w_std = sqrt(6.0 / m.weight.shape[1]) / omega_0
                     m.weight.data.uniform_(
@@ -121,7 +105,6 @@ class SIRENBase(torch.nn.Module):
                 net_layer += 1
                 # Important! Bias is not defined in original SIREN implementation
                 if m.bias is not None:
-                    # m.bias.data.uniform_(-1.0, 1.0)
                     m.bias.data.zero_()
 
 
@@ -140,7 +123,6 @@ class SIREN(SIRENBase):
         use_bias (bool):
         final_activation (torch.nn.Module): Activation function.
     """
-
     def __init__(
         self,
         dim_linear: int,

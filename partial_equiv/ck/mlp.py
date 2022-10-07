@@ -25,8 +25,6 @@ class MLPBase(torch.nn.Module):
         self.hidden_channels = hidden_channels
         self.no_layers = no_layers
 
-        # Construct the network
-        # ---------------------
         # 1st layer:
         kernel_net = [
             Linear(dim_input_space, hidden_channels, bias=bias),

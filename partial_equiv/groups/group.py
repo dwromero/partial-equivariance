@@ -1,5 +1,3 @@
-# Taken from https://github.com/dwromero/g_selfatt
-
 # torch
 import torch
 
